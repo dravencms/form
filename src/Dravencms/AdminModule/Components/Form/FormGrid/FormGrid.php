@@ -19,10 +19,10 @@
  * MA 02110-1301  USA
  */
 
-namespace Dravencms\AdminModule\Components\Form;
+namespace Dravencms\AdminModule\Components\Form\FormGrid;
 
 use Dravencms\Components\BaseGridFactory;
-use App\Model\Form\Repository\FormRepository;
+use Dravencms\Model\Form\Repository\FormRepository;
 use Kdyby\Doctrine\EntityManager;
 use Nette\Application\UI\Control;
 

@@ -19,12 +19,12 @@
  * MA 02110-1301  USA
  */
 
-namespace Dravencms\AdminModule\Components\Form;
+namespace Dravencms\AdminModule\Components\Form\ItemGrid;
 
 use Dravencms\Components\BaseGridFactory;
-use App\Model\Form\Entities\Item;
-use App\Model\Form\Entities\ItemGroup;
-use App\Model\Form\Repository\ItemRepository;
+use Dravencms\Model\Form\Entities\Item;
+use Dravencms\Model\Form\Entities\ItemGroup;
+use Dravencms\Model\Form\Repository\ItemRepository;
 use Kdyby\Doctrine\EntityManager;
 use Nette\Application\UI\Control;
 use Nette\Utils\Html;

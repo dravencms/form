@@ -18,12 +18,12 @@
  * MA 02110-1301  USA
  */
 
-namespace Dravencms\AdminModule\Components\Form;
+namespace Dravencms\AdminModule\Components\Form\ItemForm;
 
 use Dravencms\Components\BaseFormFactory;
-use App\Model\Form\Entities\Item;
-use App\Model\Form\Entities\ItemGroup;
-use App\Model\Form\Repository\ItemRepository;
+use Dravencms\Model\Form\Entities\Item;
+use Dravencms\Model\Form\Entities\ItemGroup;
+use Dravencms\Model\Form\Repository\ItemRepository;
 use App\Model\Locale\Repository\LocaleRepository;
 use Kdyby\Doctrine\EntityManager;
 use Nette\Application\UI\Control;

@@ -3,15 +3,12 @@
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  */
 
-namespace App\Model\Form\Repository;
+namespace Dravencms\Model\Form\Repository;
 
-use App\Model\Form\Entities\Form;
-use App\Model\Form\Entities\Item;
-use App\Model\Form\Entities\ItemGroup;
-use Gedmo\Translatable\TranslatableListener;
+use Dravencms\Model\Form\Entities\Item;
+use Dravencms\Model\Form\Entities\ItemGroup;
 use Kdyby\Doctrine\EntityManager;
 use Nette;
-use Salamek\Cms\Models\ILocale;
 
 class ItemRepository
 {

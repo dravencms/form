@@ -17,11 +17,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA 02110-1301  USA
  */
-namespace Dravencms\AdminModule\Components\Form;
+namespace Dravencms\AdminModule\Components\Form\ItemOptionForm;
 
 
-use App\Model\Form\Entities\Item;
-use App\Model\Form\Entities\ItemOption;
+use Dravencms\Model\Form\Entities\Item;
+use Dravencms\Model\Form\Entities\ItemOption;
 
 /**
  * Interface ItemOptionFormFactory

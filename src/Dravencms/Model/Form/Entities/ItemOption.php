@@ -1,5 +1,5 @@
 <?php
-namespace App\Model\Form\Entities;
+namespace Dravencms\Model\Form\Entities;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;

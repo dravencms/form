@@ -3,10 +3,10 @@
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  */
 
-namespace App\Model\Form\Repository;
+namespace Dravencms\Model\Form\Repository;
 
-use App\Model\Form\Entities\Form;
-use App\Model\Form\Entities\Save;
+use Dravencms\Model\Form\Entities\Form;
+use Dravencms\Model\Form\Entities\Save;
 use Kdyby\Doctrine\EntityManager;
 use Nette;
 

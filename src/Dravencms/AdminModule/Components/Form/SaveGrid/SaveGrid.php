@@ -19,13 +19,13 @@
  * MA 02110-1301  USA
  */
 
-namespace Dravencms\AdminModule\Components\Form;
+namespace Dravencms\AdminModule\Components\Form\SaveGrid;
 
 use Dravencms\Components\BaseGridFactory;
-use App\Model\Form\Entities\Form;
-use App\Model\Form\Entities\Save;
-use App\Model\Form\Repository\SaveRepository;
-use App\Model\Form\Repository\SaveValueRepository;
+use Dravencms\Model\Form\Entities\Form;
+use Dravencms\Model\Form\Entities\Save;
+use Dravencms\Model\Form\Repository\SaveRepository;
+use Dravencms\Model\Form\Repository\SaveValueRepository;
 use App\Model\Locale\Repository\LocaleRepository;
 use Kdyby\Doctrine\EntityManager;
 use Nette\Application\UI\Control;

@@ -9,13 +9,13 @@
 namespace Dravencms\AdminModule\FormModule;
 
 
-use Dravencms\AdminModule\Components\Form\ItemOptionFormFactory;
-use Dravencms\AdminModule\Components\Form\ItemOptionGridFactory;
+use Dravencms\AdminModule\Components\Form\ItemOptionForm\ItemOptionFormFactory;
+use Dravencms\AdminModule\Components\Form\ItemOptionGrid\ItemOptionGridFactory;
 use Dravencms\AdminModule\SecuredPresenter;
-use App\Model\Form\Entities\Item;
-use App\Model\Form\Entities\ItemOption;
-use App\Model\Form\Repository\ItemOptionRepository;
-use App\Model\Form\Repository\ItemRepository;
+use Dravencms\Model\Form\Entities\Item;
+use Dravencms\Model\Form\Entities\ItemOption;
+use Dravencms\Model\Form\Repository\ItemOptionRepository;
+use Dravencms\Model\Form\Repository\ItemRepository;
 
 /**
  * Class ItemOptionPresenter

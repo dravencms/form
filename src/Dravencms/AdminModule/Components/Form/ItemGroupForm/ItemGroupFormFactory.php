@@ -17,12 +17,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA 02110-1301  USA
  */
-namespace Dravencms\AdminModule\Components\Form;
+namespace Dravencms\AdminModule\Components\Form\ItemGroupForm;
 
 
 
-use App\Model\Form\Entities\Form;
-use App\Model\Form\Entities\ItemGroup;
+use Dravencms\Model\Form\Entities\Form;
+use Dravencms\Model\Form\Entities\ItemGroup;
 
 /**
  * Interface ItemGroupFormFactory

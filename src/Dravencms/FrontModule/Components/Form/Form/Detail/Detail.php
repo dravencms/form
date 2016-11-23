@@ -1,12 +1,14 @@
 <?php
-namespace Dravencms\FrontModule\Components\Form\Form;
+namespace Dravencms\FrontModule\Components\Form\Form\Detail;
+
+
 use Dravencms\Components\BaseControl;
 use Dravencms\Components\BaseFormFactory;
-use App\Model\Form\Entities\Item;
-use App\Model\Form\Entities\ItemOption;
-use App\Model\Form\Entities\Save;
-use App\Model\Form\Entities\SaveValue;
-use App\Model\Form\Repository\FormRepository;
+use Dravencms\Model\Form\Entities\Item;
+use Dravencms\Model\Form\Entities\ItemOption;
+use Dravencms\Model\Form\Entities\Save;
+use Dravencms\Model\Form\Entities\SaveValue;
+use Dravencms\Model\Form\Repository\FormRepository;
 use Kdyby\Doctrine\EntityManager;
 use Nette\Application\UI\Form;
 use Nette\Http\Request;
@@ -44,7 +46,7 @@ class Detail extends BaseControl
     /** @var TemplatedEmail */
     private $templatedEmail;
 
-    /** @var \App\Model\Form\Entities\Form|mixed|null */
+    /** @var \Dravencms\Model\Form\Entities\Form|mixed|null */
     private $formInfo;
 
     /**

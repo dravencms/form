@@ -9,13 +9,13 @@
 namespace Dravencms\AdminModule\FormModule;
 
 
-use Dravencms\AdminModule\Components\Form\ItemGroupFormFactory;
-use Dravencms\AdminModule\Components\Form\ItemGroupGridFactory;
+use Dravencms\AdminModule\Components\Form\ItemGroupForm\ItemGroupFormFactory;
+use Dravencms\AdminModule\Components\Form\ItemGroupGrid\ItemGroupGridFactory;
 use Dravencms\AdminModule\SecuredPresenter;
-use App\Model\Form\Entities\Form;
-use App\Model\Form\Entities\ItemGroup;
-use App\Model\Form\Repository\FormRepository;
-use App\Model\Form\Repository\ItemGroupRepository;
+use Dravencms\Model\Form\Entities\Form;
+use Dravencms\Model\Form\Entities\ItemGroup;
+use Dravencms\Model\Form\Repository\FormRepository;
+use Dravencms\Model\Form\Repository\ItemGroupRepository;
 
 class ItemGroupPresenter extends SecuredPresenter
 {

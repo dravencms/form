@@ -19,11 +19,11 @@
  * MA 02110-1301  USA
  */
 
-namespace Dravencms\AdminModule\Components\Form;
+namespace Dravencms\AdminModule\Components\Form\ItemOptionGrid;
 
 use Dravencms\Components\BaseGridFactory;
-use App\Model\Form\Entities\Item;
-use App\Model\Form\Repository\ItemOptionRepository;
+use Dravencms\Model\Form\Entities\Item;
+use Dravencms\Model\Form\Repository\ItemOptionRepository;
 use Kdyby\Doctrine\EntityManager;
 use Nette\Application\UI\Control;
 
