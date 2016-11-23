@@ -1,0 +1,27 @@
+{
+  "name": "dravencms/form",
+  "type": "library",
+  "description": "Form module for dravencms",
+  "keywords": [
+    "dravencms",
+    "form"
+  ],
+  "license": [
+    "LGPL-3.0"
+  ],
+  "authors": [
+    {
+      "name": "Adam Schubert"
+    }
+  ],
+  "require": {
+  },
+  "require-dev": {
+    "nette/tester": "@dev"
+  },
+  "autoload": {
+    "psr-0": {
+      "Dravencms\\": "src/"
+    }
+  }
+}

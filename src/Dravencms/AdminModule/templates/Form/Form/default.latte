@@ -1,0 +1,9 @@
+{* Latte template *}
+
+{block #content}
+    <div class="page-header"><h1>{_$h1}</h1></div>
+    <p n:isAllowed="form,edit">
+        <a n:href="Form:edit" class="btn btn-primary"><i class="fa fa-plus"></i> {_"New form"}</a>
+    </p>
+    {control gridForm}
+{/block}

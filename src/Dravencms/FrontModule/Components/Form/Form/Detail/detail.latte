@@ -1,0 +1,24 @@
+<form n:name="form" class="{$formInfo->name|webalize}">
+    <ul class="alert alert-danger" n:if="$form->hasErrors()">
+        <li n:foreach="$form->errors as $error">{$error}</li>
+    </ul>
+    {foreach $formInfo->getItemGroups() AS $formsItemsGroups}
+        {foreach $formsItemsGroups->getItems() AS $formsItems}
+            <div class="form-group control-group">
+                {if $formsItems->getType() == 'select'}
+                    <select n:name="formItem_{$formsItems->getId()}" class="form-control"></select>
+                {elseif $formsItems->getType() == 'textarea'}
+                    <textarea n:name="formItem_{$formsItems->getId()}" class="form-control"></textarea>
+                {else}
+                    <input n:name="formItem_{$formsItems->getId()}" class="form-control">
+                {/if}
+            </div>
+        {/foreach}
+    {/foreach}
+
+    <div class="form-group control-group">
+        <label class="control-label" n:name="recaptcha">{_"Antispam"} <sup>*</sup></label>
+        <div n:name="recaptcha"></div>
+    </div>
+    <input n:name="send" class="btn btn-primary">
+</form>

@@ -1,0 +1,103 @@
+<?php
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+namespace Dravencms\AdminModule\FormModule;
+
+
+use Dravencms\AdminModule\Components\Form\ItemGroupFormFactory;
+use Dravencms\AdminModule\Components\Form\ItemGroupGridFactory;
+use Dravencms\AdminModule\SecuredPresenter;
+use App\Model\Form\Entities\Form;
+use App\Model\Form\Entities\ItemGroup;
+use App\Model\Form\Repository\FormRepository;
+use App\Model\Form\Repository\ItemGroupRepository;
+
+class ItemGroupPresenter extends SecuredPresenter
+{
+    /** @var FormRepository @inject */
+    public $formRepository;
+
+    /** @var ItemGroupRepository @inject */
+    public $itemGroupRepository;
+
+    /** @var ItemGroupFormFactory @inject */
+    public $itemGroupFormFactory;
+
+    /** @var ItemGroupGridFactory @inject */
+    public $itemGroupGridFactory;
+
+    /** @var Form|null */
+    private $form = null;
+
+    /** @var ItemGroup|null */
+    private $itemGroup = null;
+
+    /**
+     * @param integer $formId
+     * @isAllowed(form,edit)
+     */
+    public function actionDefault($formId)
+    {
+        $this->form = $this->formRepository->getOneById($formId);
+        $this->template->form = $this->form;
+        $this->template->h1 = 'Item Groups';
+    }
+
+    /**
+     * @isAllowed(form,edit)
+     * @param integer $formId
+     * @param null $id
+     * @throws \Nette\Application\BadRequestException
+     */
+    public function actionEdit($formId, $id = null)
+    {
+        $this->form = $this->formRepository->getOneById($formId);
+
+        if ($id) {
+            $itemGroup = $this->itemGroupRepository->getOneById($id);
+
+            if (!$itemGroup) {
+                $this->error();
+            }
+
+            $this->itemGroup = $itemGroup;
+
+            $this->template->h1 = 'Item group edit';
+        } else {
+            $this->template->h1 = 'New item group';
+        }
+    }
+
+    /**
+     * @return \AdminModule\Components\Form\ItemGroupGrid
+     */
+    public function createComponentGridItemGroup()
+    {
+        $control = $this->itemGroupGridFactory->create($this->form);
+        $control->onDelete[] = function()
+        {
+            $this->flashMessage('Item group has been successfully deleted', 'alert-success');
+            $this->redirect('ItemGroup:', $this->form->getId());
+        };
+        return $control;
+    }
+
+    /**
+     * @return \AdminModule\Components\Form\ItemGroupForm
+     */
+    public function createComponentFormItemGroup()
+    {
+        $control = $this->itemGroupFormFactory->create($this->form, $this->itemGroup);
+        $control->onSuccess[] = function()
+        {
+            $this->flashMessage('Item group has been successfully saved', 'alert-success');
+            $this->redirect('ItemGroup:', $this->form->getId());
+        };
+        return $control;
+    }
+}
