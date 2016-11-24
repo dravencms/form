@@ -5,7 +5,7 @@
 
 namespace Dravencms\Model\Form\Repository;
 
-use App\Model\BaseRepository;
+use Dravencms\Locale\TLocalizedRepository;
 use Dravencms\Model\Form\Entities\Form;
 use Kdyby\Doctrine\EntityManager;
 use Nette;
@@ -14,8 +14,10 @@ use Salamek\Cms\ICmsActionOption;
 use Salamek\Cms\ICmsComponentRepository;
 use Salamek\Cms\Models\ILocale;
 
-class FormRepository extends BaseRepository implements ICmsComponentRepository
+class FormRepository implements ICmsComponentRepository
 {
+    use TLocalizedRepository;
+
     /** @var \Kdyby\Doctrine\EntityRepository */
     private $formRepository;
 
