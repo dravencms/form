@@ -37,12 +37,12 @@ class InstallCommand extends Command
 
             $entityManager->persist($aclResource);
 
-            $aclOperation = new AclOperation($aclResource, 'edit', 'Allows editation of form');
-            $entityManager->persist($aclOperation);
-            $aclOperation = new AclOperation($aclResource, 'delete', 'Allows deletion of form');
-            $entityManager->persist($aclOperation);
+            $aclOperationEdit = new AclOperation($aclResource, 'edit', 'Allows editation of form');
+            $entityManager->persist($aclOperationEdit);
+            $aclOperationDelete = new AclOperation($aclResource, 'delete', 'Allows deletion of form');
+            $entityManager->persist($aclOperationDelete);
 
-            $adminMenu = new Menu('Forms', ':Admin:Form:Form', 'fa-credit-card', $aclOperation);
+            $adminMenu = new Menu('Forms', ':Admin:Form:Form', 'fa-credit-card', $aclOperationEdit);
 
             $foundRoot = $adminMenuRepository->getOneByName('Site items');
 
