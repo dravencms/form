@@ -21,17 +21,17 @@
 
 namespace Dravencms\AdminModule\Components\Form\FormGrid;
 
-use Dravencms\Components\BaseGridFactory;
+use Dravencms\Components\BaseControl\BaseControl;
+use Dravencms\Components\BaseGrid\BaseGridFactory;
 use Dravencms\Model\Form\Repository\FormRepository;
 use Kdyby\Doctrine\EntityManager;
-use Nette\Application\UI\Control;
 
 /**
  * Description of FormGrid
  *
  * @author Adam Schubert <adam.schubert@sg1-game.net>
  */
-class FormGrid extends Control
+class FormGrid extends BaseControl
 {
 
     /** @var BaseGridFactory */

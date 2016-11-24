@@ -2,8 +2,8 @@
 namespace Dravencms\FrontModule\Components\Form\Form\Detail;
 
 
-use Dravencms\Components\BaseControl;
-use Dravencms\Components\BaseFormFactory;
+use Dravencms\Components\BaseControl\BaseControl;
+use Dravencms\Components\BaseForm\BaseFormFactory;
 use Dravencms\Model\Form\Entities\Item;
 use Dravencms\Model\Form\Entities\ItemOption;
 use Dravencms\Model\Form\Entities\Save;

@@ -20,13 +20,13 @@
 
 namespace Dravencms\AdminModule\Components\Form\ItemGroupForm;
 
-use Dravencms\Components\BaseFormFactory;
+use Dravencms\Components\BaseControl\BaseControl;
+use Dravencms\Components\BaseForm\BaseFormFactory;
 use Dravencms\Model\Form\Entities\Form;
 use Dravencms\Model\Form\Entities\ItemGroup;
 use Dravencms\Model\Form\Repository\ItemGroupRepository;
 use Dravencms\Model\Locale\Repository\LocaleRepository;
 use Kdyby\Doctrine\EntityManager;
-use Nette\Application\UI\Control;
 use Nette\Application\UI\Form as NForm;
 
 /**
@@ -34,7 +34,7 @@ use Nette\Application\UI\Form as NForm;
  *
  * @author Adam Schubert <adam.schubert@sg1-game.net>
  */
-class ItemGroupForm extends Control
+class ItemGroupForm extends BaseControl
 {
     /** @var BaseFormFactory */
     private $baseFormFactory;

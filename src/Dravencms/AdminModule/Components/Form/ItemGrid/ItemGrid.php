@@ -21,12 +21,12 @@
 
 namespace Dravencms\AdminModule\Components\Form\ItemGrid;
 
-use Dravencms\Components\BaseGridFactory;
+use Dravencms\Components\BaseControl\BaseControl;
+use Dravencms\Components\BaseGrid\BaseGridFactory;
 use Dravencms\Model\Form\Entities\Item;
 use Dravencms\Model\Form\Entities\ItemGroup;
 use Dravencms\Model\Form\Repository\ItemRepository;
 use Kdyby\Doctrine\EntityManager;
-use Nette\Application\UI\Control;
 use Nette\Utils\Html;
 
 /**
@@ -34,7 +34,7 @@ use Nette\Utils\Html;
  *
  * @author Adam Schubert <adam.schubert@sg1-game.net>
  */
-class ItemGrid extends Control
+class ItemGrid extends BaseControl
 {
 
     /** @var BaseGridFactory */

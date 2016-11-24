@@ -21,21 +21,21 @@
 
 namespace Dravencms\AdminModule\Components\Form\SaveGrid;
 
-use Dravencms\Components\BaseGridFactory;
+use Dravencms\Components\BaseControl\BaseControl;
+use Dravencms\Components\BaseGrid\BaseGridFactory;
 use Dravencms\Model\Form\Entities\Form;
 use Dravencms\Model\Form\Entities\Save;
 use Dravencms\Model\Form\Repository\SaveRepository;
 use Dravencms\Model\Form\Repository\SaveValueRepository;
 use Dravencms\Model\Locale\Repository\LocaleRepository;
 use Kdyby\Doctrine\EntityManager;
-use Nette\Application\UI\Control;
 
 /**
  * Description of SaveGrid
  *
  * @author Adam Schubert <adam.schubert@sg1-game.net>
  */
-class SaveGrid extends Control
+class SaveGrid extends BaseControl
 {
 
     /** @var BaseGridFactory */
