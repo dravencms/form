@@ -1,6 +1,6 @@
 {
   "name": "dravencms/form",
-  "type": "library",
+  "type": "dravencms-package",
   "description": "Form module for dravencms",
   "keywords": [
     "dravencms",
@@ -23,6 +23,19 @@
   "autoload": {
     "psr-0": {
       "Dravencms\\": "src/"
+    }
+  },
+  "extra": {
+    "dravencms": {
+      "configuration": {
+        "extensions": {
+          "timeline": "Dravencms\\Form\\DI\\FormExtension"
+        }
+      },
+      "scripts": {
+        "post-install": "Dravencms\\Form\\Script\\PostInstall",
+        "pre-uninstall": "Dravencms\\Form\\Script\\PreUninstall"
+      }
     }
   }
 }

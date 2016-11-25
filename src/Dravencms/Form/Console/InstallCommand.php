@@ -33,29 +33,7 @@ class InstallCommand extends Command
 
         try {
 
-            $aclResource = new AclResource('form', 'Form');
-
-            $entityManager->persist($aclResource);
-
-            $aclOperationEdit = new AclOperation($aclResource, 'edit', 'Allows editation of form');
-            $entityManager->persist($aclOperationEdit);
-            $aclOperationDelete = new AclOperation($aclResource, 'delete', 'Allows deletion of form');
-            $entityManager->persist($aclOperationDelete);
-
-            $adminMenu = new Menu('Forms', ':Admin:Form:Form', 'fa-credit-card', $aclOperationEdit);
-
-            $foundRoot = $adminMenuRepository->getOneByName('Site items');
-
-            if ($foundRoot)
-            {
-                $adminMenuRepository->getMenuRepository()->persistAsLastChildOf($adminMenu, $foundRoot);
-            }
-            else
-            {
-                $entityManager->persist($adminMenu);
-            }
-
-            $entityManager->flush();
+            
 
             $output->writeLn('Module installed successfully');
             return 0; // zero return code means everything is ok
