@@ -29,7 +29,7 @@
     "dravencms": {
       "configuration": {
         "extensions": {
-          "timeline": "Dravencms\\Form\\DI\\FormExtension"
+          "form": "Dravencms\\Form\\DI\\FormExtension"
         }
       },
       "scripts": {
