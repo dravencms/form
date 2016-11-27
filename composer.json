@@ -15,7 +15,7 @@
     }
   ],
   "require": {
-    "minetro/recaptcha": "@dev"
+    "dravencms/recaptcha": "@dev"
   },
   "require-dev": {
     "nette/tester": "@dev"
