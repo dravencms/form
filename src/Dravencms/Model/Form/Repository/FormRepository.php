@@ -14,7 +14,7 @@ use Salamek\Cms\ICmsActionOption;
 use Salamek\Cms\ICmsComponentRepository;
 use Salamek\Cms\Models\ILocale;
 
-class FormRepository implements ICmsComponentRepository
+class FormRepository
 {
     use TLocalizedRepository;
 
@@ -63,6 +63,14 @@ class FormRepository implements ICmsComponentRepository
     }
 
     /**
+     * @return Form[]
+     */
+    public function getActive()
+    {
+        return $this->formRepository->findBy(['isActive' => true]);
+    }
+
+    /**
      * @param $name
      * @param Form|null $formIgnore
      * @return mixed
@@ -84,49 +92,5 @@ class FormRepository implements ICmsComponentRepository
         }
 
         return (is_null($qb->getQuery()->getOneOrNullResult()));
-    }
-
-
-    /**
-     * @param string $componentAction
-     * @return ICmsActionOption[]
-     */
-    public function getActionOptions($componentAction)
-    {
-        switch ($componentAction)
-        {
-            case 'Detail':
-                $return = [];
-                /** @var Form $form */
-                foreach ($this->formRepository->findBy(['isActive' => true]) AS $form) {
-                    $return[] = new CmsActionOption($form->getName(), ['id' => $form->getId()]);
-                }
-                break;
-
-            default:
-                return false;
-                break;
-        }
-
-
-        return $return;
-    }
-
-    /**
-     * @param string $componentAction
-     * @param array $parameters
-     * @param ILocale $locale
-     * @return null|CmsActionOption
-     */
-    public function getActionOption($componentAction, array $parameters, ILocale $locale)
-    {
-        $found = $this->findTranslatedOneBy($this->formRepository, $locale, $parameters + ['isActive' => true]);
-
-        if ($found)
-        {
-            return new CmsActionOption($found->getName(), $parameters);
-        }
-
-        return null;
     }
 }
