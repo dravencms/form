@@ -16,8 +16,7 @@
   ],
   "require": {
     "dravencms/recaptcha": "@dev",
-    "salamek/nette-templated-email": "@dev",
-    "dravencms/recaptcha": "@dev"
+    "salamek/nette-templated-email": "@dev"
   },
   "require-dev": {
     "nette/tester": "@dev"
