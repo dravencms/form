@@ -16,7 +16,7 @@
   ],
   "require": {
     "dravencms/recaptcha": "@dev",
-    "templated-email": "@dev"
+    "dravencms/templated-email": "@dev"
   },
   "require-dev": {
     "nette/tester": "@dev"
