@@ -15,6 +15,7 @@
     }
   ],
   "require": {
+    "dravencms/structure": "@dev",
     "dravencms/recaptcha": "@dev",
     "dravencms/templated-email": "@dev"
   },
