@@ -10,7 +10,7 @@ use Dravencms\Model\Form\Entities\ItemGroup;
 use Gedmo\Translatable\TranslatableListener;
 use Kdyby\Doctrine\EntityManager;
 use Nette;
-use Salamek\Cms\Models\ILocale;
+use Dravencms\Model\Locale\Entities\ILocale;
 
 class ItemGroupRepository
 {

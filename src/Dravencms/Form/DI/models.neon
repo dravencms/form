@@ -5,3 +5,7 @@
 - Dravencms\Model\Form\Repository\ItemRepository
 - Dravencms\Model\Form\Repository\SaveRepository
 - Dravencms\Model\Form\Repository\SaveValueRepository
+
+- Dravencms\Model\Form\Fixtures\AclOperationFixtures
+- Dravencms\Model\Form\Fixtures\AclResourceFixtures
+- Dravencms\Model\Form\Fixtures\AdminMenuFixtures
