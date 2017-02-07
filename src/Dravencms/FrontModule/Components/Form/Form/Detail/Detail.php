@@ -4,6 +4,7 @@ namespace Dravencms\FrontModule\Components\Form\Form\Detail;
 
 use Dravencms\Components\BaseControl\BaseControl;
 use Dravencms\Components\BaseForm\BaseFormFactory;
+use Dravencms\Flash;
 use Dravencms\Model\Form\Entities\Item;
 use Dravencms\Model\Form\Entities\ItemOption;
 use Dravencms\Model\Form\Entities\Save;
@@ -247,7 +248,7 @@ class Detail extends BaseControl
                 ->send();
         }
 
-        $this->presenter->flashMessage($this->formInfo->getSuccessMessage(), 'alert-success');
+        $this->presenter->flashMessage($this->formInfo->getSuccessMessage(), Flash::SUCCESS);
         $this->redirect('this');
     }
 }
