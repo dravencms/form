@@ -225,9 +225,11 @@ class Detail extends BaseControl
 
         $this->entityManager->persist($save);
 
+        $formData = [];
         foreach ($this->formInfo->getItemGroups() AS $formsItemsGroup) {
             foreach ($formsItemsGroup->getItems() AS $formsItem) {
-                $saveValue = new SaveValue($values->{'formItem_' . $formsItem->getId()},$formsItem,  $save);
+                $formData[$formsItem->getName()] = $values->{'formItem_' . $formsItem->getId()};
+                $saveValue = new SaveValue($values->{'formItem_' . $formsItem->getId()},$formsItem, $save);
                 $this->entityManager->persist($saveValue);
             }
         }
@@ -237,7 +239,8 @@ class Detail extends BaseControl
         if ($this->formInfo->getEmail())
         {
             $this->templatedEmail->formFormDetail([
-                'title' => $this->formInfo->getName()
+                'title' => $this->formInfo->getName(),
+                'formData' => $formData
             ])
                 ->addTo($this->formInfo->getEmail())
                 ->setSubject($this->formInfo->getName())
