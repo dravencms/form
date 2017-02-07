@@ -160,6 +160,10 @@ class SaveGrid extends BaseControl
         $saves = $this->saveRepository->getById($id);
         foreach ($saves AS $save)
         {
+            foreach ($save->getSaveValues() AS $saveValue)
+            {
+                $this->entityManager->remove($saveValue);
+            }
             $this->entityManager->remove($save);
         }
 
