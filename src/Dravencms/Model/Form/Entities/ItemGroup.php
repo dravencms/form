@@ -4,7 +4,6 @@ namespace Dravencms\Model\Form\Entities;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Gedmo\Translatable\Translatable;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Kdyby\Doctrine\Entities\Attributes\Identifier;
 use Nette;
@@ -21,13 +20,6 @@ class ItemGroup extends Nette\Object
     use TimestampableEntity;
 
     /**
-     * @var string
-     * @Gedmo\Translatable
-     * @ORM\Column(type="string",length=255,nullable=false,unique=true)
-     */
-    private $name;
-
-    /**
      * @var boolean
      * @ORM\Column(type="boolean")
      */
@@ -39,14 +31,6 @@ class ItemGroup extends Nette\Object
      * @ORM\Column(type="integer")
      */
     private $position;
-
-    /**
-     * @Gedmo\Locale
-     * Used locale to override Translation listener`s locale
-     * this is not a mapped field of entity metadata, just a simple property
-     * and it is not necessary because globally locale can be set in listener
-     */
-    private $locale;
 
     /**
      * @var Form
@@ -63,24 +47,22 @@ class ItemGroup extends Nette\Object
     private $items;
 
     /**
-     * ItemGroup constructor.
-     * @param Form $form
-     * @param $name
-     * @param bool $isShowName
+     * @var ArrayCollection|ItemGroupTranslation[]
+     * @ORM\OneToMany(targetEntity="ItemGroupTranslation", mappedBy="itemGroup",cascade={"persist"})
      */
-    public function __construct(Form $form, $name, $isShowName = false)
-    {
-        $this->name = $name;
-        $this->isShowName = $isShowName;
-        $this->form = $form;
-    }
+    private $translations;
 
     /**
-     * @param string $name
+     * ItemGroup constructor.
+     * @param Form $form
+     * @param bool $isShowName
      */
-    public function setName($name)
+    public function __construct(Form $form, $isShowName = false)
     {
-        $this->name = $name;
+        $this->isShowName = $isShowName;
+        $this->form = $form;
+
+        $this->translations = new ArrayCollection();
     }
 
     /**
@@ -100,27 +82,11 @@ class ItemGroup extends Nette\Object
     }
 
     /**
-     * @param mixed $locale
-     */
-    public function setLocale($locale)
-    {
-        $this->locale = $locale;
-    }
-
-    /**
      * @param Form $form
      */
     public function setForm($form)
     {
         $this->form = $form;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
     }
 
     /**
@@ -140,14 +106,6 @@ class ItemGroup extends Nette\Object
     }
 
     /**
-     * @return mixed
-     */
-    public function getLocale()
-    {
-        return $this->locale;
-    }
-
-    /**
      * @return Form
      */
     public function getForm()
@@ -161,6 +119,14 @@ class ItemGroup extends Nette\Object
     public function getItems()
     {
         return $this->items;
+    }
+
+    /**
+     * @return ArrayCollection|ItemGroupTranslation[]
+     */
+    public function getTranslations()
+    {
+        return $this->translations;
     }
 }
 

@@ -7,12 +7,10 @@ namespace Dravencms\Model\Form\Repository;
 
 use Dravencms\Locale\TLocalizedRepository;
 use Dravencms\Model\Form\Entities\Form;
+use Dravencms\Model\Form\Entities\FormTranslation;
 use Kdyby\Doctrine\EntityManager;
 use Nette;
-use Salamek\Cms\CmsActionOption;
-use Salamek\Cms\ICmsActionOption;
-use Salamek\Cms\ICmsComponentRepository;
-use Salamek\Cms\Models\ILocale;
+use Dravencms\Model\Locale\Entities\ILocale;
 
 class FormRepository
 {
@@ -20,6 +18,9 @@ class FormRepository
 
     /** @var \Kdyby\Doctrine\EntityRepository */
     private $formRepository;
+
+    /** @var \Kdyby\Doctrine\EntityRepository */
+    private $formTranslationRepository;
 
     /** @var EntityManager */
     private $entityManager;
@@ -32,6 +33,7 @@ class FormRepository
     {
         $this->entityManager = $entityManager;
         $this->formRepository = $entityManager->getRepository(Form::class);
+        $this->formTranslationRepository = $entityManager->getRepository(FormTranslation::class);
     }
 
     /**
@@ -92,5 +94,24 @@ class FormRepository
         }
 
         return (is_null($qb->getQuery()->getOneOrNullResult()));
+    }
+
+    /**
+     * @param Form $form
+     * @param ILocale $locale
+     * @return FormTranslation
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function getTranslation(Form $form, ILocale $locale)
+    {
+        $qb = $this->formTranslationRepository->createQueryBuilder('t')
+            ->select('t')
+            ->where('t.locale = :locale')
+            ->andWhere('t.form = :form')
+            ->setParameters([
+                'form' => $form,
+                'locale' => $locale
+            ]);
+        return $qb->getQuery()->getResult();
     }
 }

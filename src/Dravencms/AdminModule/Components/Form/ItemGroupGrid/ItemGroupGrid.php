@@ -23,6 +23,7 @@ namespace Dravencms\AdminModule\Components\Form\ItemGroupGrid;
 
 use Dravencms\Components\BaseControl\BaseControl;
 use Dravencms\Components\BaseGrid\BaseGridFactory;
+use Dravencms\Locale\CurrentLocale;
 use Dravencms\Model\Form\Entities\Form;
 use Dravencms\Model\Form\Repository\ItemGroupRepository;
 use Kdyby\Doctrine\EntityManager;
@@ -47,6 +48,9 @@ class ItemGroupGrid extends BaseControl
     /** @var Form */
     private $form;
 
+    /** @var CurrentLocale */
+    private $currentLocale;
+
     /**
      * @var array
      */
@@ -57,33 +61,41 @@ class ItemGroupGrid extends BaseControl
      * @param Form $form
      * @param ItemGroupRepository $itemGroupRepository
      * @param BaseGridFactory $baseGridFactory
+     * @param CurrentLocale $currentLocale
      * @param EntityManager $entityManager
      */
-    public function __construct(Form $form, ItemGroupRepository $itemGroupRepository, BaseGridFactory $baseGridFactory, EntityManager $entityManager)
+    public function __construct(
+        Form $form,
+        ItemGroupRepository $itemGroupRepository,
+        BaseGridFactory $baseGridFactory,
+        CurrentLocale $currentLocale,
+        EntityManager $entityManager
+    )
     {
         parent::__construct();
 
         $this->baseGridFactory = $baseGridFactory;
         $this->itemGroupRepository = $itemGroupRepository;
         $this->entityManager = $entityManager;
+        $this->currentLocale = $currentLocale;
         $this->form = $form;
     }
 
 
     /**
      * @param $name
-     * @return \Dravencms\Components\BaseGrid
+     * @return \Dravencms\Components\BaseGrid\BaseGrid
      */
     public function createComponentGrid($name)
     {
         $grid = $this->baseGridFactory->create($this, $name);
 
-        $grid->setModel($this->itemGroupRepository->getItemGroupQueryBuilder($this->form));
+        $grid->setModel($this->itemGroupRepository->getItemGroupQueryBuilder($this->form, $this->currentLocale));
 
-        $grid->addColumnText('name', 'Name')
+        /*$grid->addColumnText('name', 'Name')
             ->setSortable()
             ->setFilterText()
-            ->setSuggestion();
+            ->setSuggestion();*/
 
         $grid->addColumnBoolean('isShowName', 'Show name');
 

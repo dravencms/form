@@ -62,14 +62,6 @@ class Item extends Nette\Object
      * @ORM\Column(type="string",length=255)
      */
     private $type;
-
-    /**
-     * @var string
-     * @Gedmo\Translatable
-     * @ORM\Column(type="string",length=255,nullable=false)
-     */
-    private $defaultValue;
-
     /**
      * @var integer
      * @ORM\Column(type="integer",nullable=true)
@@ -83,27 +75,6 @@ class Item extends Nette\Object
     private $maxValue;
 
     /**
-     * @var string
-     * @Gedmo\Translatable
-     * @ORM\Column(type="string",length=255,nullable=false)
-     */
-    private $placeholder;
-
-    /**
-     * @var string
-     * @Gedmo\Translatable
-     * @ORM\Column(type="string",length=255,nullable=false)
-     */
-    private $title;
-
-    /**
-     * @var string
-     * @Gedmo\Translatable
-     * @ORM\Column(type="string",length=255,nullable=true)
-     */
-    private $required;
-
-    /**
      * @var integer
      * @Gedmo\SortablePosition
      * @ORM\Column(type="integer")
@@ -111,12 +82,10 @@ class Item extends Nette\Object
     private $position;
 
     /**
-     * @Gedmo\Locale
-     * Used locale to override Translation listener`s locale
-     * this is not a mapped field of entity metadata, just a simple property
-     * and it is not necessary because globally locale can be set in listener
+     * @var ArrayCollection|ItemTranslantion[]
+     * @ORM\OneToMany(targetEntity="ItemTranslantion", mappedBy="item",cascade={"persist"})
      */
-    private $locale;
+    private $translations;
 
     /**
      * @var ItemGroup
@@ -144,26 +113,20 @@ class Item extends Nette\Object
      * @param $name
      * @param $title
      * @param $type
-     * @param null $defaultValue
      * @param null $minValue
      * @param null $maxValue
-     * @param null $placeholder
-     * @param null $required
      */
-    public function __construct(ItemGroup $itemGroup, $name, $title, $type, $defaultValue = null, $minValue = null, $maxValue = null, $placeholder = null, $required = null)
+    public function __construct(ItemGroup $itemGroup, $name, $title, $type, $minValue = null, $maxValue = null)
     {
         $this->itemGroup = $itemGroup;
         $this->name = $name;
         $this->type = $type;
-        $this->defaultValue = $defaultValue;
         $this->minValue = $minValue;
         $this->maxValue = $maxValue;
-        $this->placeholder = $placeholder;
-        $this->title = $title;
-        $this->required = $required;
 
         $this->itemOptions = new ArrayCollection();
         $this->saveValues = new ArrayCollection();
+        $this->translations = new ArrayCollection();
     }
 
     /**
@@ -187,14 +150,6 @@ class Item extends Nette\Object
     }
 
     /**
-     * @param string $defaultValue
-     */
-    public function setDefaultValue($defaultValue)
-    {
-        $this->defaultValue = $defaultValue;
-    }
-
-    /**
      * @param int $minValue
      */
     public function setMinValue($minValue)
@@ -211,43 +166,11 @@ class Item extends Nette\Object
     }
 
     /**
-     * @param string $placeholder
-     */
-    public function setPlaceholder($placeholder)
-    {
-        $this->placeholder = $placeholder;
-    }
-
-    /**
-     * @param string $title
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
-    }
-
-    /**
-     * @param boolean $required
-     */
-    public function setRequired($required)
-    {
-        $this->required = $required;
-    }
-
-    /**
      * @param int $position
      */
     public function setPosition($position)
     {
         $this->position = $position;
-    }
-
-    /**
-     * @param $locale
-     */
-    public function setLocale($locale)
-    {
-        $this->locale = $locale;
     }
 
     /**
@@ -267,14 +190,6 @@ class Item extends Nette\Object
     }
 
     /**
-     * @return string
-     */
-    public function getDefaultValue()
-    {
-        return $this->defaultValue;
-    }
-
-    /**
      * @return int
      */
     public function getMinValue()
@@ -291,30 +206,6 @@ class Item extends Nette\Object
     }
 
     /**
-     * @return string
-     */
-    public function getPlaceholder()
-    {
-        return $this->placeholder;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
-     * @return string
-     */
-    public function getRequired()
-    {
-        return $this->required;
-    }
-
-    /**
      * @return int
      */
     public function getPosition()
@@ -323,19 +214,19 @@ class Item extends Nette\Object
     }
 
     /**
-     * @return mixed
-     */
-    public function getLocale()
-    {
-        return $this->locale;
-    }
-
-    /**
      * @return ItemOption[]|ArrayCollection
      */
     public function getItemOptions()
     {
         return $this->itemOptions;
+    }
+
+    /**
+     * @return ArrayCollection|ItemTranslantion[]
+     */
+    public function getTranslations()
+    {
+        return $this->translations;
     }
 }
 

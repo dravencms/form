@@ -23,10 +23,12 @@ namespace Dravencms\AdminModule\Components\Form\FormForm;
 use Dravencms\Components\BaseControl\BaseControl;
 use Dravencms\Components\BaseForm\BaseFormFactory;
 use Dravencms\Model\Form\Entities\Form;
+use Dravencms\Model\Form\Entities\FormTranslation;
 use Dravencms\Model\Form\Repository\FormRepository;
 use Dravencms\Model\Locale\Repository\LocaleRepository;
 use Kdyby\Doctrine\EntityManager;
 use Nette\Application\UI\Form as NForm;
+use Tracy\Debugger;
 
 /**
  * Description of FormForm
@@ -81,20 +83,14 @@ class FormForm extends BaseControl
             $defaults = [
                 'name' => $this->form->getName(),
                 'email' => $this->form->getEmail(),
-                /*'sendButtonValue' => $this->form->getSendButtonValue(),
-                'successMessage' => $this->form->getSuccessMessage(),
-                'latteTemplate' => $this->form->getLatteTemplate(),*/
                 'isActive' => $this->form->isActive()
             ];
 
-            $repository = $this->entityManager->getRepository('Gedmo\Translatable\Entity\Translation');
-            $defaults += $repository->findTranslations($this->form);
-
-            $defaultLocale = $this->localeRepository->getDefault();
-            if ($defaultLocale) {
-                $defaults[$defaultLocale->getLanguageCode()]['sendButtonValue'] = $this->form->getSendButtonValue();
-                $defaults[$defaultLocale->getLanguageCode()]['successMessage'] = $this->form->getSuccessMessage();
-                $defaults[$defaultLocale->getLanguageCode()]['latteTemplate'] = $this->form->getLatteTemplate();
+            foreach ($this->form->getTranslations() AS $translation)
+            {
+                $defaults[$translation->getLocale()->getLanguageCode()]['sendButtonValue'] = $translation->getSendButtonValue();
+                $defaults[$translation->getLocale()->getLanguageCode()]['successMessage'] = $translation->getSuccessMessage();
+                $defaults[$translation->getLocale()->getLanguageCode()]['latteTemplate'] = $translation->getLatteTemplate();
             }
         }
         else{
@@ -107,7 +103,7 @@ class FormForm extends BaseControl
     }
 
     /**
-     * @return \Dravencms\Components\BaseForm
+     * @return \Dravencms\Components\BaseForm\BaseForm
      */
     protected function createComponentForm()
     {
@@ -175,23 +171,33 @@ class FormForm extends BaseControl
             $form->setName($values->name);
             $form->setEmail($values->email);
             $form->setIsActive($values->isActive);
-            /*$form->setSendButtonValue($values->sendButtonValue);
-            $form->setSuccessMessage($values->successMessage);
-            $form->setLatteTemplate($values->latteTemplate);*/
         } else {
-            $defaultLocale = $this->localeRepository->getDefault();
-            $form = new Form($values->name, $values->email, $values->{$defaultLocale->getLanguageCode()}->sendButtonValue, $values->{$defaultLocale->getLanguageCode()}->successMessage, $values->{$defaultLocale->getLanguageCode()}->latteTemplate, $values->isActive);
-        }
-
-        $repository = $this->entityManager->getRepository('Gedmo\\Translatable\\Entity\\Translation');
-
-        foreach ($this->localeRepository->getActive() AS $activeLocale) {
-            $repository->translate($form, 'sendButtonValue', $activeLocale->getLanguageCode(), $values->{$activeLocale->getLanguageCode()}->sendButtonValue)
-                ->translate($form, 'successMessage', $activeLocale->getLanguageCode(), $values->{$activeLocale->getLanguageCode()}->successMessage)
-                ->translate($form, 'latteTemplate', $activeLocale->getLanguageCode(), $values->{$activeLocale->getLanguageCode()}->latteTemplate);
+            $form = new Form($values->name, $values->email, $values->isActive);
         }
 
         $this->entityManager->persist($form);
+        $this->entityManager->flush();
+
+        foreach ($this->localeRepository->getActive() AS $activeLocale) {
+            if ($formTranslation = $this->formRepository->getTranslation($form, $activeLocale))
+            {
+                $formTranslation->setLatteTemplate($values->{$activeLocale->getLanguageCode()}->latteTemplate);
+                $formTranslation->setSendButtonValue($values->{$activeLocale->getLanguageCode()}->sendButtonValue);
+                $formTranslation->setSuccessMessage($values->{$activeLocale->getLanguageCode()}->successMessage);
+            }
+            else
+            {
+                $formTranslation = new FormTranslation(
+                    $form,
+                    $activeLocale,
+                    $values->{$activeLocale->getLanguageCode()}->sendButtonValue,
+                    $values->{$activeLocale->getLanguageCode()}->successMessage,
+                    $values->{$activeLocale->getLanguageCode()}->latteTemplate
+                );
+            }
+
+            $this->entityManager->persist($formTranslation);
+        }
 
         $this->entityManager->flush();
 

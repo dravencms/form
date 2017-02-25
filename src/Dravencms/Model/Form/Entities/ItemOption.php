@@ -1,6 +1,7 @@
 <?php
 namespace Dravencms\Model\Form\Entities;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Translatable\Translatable;
@@ -48,6 +49,12 @@ class ItemOption extends Nette\Object
     private $item;
 
     /**
+     * @var ArrayCollection|ItemOptionTranslation[]
+     * @ORM\OneToMany(targetEntity="ItemOptionTranslation", mappedBy="itemOption",cascade={"persist"})
+     */
+    private $translations;
+
+    /**
      * ItemOption constructor.
      * @param Item $item
      * @param $name
@@ -56,6 +63,7 @@ class ItemOption extends Nette\Object
     {
         $this->name = $name;
         $this->item = $item;
+        $this->translations = new ArrayCollection();
     }
 
     /**
@@ -112,6 +120,14 @@ class ItemOption extends Nette\Object
     public function getItem()
     {
         return $this->item;
+    }
+
+    /**
+     * @return ArrayCollection|ItemOptionTranslation[]
+     */
+    public function getTranslations()
+    {
+        return $this->translations;
     }
 }
 

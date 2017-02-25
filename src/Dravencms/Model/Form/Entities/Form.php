@@ -20,7 +20,6 @@ class Form extends Nette\Object
     use Identifier;
     use TimestampableEntity;
 
-
     /**
      * @var string
      * @ORM\Column(type="string",length=255,nullable=false,unique=true)
@@ -34,39 +33,10 @@ class Form extends Nette\Object
     private $email;
 
     /**
-     * @var string
-     * @Gedmo\Translatable
-     * @ORM\Column(type="string",length=255,nullable=false)
-     */
-    private $sendButtonValue;
-
-    /**
-     * @var string
-     * @Gedmo\Translatable
-     * @ORM\Column(type="string",length=255,nullable=false)
-     */
-    private $successMessage;
-
-    /**
-     * @var string
-     * @Gedmo\Translatable
-     * @ORM\Column(type="text",nullable=false)
-     */
-    private $latteTemplate;
-
-    /**
      * @var boolean
      * @ORM\Column(type="boolean", nullable=false)
      */
     private $isActive;
-
-    /**
-     * @Gedmo\Locale
-     * Used locale to override Translation listener`s locale
-     * this is not a mapped field of entity metadata, just a simple property
-     * and it is not necessary because globally locale can be set in listener
-     */
-    private $locale;
 
     /**
      * @var ArrayCollection|ItemGroup[]
@@ -75,24 +45,25 @@ class Form extends Nette\Object
     private $itemGroups;
 
     /**
+     * @var ArrayCollection|FormTranslation[]
+     * @ORM\OneToMany(targetEntity="FormTranslation", mappedBy="form",cascade={"persist"})
+     */
+    private $translations;
+
+    /**
      * Form constructor.
      * @param string $name
      * @param string $email
-     * @param string $sendButtonValue
-     * @param string $successMessage
-     * @param string $latteTemplate
      * @param bool $isActive
      */
-    public function __construct($name, $email, $sendButtonValue, $successMessage, $latteTemplate = null, $isActive = true)
+    public function __construct($name, $email, $isActive = true)
     {
         $this->name = $name;
         $this->email = $email;
-        $this->sendButtonValue = $sendButtonValue;
-        $this->successMessage = $successMessage;
-        $this->latteTemplate = $latteTemplate;
         $this->isActive = $isActive;
 
         $this->itemGroups = new ArrayCollection();
+        $this->translations = new ArrayCollection();
     }
 
 
@@ -121,38 +92,6 @@ class Form extends Nette\Object
     }
 
     /**
-     * @param string $sendButtonValue
-     */
-    public function setSendButtonValue($sendButtonValue)
-    {
-        $this->sendButtonValue = $sendButtonValue;
-    }
-
-    /**
-     * @param string $successMessage
-     */
-    public function setSuccessMessage($successMessage)
-    {
-        $this->successMessage = $successMessage;
-    }
-
-    /**
-     * @param string $latteTemplate
-     */
-    public function setLatteTemplate($latteTemplate)
-    {
-        $this->latteTemplate = $latteTemplate;
-    }
-
-    /**
-     * @param mixed $locale
-     */
-    public function setLocale($locale)
-    {
-        $this->locale = $locale;
-    }
-    
-    /**
      * @return boolean
      */
     public function isActive()
@@ -177,38 +116,6 @@ class Form extends Nette\Object
     }
 
     /**
-     * @return string
-     */
-    public function getSendButtonValue()
-    {
-        return $this->sendButtonValue;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSuccessMessage()
-    {
-        return $this->successMessage;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLatteTemplate()
-    {
-        return $this->latteTemplate;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getLocale()
-    {
-        return $this->locale;
-    }
-
-    /**
      * @return ItemGroup[]|ArrayCollection
      */
     public function getItemGroups()
@@ -216,5 +123,12 @@ class Form extends Nette\Object
         return $this->itemGroups;
     }
 
+    /**
+     * @return ArrayCollection|FormTranslation[]
+     */
+    public function getTranslations()
+    {
+        return $this->translations;
+    }
 }
 

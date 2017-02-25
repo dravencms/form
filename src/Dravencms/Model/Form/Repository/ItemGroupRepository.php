@@ -50,14 +50,20 @@ class ItemGroupRepository
 
     /**
      * @param Form $form
-     * @return \Kdyby\Doctrine\QueryBuilder
+     * @param ILocale $locale
+     * @return static
      */
-    public function getItemGroupQueryBuilder(Form $form)
+    public function getItemGroupQueryBuilder(Form $form, ILocale $locale)
     {
         $qb = $this->itemGroupRepository->createQueryBuilder('ig')
             ->select('ig')
-            ->where('ig.form = :form')
-            ->setParameter('form', $form);
+            ->join('ig.translations', 't')
+            ->where('t.locale = :locale')
+            ->andWhere('ig.form = :form')
+            ->setParameters([
+                'form' => $form,
+                'locale' => $locale
+            ]);
         return $qb;
     }
 
