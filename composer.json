@@ -17,6 +17,7 @@
   "require": {
     "dravencms/structure": "@dev",
     "dravencms/recaptcha": "@dev",
+    "dravencms/admin": "@dev",
     "dravencms/templated-email": "@dev"
   },
   "require-dev": {
