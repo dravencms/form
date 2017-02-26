@@ -24,6 +24,7 @@ use Dravencms\Components\BaseControl\BaseControl;
 use Dravencms\Components\BaseForm\BaseFormFactory;
 use Dravencms\Model\Form\Entities\Form;
 use Dravencms\Model\Form\Entities\ItemGroup;
+use Dravencms\Model\Form\Entities\ItemGroupTranslation;
 use Dravencms\Model\Form\Repository\ItemGroupRepository;
 use Dravencms\Model\Locale\Repository\LocaleRepository;
 use Kdyby\Doctrine\EntityManager;
@@ -86,16 +87,12 @@ class ItemGroupForm extends BaseControl
 
         if ($this->itemGroup) {
             $defaults = [
-                //'name' => $this->itemGroup->getName(),
                 'isShowName' => $this->itemGroup->isShowName()
             ];
 
-            $repository = $this->entityManager->getRepository('Gedmo\Translatable\Entity\Translation');
-            $defaults += $repository->findTranslations($this->itemGroup);
-
-            $defaultLocale = $this->localeRepository->getDefault();
-            if ($defaultLocale) {
-                $defaults[$defaultLocale->getLanguageCode()]['name'] = $this->itemGroup->getName();
+            foreach ($this->itemGroup->getTranslations() AS $translation)
+            {
+                $defaults[$translation->getLocale()->getLanguageCode()]['name'] = $translation->getName();
             }
         }
         else{
@@ -108,7 +105,7 @@ class ItemGroupForm extends BaseControl
     }
 
     /**
-     * @return \Dravencms\Components\BaseForm
+     * @return \Dravencms\Components\BaseForm\BaseForm
      */
     protected function createComponentForm()
     {
@@ -160,21 +157,31 @@ class ItemGroupForm extends BaseControl
 
         if ($this->itemGroup) {
             $itemGroup = $this->itemGroup;
-            //$itemGroup->setName($values->name);
             $itemGroup->setIsShowName($values->isShowName);
         } else {
-            $defaultLocale = $this->localeRepository->getDefault();
-            $itemGroup = new ItemGroup($this->form, $values->{$defaultLocale->getLanguageCode()}->name, $values->isShowName);
-        }
-
-        $repository = $this->entityManager->getRepository('Gedmo\\Translatable\\Entity\\Translation');
-
-        foreach ($this->localeRepository->getActive() AS $activeLocale) {
-            $repository->translate($itemGroup, 'name', $activeLocale->getLanguageCode(), $values->{$activeLocale->getLanguageCode()}->name);
+            $itemGroup = new ItemGroup($this->form, $values->isShowName);
         }
 
         $this->entityManager->persist($itemGroup);
+        $this->entityManager->flush();
 
+        foreach ($this->localeRepository->getActive() AS $activeLocale) {
+            if ($formTranslation = $this->itemGroupRepository->getTranslation($itemGroup, $activeLocale))
+            {
+                $formTranslation->setName($values->{$activeLocale->getLanguageCode()}->name);
+            }
+            else
+            {
+                $formTranslation = new ItemGroupTranslation(
+                    $itemGroup,
+                    $activeLocale,
+                    $values->{$activeLocale->getLanguageCode()}->name
+                );
+            }
+
+            $this->entityManager->persist($formTranslation);
+        }
+        
         $this->entityManager->flush();
 
         $this->onSuccess();

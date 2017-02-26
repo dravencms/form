@@ -26,7 +26,9 @@ use Dravencms\Components\BaseGrid\BaseGridFactory;
 use Dravencms\Locale\CurrentLocale;
 use Dravencms\Model\Form\Entities\Form;
 use Dravencms\Model\Form\Repository\ItemGroupRepository;
+use Dravencms\Model\Locale\Repository\LocaleRepository;
 use Kdyby\Doctrine\EntityManager;
+use Tracy\Debugger;
 
 /**
  * Description of ItemGroupGrid
@@ -41,6 +43,9 @@ class ItemGroupGrid extends BaseControl
 
     /** @var ItemGroupRepository */
     private $itemGroupRepository;
+
+    /** @var LocaleRepository */
+    private $localeRepository;
 
     /** @var EntityManager */
     private $entityManager;
@@ -60,6 +65,7 @@ class ItemGroupGrid extends BaseControl
      * ItemGroupGrid constructor.
      * @param Form $form
      * @param ItemGroupRepository $itemGroupRepository
+     * @param LocaleRepository $localeRepository
      * @param BaseGridFactory $baseGridFactory
      * @param CurrentLocale $currentLocale
      * @param EntityManager $entityManager
@@ -67,6 +73,7 @@ class ItemGroupGrid extends BaseControl
     public function __construct(
         Form $form,
         ItemGroupRepository $itemGroupRepository,
+        LocaleRepository $localeRepository,
         BaseGridFactory $baseGridFactory,
         CurrentLocale $currentLocale,
         EntityManager $entityManager
@@ -78,6 +85,7 @@ class ItemGroupGrid extends BaseControl
         $this->itemGroupRepository = $itemGroupRepository;
         $this->entityManager = $entityManager;
         $this->currentLocale = $currentLocale;
+        $this->localeRepository = $localeRepository;
         $this->form = $form;
     }
 
@@ -90,27 +98,26 @@ class ItemGroupGrid extends BaseControl
     {
         $grid = $this->baseGridFactory->create($this, $name);
 
-        $grid->setModel($this->itemGroupRepository->getItemGroupQueryBuilder($this->form, $this->currentLocale));
+        $grid->setModel($this->itemGroupRepository->getItemGroupQueryBuilder($this->form, $this->currentLocale, $this->localeRepository->getDefault()));
 
-        /*$grid->addColumnText('name', 'Name')
+        $grid->addColumnText('name', 'Name')
             ->setSortable()
             ->setFilterText()
-            ->setSuggestion();*/
+            ->setSuggestion();
 
-        $grid->addColumnBoolean('isShowName', 'Show name');
-
-
+        $grid->addColumnBoolean('itemGroup.isShowName', 'Show name');
+        
         if ($this->presenter->isAllowed('form', 'edit')) {
 
             $grid->addActionHref('Item', 'Items', 'Item:')
                 ->setCustomHref(function($row){
-                    return $this->presenter->link('Item:', ['itemGroupId' => $row->getId()]);
+                    return $this->presenter->link('Item:', ['itemGroupId' => $row->getItemGroup()->getId()]);
                 })
                 ->setIcon('bars');
 
             $grid->addActionHref('edit', 'Upravit')
                 ->setCustomHref(function($row){
-                   return $this->presenter->link('ItemGroup:edit', ['formId' => $this->form->getId(), 'id' => $row->getId()]);
+                   return $this->presenter->link('ItemGroup:edit', ['formId' => $this->form->getId(), 'id' => $row->getItemGroup()->getId()]);
                 })
                 ->setIcon('pencil');
         }
@@ -118,13 +125,12 @@ class ItemGroupGrid extends BaseControl
         if ($this->presenter->isAllowed('form', 'delete')) {
             $grid->addActionHref('delete', 'Smazat', 'delete!')
                 ->setCustomHref(function($row){
-                    return $this->link('delete!', $row->getId());
+                    return $this->link('delete!', $row->getItemGroup()->getId());
                 })
                 ->setIcon('trash-o')
                 ->setConfirm(function ($row) {
-                    return ['Opravdu chcete smazat item group %s ?', $row->name];
+                    return ['Opravdu chcete smazat item group %s ?', $row->getName()];
                 });
-
 
             $operations = ['delete' => 'Smazat'];
             $grid->setOperation($operations, [$this, 'gridOperationsHandler'])

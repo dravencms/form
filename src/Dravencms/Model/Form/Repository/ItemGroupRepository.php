@@ -5,8 +5,10 @@
 
 namespace Dravencms\Model\Form\Repository;
 
+use Doctrine\ORM\Query\Expr\Join;
 use Dravencms\Model\Form\Entities\Form;
 use Dravencms\Model\Form\Entities\ItemGroup;
+use Dravencms\Model\Form\Entities\ItemGroupTranslation;
 use Gedmo\Translatable\TranslatableListener;
 use Kdyby\Doctrine\EntityManager;
 use Nette;
@@ -16,6 +18,9 @@ class ItemGroupRepository
 {
     /** @var \Kdyby\Doctrine\EntityRepository */
     private $itemGroupRepository;
+
+    /** @var \Kdyby\Doctrine\EntityRepository */
+    private $itemGroupTranslantionRepository;
 
     /** @var EntityManager */
     private $entityManager;
@@ -28,6 +33,7 @@ class ItemGroupRepository
     {
         $this->entityManager = $entityManager;
         $this->itemGroupRepository = $entityManager->getRepository(ItemGroup::class);
+        $this->itemGroupTranslantionRepository = $entityManager->getRepository(ItemGroupTranslation::class);
     }
 
     /**
@@ -53,16 +59,18 @@ class ItemGroupRepository
      * @param ILocale $locale
      * @return static
      */
-    public function getItemGroupQueryBuilder(Form $form, ILocale $locale)
+    public function getItemGroupQueryBuilder(Form $form, ILocale $locale, ILocale $defaultLocale)
     {
-        $qb = $this->itemGroupRepository->createQueryBuilder('ig')
-            ->select('ig')
-            ->join('ig.translations', 't')
-            ->where('t.locale = :locale')
-            ->andWhere('ig.form = :form')
+        $qb = $this->itemGroupTranslantionRepository->createQueryBuilder('t')
+            ->select('t')
+            ->join('t.itemGroup', 'it')
+            //->where('t.locale = :locale OR t.locale = :defaultLocale')
+            ->andWhere('it.form = :form')
+            ->groupBy('it')
             ->setParameters([
                 'form' => $form,
-                'locale' => $locale
+                /*'locale' => $locale->getId(),
+                'defaultLocale' => $defaultLocale*/
             ]);
         return $qb;
     }
@@ -79,11 +87,14 @@ class ItemGroupRepository
     {
         $qb = $this->itemGroupRepository->createQueryBuilder('ig')
             ->select('ig')
-            ->where('ig.name = :name')
+            ->join('ig.translations', 't')
+            ->where('t.name = :name')
+            ->andWhere('t.locale = :locale')
             ->andWhere('ig.form = :form')
             ->setParameters([
                 'name' => $name,
                 'form' => $form,
+                'locale' => $locale
             ]);
 
         if ($itemGroupIgnore)
@@ -93,10 +104,24 @@ class ItemGroupRepository
         }
 
         $query = $qb->getQuery();
-
-        $query->setHint(TranslatableListener::HINT_TRANSLATABLE_LOCALE, $locale->getLanguageCode());
-
         return (is_null($query->getOneOrNullResult()));
     }
 
+    /**
+     * @param ItemGroup $itemGroup
+     * @param ILocale $locale
+     * @return mixed
+     */
+    public function getTranslation(ItemGroup $itemGroup, ILocale $locale)
+    {
+        $qb = $this->itemGroupTranslantionRepository->createQueryBuilder('t')
+            ->select('t')
+            ->where('t.locale = :locale')
+            ->andWhere('t.itemGroup = :itemGroup')
+            ->setParameters([
+                'itemGroup' => $itemGroup,
+                'locale' => $locale
+            ]);
+        return $qb->getQuery()->getResult();
+    }
 }
