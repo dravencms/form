@@ -14,8 +14,6 @@ use Dravencms\Model\Locale\Entities\ILocale;
 
 class FormRepository
 {
-    use TLocalizedRepository;
-
     /** @var \Kdyby\Doctrine\EntityRepository */
     private $formRepository;
 
@@ -94,6 +92,15 @@ class FormRepository
         }
 
         return (is_null($qb->getQuery()->getOneOrNullResult()));
+    }
+
+    /**
+     * @param array $parameters
+     * @return Form
+     */
+    public function getOneByParameters(array $parameters)
+    {
+        return $this->formRepository->findOneBy($parameters);
     }
 
     /**
