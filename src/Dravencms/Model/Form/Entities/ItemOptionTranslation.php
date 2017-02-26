@@ -52,5 +52,53 @@ class ItemOptionTranslation extends Nette\Object
         $this->itemOption = $itemOption;
         $this->locale = $locale;
     }
+
+    /**
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @param ItemOption $itemOption
+     */
+    public function setItemOption($itemOption)
+    {
+        $this->itemOption = $itemOption;
+    }
+
+    /**
+     * @param Locale $locale
+     */
+    public function setLocale($locale)
+    {
+        $this->locale = $locale;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return ItemOption
+     */
+    public function getItemOption()
+    {
+        return $this->itemOption;
+    }
+
+    /**
+     * @return Locale
+     */
+    public function getLocale()
+    {
+        return $this->locale;
+    }
 }
 

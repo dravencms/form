@@ -48,7 +48,7 @@ class ItemGroup extends Nette\Object
 
     /**
      * @var ArrayCollection|ItemGroupTranslation[]
-     * @ORM\OneToMany(targetEntity="ItemGroupTranslation", mappedBy="itemGroup",cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="ItemGroupTranslation", mappedBy="itemGroup",cascade={"persist", "remove"})
      */
     private $translations;
 

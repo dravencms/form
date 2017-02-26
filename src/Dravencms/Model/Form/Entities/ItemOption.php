@@ -4,7 +4,6 @@ namespace Dravencms\Model\Form\Entities;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Gedmo\Translatable\Translatable;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Kdyby\Doctrine\Entities\Attributes\Identifier;
 use Nette;
@@ -21,25 +20,11 @@ class ItemOption extends Nette\Object
     use TimestampableEntity;
 
     /**
-     * @var string
-     * @Gedmo\Translatable
-     * @ORM\Column(type="string",length=255,nullable=false,unique=true)
-     */
-    private $name;
-    /**
      * @var integer
      * @Gedmo\SortablePosition
      * @ORM\Column(type="integer")
      */
     private $position;
-
-    /**
-     * @Gedmo\Locale
-     * Used locale to override Translation listener`s locale
-     * this is not a mapped field of entity metadata, just a simple property
-     * and it is not necessary because globally locale can be set in listener
-     */
-    private $locale;
 
     /**
      * @var Item
@@ -50,28 +35,18 @@ class ItemOption extends Nette\Object
 
     /**
      * @var ArrayCollection|ItemOptionTranslation[]
-     * @ORM\OneToMany(targetEntity="ItemOptionTranslation", mappedBy="itemOption",cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="ItemOptionTranslation", mappedBy="itemOption",cascade={"persist", "remove"})
      */
     private $translations;
 
     /**
      * ItemOption constructor.
      * @param Item $item
-     * @param $name
      */
-    public function __construct(Item $item, $name)
+    public function __construct(Item $item)
     {
-        $this->name = $name;
         $this->item = $item;
         $this->translations = new ArrayCollection();
-    }
-
-    /**
-     * @param string $name
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
     }
 
     /**
@@ -83,35 +58,11 @@ class ItemOption extends Nette\Object
     }
 
     /**
-     * @param mixed $locale
-     */
-    public function setLocale($locale)
-    {
-        $this->locale = $locale;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
      * @return int
      */
     public function getPosition()
     {
         return $this->position;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getLocale()
-    {
-        return $this->locale;
     }
 
     /**

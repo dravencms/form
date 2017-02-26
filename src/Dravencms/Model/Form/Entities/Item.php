@@ -83,7 +83,7 @@ class Item extends Nette\Object
 
     /**
      * @var ArrayCollection|ItemTranslantion[]
-     * @ORM\OneToMany(targetEntity="ItemTranslantion", mappedBy="item",cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="ItemTranslantion", mappedBy="item",cascade={"persist", "remove"})
      */
     private $translations;
 
@@ -111,12 +111,11 @@ class Item extends Nette\Object
      * Item constructor.
      * @param ItemGroup $itemGroup
      * @param $name
-     * @param $title
      * @param $type
      * @param null $minValue
      * @param null $maxValue
      */
-    public function __construct(ItemGroup $itemGroup, $name, $title, $type, $minValue = null, $maxValue = null)
+    public function __construct(ItemGroup $itemGroup, $name, $type, $minValue = null, $maxValue = null)
     {
         $this->itemGroup = $itemGroup;
         $this->name = $name;

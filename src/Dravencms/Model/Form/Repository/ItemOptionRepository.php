@@ -7,10 +7,11 @@ namespace Dravencms\Model\Form\Repository;
 
 use Dravencms\Model\Form\Entities\Item;
 use Dravencms\Model\Form\Entities\ItemOption;
+use Dravencms\Model\Form\Entities\ItemOptionTranslation;
 use Gedmo\Translatable\TranslatableListener;
 use Kdyby\Doctrine\EntityManager;
 use Nette;
-use Salamek\Cms\Models\ILocale;
+use Dravencms\Model\Locale\Entities\ILocale;
 
 /**
  * Class ItemOptionRepository
@@ -20,6 +21,9 @@ class ItemOptionRepository
 {
     /** @var \Kdyby\Doctrine\EntityRepository */
     private $itemOptionRepository;
+
+    /** @var \Kdyby\Doctrine\EntityRepository */
+    private $itemOptionTranslationRepository;
 
     /** @var EntityManager */
     private $entityManager;
@@ -32,6 +36,7 @@ class ItemOptionRepository
     {
         $this->entityManager = $entityManager;
         $this->itemOptionRepository = $entityManager->getRepository(ItemOption::class);
+        $this->itemOptionTranslationRepository = $entityManager->getRepository(ItemOptionTranslation::class);
     }
 
     /**
@@ -58,8 +63,9 @@ class ItemOptionRepository
      */
     public function getItemOptionQueryBuilder(Item $item)
     {
-        $qb = $this->itemOptionRepository->createQueryBuilder('io')
-            ->select('io')
+        $qb = $this->itemOptionTranslationRepository->createQueryBuilder('t')
+            ->select('t')
+            ->join('t.itemOption', 'io')
             ->where('io.item = :item')
             ->setParameter('item', $item);
         return $qb;
@@ -77,11 +83,14 @@ class ItemOptionRepository
     {
         $qb = $this->itemOptionRepository->createQueryBuilder('io')
             ->select('io')
-            ->where('io.name = :name')
+            ->join('io.translations', 't')
+            ->where('t.name = :name')
             ->andWhere('io.item = :item')
+            ->andWhere('t.locale = :locale')
             ->setParameters([
                 'name' => $name,
-                'item' => $item
+                'item' => $item,
+                'locale' => $locale
             ]);
 
         if ($itemOptionIgnore)
@@ -91,10 +100,24 @@ class ItemOptionRepository
         }
 
         $query = $qb->getQuery();
-
-        $query->setHint(TranslatableListener::HINT_TRANSLATABLE_LOCALE, $locale->getLanguageCode());
-
         return (is_null($query->getOneOrNullResult()));
     }
 
+    /**
+     * @param ItemOption $itemOption
+     * @param ILocale $locale
+     * @return ItemOptionTranslation
+     */
+    public function getTranslation(ItemOption $itemOption, ILocale $locale)
+    {
+        $qb = $this->itemOptionTranslationRepository->createQueryBuilder('t')
+            ->select('t')
+            ->where('t.locale = :locale')
+            ->andWhere('t.itemOption = :itemOption')
+            ->setParameters([
+                'itemOption' => $itemOption,
+                'locale' => $locale
+            ]);
+        return $qb->getQuery()->getOneOrNullResult();
+    }
 }

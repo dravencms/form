@@ -7,6 +7,8 @@ namespace Dravencms\Model\Form\Repository;
 
 use Dravencms\Model\Form\Entities\Item;
 use Dravencms\Model\Form\Entities\ItemGroup;
+use Dravencms\Model\Form\Entities\ItemTranslantion;
+use Dravencms\Model\Locale\Entities\ILocale;
 use Kdyby\Doctrine\EntityManager;
 use Nette;
 
@@ -14,6 +16,9 @@ class ItemRepository
 {
     /** @var \Kdyby\Doctrine\EntityRepository */
     private $itemRepository;
+
+    /** @var \Kdyby\Doctrine\EntityRepository */
+    private $itemTranslationRepository;
 
     /** @var EntityManager */
     private $entityManager;
@@ -26,6 +31,7 @@ class ItemRepository
     {
         $this->entityManager = $entityManager;
         $this->itemRepository = $entityManager->getRepository(Item::class);
+        $this->itemTranslationRepository = $entityManager->getRepository(ItemTranslantion::class);
     }
 
     /**
@@ -50,11 +56,13 @@ class ItemRepository
      * @param ItemGroup $itemGroup
      * @return \Kdyby\Doctrine\QueryBuilder
      */
-    public function getItemQueryBuilder(ItemGroup $itemGroup)
+    public function getItemQueryBuilder(ItemGroup $itemGroup, ILocale $locale, ILocale $defaultLocale)
     {
-        $qb = $this->itemRepository->createQueryBuilder('i')
-            ->select('i')
+        $qb = $this->itemTranslationRepository->createQueryBuilder('t')
+            ->select('t')
+            ->join('t.item', 'i')
             ->where('i.itemGroup = :itemGroup')
+            ->groupBy('i')
             ->setParameter('itemGroup', $itemGroup);
         return $qb;
     }
@@ -86,6 +94,24 @@ class ItemRepository
         $query = $qb->getQuery();
 
         return (is_null($query->getOneOrNullResult()));
+    }
+
+    /**
+     * @param Item $item
+     * @param ILocale $locale
+     * @return ItemTranslantion
+     */
+    public function getTranslation(Item $item, ILocale $locale)
+    {
+        $qb = $this->itemTranslationRepository->createQueryBuilder('t')
+            ->select('t')
+            ->where('t.locale = :locale')
+            ->andWhere('t.item = :item')
+            ->setParameters([
+                'item' => $item,
+                'locale' => $locale
+            ]);
+        return $qb->getQuery()->getOneOrNullResult();
     }
 
 }

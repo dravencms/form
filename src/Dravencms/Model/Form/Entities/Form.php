@@ -46,7 +46,7 @@ class Form extends Nette\Object
 
     /**
      * @var ArrayCollection|FormTranslation[]
-     * @ORM\OneToMany(targetEntity="FormTranslation", mappedBy="form",cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="FormTranslation", mappedBy="form",cascade={"persist", "remove"})
      */
     private $translations;
 

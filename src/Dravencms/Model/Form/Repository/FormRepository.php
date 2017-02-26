@@ -112,6 +112,6 @@ class FormRepository
                 'form' => $form,
                 'locale' => $locale
             ]);
-        return $qb->getQuery()->getResult();
+        return $qb->getQuery()->getOneOrNullResult();
     }
 }

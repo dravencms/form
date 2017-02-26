@@ -23,9 +23,11 @@ namespace Dravencms\AdminModule\Components\Form\ItemGrid;
 
 use Dravencms\Components\BaseControl\BaseControl;
 use Dravencms\Components\BaseGrid\BaseGridFactory;
+use Dravencms\Locale\CurrentLocale;
 use Dravencms\Model\Form\Entities\Item;
 use Dravencms\Model\Form\Entities\ItemGroup;
 use Dravencms\Model\Form\Repository\ItemRepository;
+use Dravencms\Model\Locale\Repository\LocaleRepository;
 use Kdyby\Doctrine\EntityManager;
 use Nette\Utils\Html;
 
@@ -49,6 +51,12 @@ class ItemGrid extends BaseControl
     /** @var ItemGroup */
     private $itemGroup;
 
+    /** @var CurrentLocale */
+    private $currentLocale;
+
+    /** @var LocaleRepository */
+    private $localeRepository;
+
     /**
      * @var array
      */
@@ -60,28 +68,39 @@ class ItemGrid extends BaseControl
      * @param ItemRepository $itemRepository
      * @param BaseGridFactory $baseGridFactory
      * @param EntityManager $entityManager
+     * @param CurrentLocale $currentLocale
+     * @param LocaleRepository $localeRepository
      */
-    public function __construct(ItemGroup $itemGroup, ItemRepository $itemRepository, BaseGridFactory $baseGridFactory, EntityManager $entityManager)
+    public function __construct(
+        ItemGroup $itemGroup,
+        ItemRepository $itemRepository,
+        BaseGridFactory $baseGridFactory,
+        EntityManager $entityManager,
+        CurrentLocale $currentLocale,
+        LocaleRepository $localeRepository
+    )
     {
         parent::__construct();
         $this->itemGroup = $itemGroup;
         $this->baseGridFactory = $baseGridFactory;
         $this->itemRepository = $itemRepository;
         $this->entityManager = $entityManager;
+        $this->currentLocale = $currentLocale;
+        $this->localeRepository = $localeRepository;
     }
 
 
     /**
      * @param $name
-     * @return \Dravencms\Components\BaseGrid
+     * @return \Dravencms\Components\BaseGrid\BaseGrid
      */
     public function createComponentGrid($name)
     {
         $grid = $this->baseGridFactory->create($this, $name);
 
-        $grid->setModel($this->itemRepository->getItemQueryBuilder($this->itemGroup));
+        $grid->setModel($this->itemRepository->getItemQueryBuilder($this->itemGroup, $this->currentLocale, $this->localeRepository->getDefault()));
 
-        $grid->addColumnText('name', 'Name')
+        $grid->addColumnText('item.name', 'Name')
             ->setSortable()
             ->setFilterText()
             ->setSuggestion();
@@ -91,18 +110,18 @@ class ItemGrid extends BaseControl
                 return 'formItem_'.$row->getId();
             });
 
-        $grid->addColumnText('type', 'Type')
+        $grid->addColumnText('item.type', 'Type')
             ->setCustomRender(function ($row) {
 
                 $multiOptions = [Item::TYPE_SELECT, Item::TYPE_MULTISELECT, Item::TYPE_RADIOLIST, Item::TYPE_CHECKBOXLIST];
 
-                if (in_array($row->type, $multiOptions)) {
+                if (in_array($row->getItem()->getType(), $multiOptions)) {
                     $el = Html::el('a', 'Options');
-                    $el->href = $this->presenter->link('ItemOption:', ['itemId' => $row->getId()]);
+                    $el->href = $this->presenter->link('ItemOption:', ['itemId' => $row->getItem()->getId()]);
                     $el->class = 'btn btn-default btn-xs';
-                    return Item::$typeList[$row->type] . ' ' . $el;
+                    return Item::$typeList[$row->getItem()->getType()] . ' ' . $el;
                 } else {
-                    return Item::$typeList[$row->type];
+                    return Item::$typeList[$row->getItem()->getType()];
                 }
             })
             ->setFilterText()
@@ -115,7 +134,7 @@ class ItemGrid extends BaseControl
         if ($this->presenter->isAllowed('form', 'edit')) {
             $grid->addActionHref('edit', 'Upravit')
                 ->setCustomHref(function($row){
-                    return $this->presenter->link('Item:edit', ['itemGroupId' => $this->itemGroup->getId(), 'id' => $row->getId()]);
+                    return $this->presenter->link('Item:edit', ['itemGroupId' => $this->itemGroup->getId(), 'id' => $row->getItem()->getId()]);
                 })
                 ->setIcon('pencil');
         }
@@ -123,11 +142,11 @@ class ItemGrid extends BaseControl
         if ($this->presenter->isAllowed('form', 'delete')) {
             $grid->addActionHref('delete', 'Smazat', 'delete!')
                 ->setCustomHref(function($row){
-                    return $this->link('delete!', $row->getId());
+                    return $this->link('delete!', $row->getItem()->getId());
                 })
                 ->setIcon('trash-o')
                 ->setConfirm(function ($row) {
-                    return ['Opravdu chcete smazat form %s ?', $row->name];
+                    return ['Opravdu chcete smazat form %s ?', $row->getItem()->getName()];
                 });
 
 

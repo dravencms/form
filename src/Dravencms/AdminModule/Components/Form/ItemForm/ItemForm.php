@@ -24,6 +24,7 @@ use Dravencms\Components\BaseControl\BaseControl;
 use Dravencms\Components\BaseForm\BaseFormFactory;
 use Dravencms\Model\Form\Entities\Item;
 use Dravencms\Model\Form\Entities\ItemGroup;
+use Dravencms\Model\Form\Entities\ItemTranslantion;
 use Dravencms\Model\Form\Repository\ItemRepository;
 use Dravencms\Model\Locale\Repository\LocaleRepository;
 use Kdyby\Doctrine\EntityManager;
@@ -87,25 +88,18 @@ class ItemForm extends BaseControl
         if ($this->item) {
             $defaults = [
                 'name' => $this->item->getName(),
-                //'title' => $this->item->getTitle(),
                 'type' => $this->item->getType(),
-                //'defaultValue' => $this->item->getDefaultValue(),
                 'minValue' => $this->item->getMinValue(),
                 'maxValue' => $this->item->getMaxValue(),
-                //'placeholder' => $this->item->getPlaceholder(),
-                //'required' => $this->item->getRequired(),
                 'position' => $this->item->getPosition()
             ];
 
-            $repository = $this->entityManager->getRepository('Gedmo\Translatable\Entity\Translation');
-            $defaults += $repository->findTranslations($this->item);
-
-            $defaultLocale = $this->localeRepository->getDefault();
-            if ($defaultLocale) {
-                $defaults[$defaultLocale->getLanguageCode()]['title'] = $this->item->getTitle();
-                $defaults[$defaultLocale->getLanguageCode()]['defaultValue'] = $this->item->getDefaultValue();
-                $defaults[$defaultLocale->getLanguageCode()]['placeholder'] = $this->item->getPlaceholder();
-                $defaults[$defaultLocale->getLanguageCode()]['required'] = $this->item->getRequired();
+            foreach ($this->item->getTranslations() AS $translation)
+            {
+                $defaults[$translation->getLocale()->getLanguageCode()]['title'] = $translation->getTitle();
+                $defaults[$translation->getLocale()->getLanguageCode()]['defaultValue'] = $translation->getDefaultValue();
+                $defaults[$translation->getLocale()->getLanguageCode()]['placeholder'] = $translation->getPlaceholder();
+                $defaults[$translation->getLocale()->getLanguageCode()]['required'] = $translation->getRequired();
             }
         }
         else{
@@ -118,7 +112,7 @@ class ItemForm extends BaseControl
     }
 
     /**
-     * @return \Dravencms\Components\BaseForm
+     * @return \Dravencms\Components\BaseForm\BaseForm
      */
     protected function createComponentForm()
     {
@@ -195,29 +189,39 @@ class ItemForm extends BaseControl
         if ($this->item) {
             $item = $this->item;
             $item->setName($values->name);
-            //$item->setTitle($values->title);
             $item->setType($values->type);
-            //$item->setDefaultValue($values->defaultValue);
             $item->setMinValue($values->minValue);
             $item->setMaxValue($values->maxValue);
-            //$item->setPlaceholder($values->placeholder);
-            //$item->setRequired($values->required);
             $item->setPosition($values->position);
         } else {
-            $defaultLocale = $this->localeRepository->getDefault();
-            $item = new Item($this->itemGroup, $values->name, $values->{$defaultLocale->getLanguageCode()}->title, $values->type, $values->{$defaultLocale->getLanguageCode()}->defaultValue, $values->minValue, $values->maxValue, $values->{$defaultLocale->getLanguageCode()}->placeholder, $values->{$defaultLocale->getLanguageCode()}->required);
+            $item = new Item($this->itemGroup, $values->name, $values->type, $values->minValue, $values->maxValue);
         }
+        $this->entityManager->persist($item);
 
-        $repository = $this->entityManager->getRepository('Gedmo\\Translatable\\Entity\\Translation');
+        $this->entityManager->flush();
 
         foreach ($this->localeRepository->getActive() AS $activeLocale) {
-            $repository->translate($item, 'title', $activeLocale->getLanguageCode(), $values->{$activeLocale->getLanguageCode()}->title)
-            ->translate($item, 'defaultValue', $activeLocale->getLanguageCode(), $values->{$activeLocale->getLanguageCode()}->defaultValue)
-            ->translate($item, 'placeholder', $activeLocale->getLanguageCode(), $values->{$activeLocale->getLanguageCode()}->placeholder)
-            ->translate($item, 'required', $activeLocale->getLanguageCode(), $values->{$activeLocale->getLanguageCode()}->required);
-        }
+            if ($formTranslation = $this->itemRepository->getTranslation($item, $activeLocale))
+            {
+                $formTranslation->setTitle($values->{$activeLocale->getLanguageCode()}->title);
+                $formTranslation->setDefaultValue($values->{$activeLocale->getLanguageCode()}->defaultValue);
+                $formTranslation->setPlaceholder($values->{$activeLocale->getLanguageCode()}->placeholder);
+                $formTranslation->setRequired($values->{$activeLocale->getLanguageCode()}->required);
+            }
+            else
+            {
+                $formTranslation = new ItemTranslantion(
+                    $item,
+                    $activeLocale,
+                    $values->{$activeLocale->getLanguageCode()}->title,
+                    $values->{$activeLocale->getLanguageCode()}->defaultValue,
+                    $values->{$activeLocale->getLanguageCode()}->placeholder,
+                    $values->{$activeLocale->getLanguageCode()}->required
+                );
+            }
 
-        $this->entityManager->persist($item);
+            $this->entityManager->persist($formTranslation);
+        }
 
         $this->entityManager->flush();
 

@@ -122,6 +122,6 @@ class ItemGroupRepository
                 'itemGroup' => $itemGroup,
                 'locale' => $locale
             ]);
-        return $qb->getQuery()->getResult();
+        return $qb->getQuery()->getOneOrNullResult();
     }
 }

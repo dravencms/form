@@ -156,5 +156,13 @@ class ItemTranslantion extends Nette\Object
     {
         return $this->locale;
     }
+
+    /**
+     * @return Item
+     */
+    public function getItem()
+    {
+        return $this->item;
+    }
 }
 
