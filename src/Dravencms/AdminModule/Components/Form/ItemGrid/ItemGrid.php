@@ -107,7 +107,7 @@ class ItemGrid extends BaseControl
 
         $grid->addColumnText('latteName', 'Latte name')
             ->setCustomRender(function($row){
-                return 'formItem_'.$row->getId();
+                return 'formItem_'.$row->getItem()->getId();
             });
 
         $grid->addColumnText('item.type', 'Type')

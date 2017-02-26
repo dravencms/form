@@ -5,22 +5,22 @@ namespace Dravencms\FrontModule\Components\Form\Form\Detail;
 use Dravencms\Components\BaseControl\BaseControl;
 use Dravencms\Components\BaseForm\BaseFormFactory;
 use Dravencms\Flash;
+use Dravencms\Locale\CurrentLocale;
+use Dravencms\Model\Form\Entities\FormTranslation;
 use Dravencms\Model\Form\Entities\Item;
+use Dravencms\Model\Form\Entities\ItemGroup;
 use Dravencms\Model\Form\Entities\ItemOption;
 use Dravencms\Model\Form\Entities\Save;
 use Dravencms\Model\Form\Entities\SaveValue;
 use Dravencms\Model\Form\Repository\FormRepository;
+use Dravencms\Model\Form\Repository\ItemGroupRepository;
+use Dravencms\Model\Form\Repository\ItemRepository;
 use Kdyby\Doctrine\EntityManager;
 use Nette\Application\UI\Form;
 use Nette\Http\Request;
 use Salamek\Cms\ICmsActionOption;
 use Salamek\TemplatedEmail\TemplatedEmail;
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+use Tracy\Debugger;
 
 /**
  * Description of FormPresenter
@@ -50,16 +50,41 @@ class Detail extends BaseControl
     /** @var \Dravencms\Model\Form\Entities\Form|mixed|null */
     private $formInfo;
 
+    /** @var CurrentLocale */
+    private $currentLocale;
+
+    /** @var ItemGroupRepository */
+    private $itemGroupRepository;
+
+    /** @var ItemRepository */
+    private $itemRepository;
+
+    /** @var FormTranslation */
+    private $formInfoTranslation;
+
     /**
      * Detail constructor.
      * @param ICmsActionOption $cmsActionOption
      * @param BaseFormFactory $baseFormFactory
      * @param FormRepository $formRepository
+     * @param ItemGroupRepository $itemGroupRepository
+     * @param ItemRepository $itemRepository
      * @param Request $request
      * @param EntityManager $entityManager
      * @param TemplatedEmail $templatedEmail
+     * @param CurrentLocale $currentLocale
      */
-    public function __construct(ICmsActionOption $cmsActionOption, BaseFormFactory $baseFormFactory, FormRepository $formRepository, Request $request, EntityManager $entityManager, TemplatedEmail $templatedEmail)
+    public function __construct(
+        ICmsActionOption $cmsActionOption,
+        BaseFormFactory $baseFormFactory,
+        FormRepository $formRepository,
+        ItemGroupRepository $itemGroupRepository,
+        ItemRepository $itemRepository,
+        Request $request,
+        EntityManager $entityManager,
+        TemplatedEmail $templatedEmail,
+        CurrentLocale $currentLocale
+    )
     {
         parent::__construct();
         $this->cmsActionOption = $cmsActionOption;
@@ -68,8 +93,12 @@ class Detail extends BaseControl
         $this->request = $request;
         $this->entityManager = $entityManager;
         $this->templatedEmail = $templatedEmail;
+        $this->currentLocale = $currentLocale;
+        $this->itemGroupRepository = $itemGroupRepository;
+        $this->itemRepository = $itemRepository;
 
         $this->formInfo = $this->formRepository->getOneById($this->cmsActionOption->getParameter('id'));
+        $this->formInfoTranslation = $this->formRepository->getTranslation($this->formInfo, $this->currentLocale);
     }
 
     public function render()
@@ -78,11 +107,11 @@ class Detail extends BaseControl
 
         $template->formInfo = $this->formInfo;
 
-        if ($this->formInfo->getLatteTemplate())
+        if ($this->formInfoTranslation->getLatteTemplate())
         {
             //!FIXME HACK SPEED ISSUE
             $tmpfname = tempnam(sys_get_temp_dir(), 'detail.latte');
-            file_put_contents($tmpfname, $this->formInfo->getLatteTemplate());
+            file_put_contents($tmpfname, $this->formInfoTranslation->getLatteTemplate());
             $template->setFile($tmpfname);
         }
         else
@@ -113,8 +142,21 @@ class Detail extends BaseControl
         $form = $this->baseFormFactory->create();
 
         foreach ($this->formInfo->getItemGroups() AS $formsItemsGroups) {
-            $form->addGroup(($formsItemsGroups->isShowName() ? $formsItemsGroups->getName() : null));
+            
+            if ($formsItemsGroups->isShowName())
+            {
+                $itemgGroupTranslation = $this->itemGroupRepository->getTranslation($formsItemsGroups, $this->currentLocale);
+                $groupName = $itemgGroupTranslation->getName();
+            }
+            else
+            {
+                $groupName = null;
+            }
+            
+            $form->addGroup($groupName);
             foreach ($formsItemsGroups->getItems() AS $formsItems) {
+                $itemTranslation = $this->itemRepository->getTranslation($formsItems, $this->currentLocale);
+
                 switch ($formsItems->getType()) {
                     case Item::TYPE_TEXT:
                     case Item::TYPE_NUMBER:
@@ -177,27 +219,27 @@ class Detail extends BaseControl
 
                 $objInput->setAttribute('class', 'form-control');
 
-                if ($formsItems->getRequired()) {
-                    $objInput->setRequired($formsItems->getRequired());
+                if ($itemTranslation->getRequired()) {
+                    $objInput->setRequired($itemTranslation->getRequired());
                 }
 
-                if ($formsItems->getTitle()) {
-                    $objInput->setAttribute('title', $formsItems->getTitle());
+                if ($itemTranslation->getTitle()) {
+                    $objInput->setAttribute('title', $itemTranslation->getTitle());
                 }
 
-                if ($formsItems->getPlaceholder()) {
-                    $objInput->setAttribute('placeholder', $formsItems->getPlaceholder());
+                if ($itemTranslation->getPlaceholder()) {
+                    $objInput->setAttribute('placeholder', $itemTranslation->getPlaceholder());
                 }
 
-                if ($formsItems->getDefaultValue() && !$form->isSubmitted()) {
-                    $objInput->setValue($formsItems->getDefaultValue());
+                if ($itemTranslation->getDefaultValue() && !$form->isSubmitted()) {
+                    $objInput->setValue($itemTranslation->getDefaultValue());
                 }
             }
         }
 
         $form->addReCaptcha();
 
-        $form->addSubmit('send', $this->formInfo->getSendButtonValue())
+        $form->addSubmit('send', $this->formInfoTranslation->getSendButtonValue())
             ->setAttribute('class', 'btn btn-success');
 
 
@@ -248,7 +290,7 @@ class Detail extends BaseControl
                 ->send();
         }
 
-        $this->presenter->flashMessage($this->formInfo->getSuccessMessage(), Flash::SUCCESS);
+        $this->presenter->flashMessage($this->formInfoTranslation->getSuccessMessage(), Flash::SUCCESS);
         $this->redirect('this');
     }
 }

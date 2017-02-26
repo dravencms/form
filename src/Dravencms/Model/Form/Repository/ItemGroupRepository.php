@@ -110,7 +110,7 @@ class ItemGroupRepository
     /**
      * @param ItemGroup $itemGroup
      * @param ILocale $locale
-     * @return mixed
+     * @return ItemGroupTranslation
      */
     public function getTranslation(ItemGroup $itemGroup, ILocale $locale)
     {
