@@ -23,6 +23,7 @@ namespace Dravencms\AdminModule\Components\Form\SaveGrid;
 
 use Dravencms\Components\BaseControl\BaseControl;
 use Dravencms\Components\BaseGrid\BaseGridFactory;
+use Dravencms\Locale\CurrentLocale;
 use Dravencms\Model\Form\Entities\Form;
 use Dravencms\Model\Form\Entities\Save;
 use Dravencms\Model\Form\Repository\SaveRepository;
@@ -37,7 +38,6 @@ use Kdyby\Doctrine\EntityManager;
  */
 class SaveGrid extends BaseControl
 {
-
     /** @var BaseGridFactory */
     private $baseGridFactory;
 
@@ -47,11 +47,11 @@ class SaveGrid extends BaseControl
     /** @var EntityManager */
     private $entityManager;
 
-    /** @var LocaleRepository */
-    private $localeRepository;
-
     /** @var SaveValueRepository */
     private $saveValueRepository;
+
+    /** @var CurrentLocale */
+    private $currentLocale;
 
     /** @var Form */
     private $form;
@@ -67,10 +67,17 @@ class SaveGrid extends BaseControl
      * @param SaveRepository $saveRepository
      * @param BaseGridFactory $baseGridFactory
      * @param EntityManager $entityManager
-     * @param LocaleRepository $localeRepository
+     * @param CurrentLocale $currentLocale
      * @param SaveValueRepository $saveValueRepository
      */
-    public function __construct(Form $form, SaveRepository $saveRepository, BaseGridFactory $baseGridFactory, EntityManager $entityManager, LocaleRepository $localeRepository, SaveValueRepository $saveValueRepository)
+    public function __construct(
+        Form $form,
+        SaveRepository $saveRepository,
+        BaseGridFactory $baseGridFactory,
+        EntityManager $entityManager,
+        CurrentLocale $currentLocale,
+        SaveValueRepository $saveValueRepository
+    )
     {
         parent::__construct();
 
@@ -78,14 +85,14 @@ class SaveGrid extends BaseControl
         $this->baseGridFactory = $baseGridFactory;
         $this->saveRepository = $saveRepository;
         $this->entityManager = $entityManager;
-        $this->localeRepository = $localeRepository;
         $this->saveValueRepository = $saveValueRepository;
+        $this->currentLocale = $currentLocale;
     }
 
 
     /**
      * @param $name
-     * @return \Dravencms\Components\BaseGrid
+     * @return \Dravencms\Components\BaseGrid\BaseGrid
      */
     public function createComponentGrid($name)
     {
@@ -93,7 +100,7 @@ class SaveGrid extends BaseControl
 
         $grid->setModel($this->saveRepository->getSaveQueryBuilder($this->form));
 
-        $grid->addColumnDate('createdAt', 'Created', $this->localeRepository->getLocalizedDateTimeFormat());
+        $grid->addColumnDate('createdAt', 'Created', $this->currentLocale->getDateTimeFormat());
 
         $grid->addColumnText('ip', 'IP')
             ->setSortable()
