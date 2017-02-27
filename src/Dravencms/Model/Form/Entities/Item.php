@@ -98,6 +98,7 @@ class Item extends Nette\Object
     /**
      * @var ArrayCollection|ItemOption[]
      * @ORM\OneToMany(targetEntity="ItemOption", mappedBy="item",cascade={"persist"})
+     * @ORM\OrderBy({"position" = "ASC"})
      */
     private $itemOptions;
 

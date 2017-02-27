@@ -14,6 +14,7 @@ use Dravencms\Model\Form\Entities\Save;
 use Dravencms\Model\Form\Entities\SaveValue;
 use Dravencms\Model\Form\Repository\FormRepository;
 use Dravencms\Model\Form\Repository\ItemGroupRepository;
+use Dravencms\Model\Form\Repository\ItemOptionRepository;
 use Dravencms\Model\Form\Repository\ItemRepository;
 use Kdyby\Doctrine\EntityManager;
 use Nette\Application\UI\Form;
@@ -62,6 +63,9 @@ class Detail extends BaseControl
     /** @var FormTranslation */
     private $formInfoTranslation;
 
+    /** @var ItemOptionRepository */
+    private $itemOptionRepository;
+
     /**
      * Detail constructor.
      * @param ICmsActionOption $cmsActionOption
@@ -72,6 +76,7 @@ class Detail extends BaseControl
      * @param Request $request
      * @param EntityManager $entityManager
      * @param TemplatedEmail $templatedEmail
+     * @param ItemOptionRepository $itemOptionRepository
      * @param CurrentLocale $currentLocale
      */
     public function __construct(
@@ -83,6 +88,7 @@ class Detail extends BaseControl
         Request $request,
         EntityManager $entityManager,
         TemplatedEmail $templatedEmail,
+        ItemOptionRepository $itemOptionRepository,
         CurrentLocale $currentLocale
     )
     {
@@ -96,6 +102,7 @@ class Detail extends BaseControl
         $this->currentLocale = $currentLocale;
         $this->itemGroupRepository = $itemGroupRepository;
         $this->itemRepository = $itemRepository;
+        $this->itemOptionRepository = $itemOptionRepository;
 
         $this->formInfo = $this->formRepository->getOneById($this->cmsActionOption->getParameter('id'));
         $this->formInfoTranslation = $this->formRepository->getTranslation($this->formInfo, $this->currentLocale);
@@ -131,7 +138,8 @@ class Detail extends BaseControl
         $return = [];
         foreach ($itemOptions AS $itemOption)
         {
-            $return[$itemOption->getId()] = $itemOption->getName();
+            $optionTranslation = $this->itemOptionRepository->getTranslation($itemOption, $this->currentLocale);
+            $return[$itemOption->getId()] = $optionTranslation->getName();
         }
 
         return $return;
@@ -241,7 +249,7 @@ class Detail extends BaseControl
         {
             $form->addReCaptcha();
         }
-        
+
         $form->addSubmit('send', $this->formInfoTranslation->getSendButtonValue())
             ->setAttribute('class', 'btn btn-success');
 
