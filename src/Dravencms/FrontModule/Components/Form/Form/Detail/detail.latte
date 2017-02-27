@@ -16,7 +16,7 @@
         {/foreach}
     {/foreach}
 
-    <div class="form-group control-group">
+    <div n:if="$formInfo->isAntispam()" class="form-group control-group">
         <label class="control-label" n:name="recaptcha">{_"Antispam"} <sup>*</sup></label>
         <div n:name="recaptcha"></div>
     </div>

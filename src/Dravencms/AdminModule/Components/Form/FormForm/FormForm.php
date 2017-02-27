@@ -83,7 +83,8 @@ class FormForm extends BaseControl
             $defaults = [
                 'name' => $this->form->getName(),
                 'email' => $this->form->getEmail(),
-                'isActive' => $this->form->isActive()
+                'isActive' => $this->form->isActive(),
+                'isAntispam' => $this->form->isAntispam(),
             ];
 
             foreach ($this->form->getTranslations() AS $translation)
@@ -134,6 +135,7 @@ class FormForm extends BaseControl
 
 
         $form->addCheckbox('isActive');
+        $form->addCheckbox('isAntispam');
 
         $form->addSubmit('send');
 
@@ -171,8 +173,9 @@ class FormForm extends BaseControl
             $form->setName($values->name);
             $form->setEmail($values->email);
             $form->setIsActive($values->isActive);
+            $form->setIsAntispam($values->isAntispam);
         } else {
-            $form = new Form($values->name, $values->email, $values->isActive);
+            $form = new Form($values->name, $values->email, $values->isActive, $values->isAntispam);
         }
 
         $this->entityManager->persist($form);

@@ -39,6 +39,12 @@ class Form extends Nette\Object
     private $isActive;
 
     /**
+     * @var boolean
+     * @ORM\Column(type="boolean", nullable=false)
+     */
+    private $isAntispam;
+
+    /**
      * @var ArrayCollection|ItemGroup[]
      * @ORM\OneToMany(targetEntity="ItemGroup", mappedBy="form",cascade={"persist"})
      */
@@ -52,15 +58,18 @@ class Form extends Nette\Object
 
     /**
      * Form constructor.
-     * @param string $name
-     * @param string $email
+     * @param $name
+     * @param $email
+     * @param $email
      * @param bool $isActive
+     * @param bool $isAntispam
      */
-    public function __construct($name, $email, $isActive = true)
+    public function __construct($name, $email, $isActive = true, $isAntispam = true)
     {
         $this->name = $name;
         $this->email = $email;
         $this->isActive = $isActive;
+        $this->isAntispam = $isAntispam;
 
         $this->itemGroups = new ArrayCollection();
         $this->translations = new ArrayCollection();
@@ -89,6 +98,14 @@ class Form extends Nette\Object
     public function setEmail($email)
     {
         $this->email = $email;
+    }
+
+    /**
+     * @param boolean $isAntispam
+     */
+    public function setIsAntispam($isAntispam)
+    {
+        $this->isAntispam = $isAntispam;
     }
 
     /**
@@ -129,6 +146,14 @@ class Form extends Nette\Object
     public function getTranslations()
     {
         return $this->translations;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isAntispam()
+    {
+        return $this->isAntispam;
     }
 }
 

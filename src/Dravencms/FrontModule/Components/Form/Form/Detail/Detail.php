@@ -237,8 +237,11 @@ class Detail extends BaseControl
             }
         }
 
-        $form->addReCaptcha();
-
+        if ($this->formInfo->isAntispam())
+        {
+            $form->addReCaptcha();
+        }
+        
         $form->addSubmit('send', $this->formInfoTranslation->getSendButtonValue())
             ->setAttribute('class', 'btn btn-success');
 
