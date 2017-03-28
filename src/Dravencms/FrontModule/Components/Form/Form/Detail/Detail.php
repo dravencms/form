@@ -284,7 +284,7 @@ class Detail extends BaseControl
             foreach ($formsItemsGroup->getItems() AS $formsItem) {
 
                 $value = $values->{'formItem_' . $formsItem->getId()};
-                if (in_array($value , [Item::TYPE_CHECKBOXLIST, Item::TYPE_MULTISELECT, Item::TYPE_SELECT, Item::TYPE_RADIOLIST]))
+                if (in_array($formsItem->getType() , [Item::TYPE_CHECKBOXLIST, Item::TYPE_MULTISELECT, Item::TYPE_SELECT, Item::TYPE_RADIOLIST]))
                 {
                     foreach($formsItem->getItemOptions() AS $itemOption)
                     {
