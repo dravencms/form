@@ -63,12 +63,39 @@ class ItemOptionRepository
      */
     public function getItemOptionQueryBuilder(Item $item)
     {
-        $qb = $this->itemOptionTranslationRepository->createQueryBuilder('t')
-            ->select('t')
-            ->join('t.itemOption', 'io')
+        $qb = $this->itemOptionRepository->createQueryBuilder('io')
+            ->select('io')
             ->where('io.item = :item')
             ->setParameter('item', $item);
         return $qb;
+    }
+
+    /**
+     * @param $identifier
+     * @param Item $item
+     * @param ItemOption|null $itemOptionIgnore
+     * @return mixed
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function isIdentifierFree($identifier, Item $item, ItemOption $itemOptionIgnore = null)
+    {
+        $qb = $this->itemOptionRepository->createQueryBuilder('io')
+            ->select('io')
+            ->where('io.identifier = :identifier')
+            ->andWhere('io.item = :item')
+            ->setParameters([
+                'identifier' => $identifier,
+                'item' => $item,
+            ]);
+
+        if ($itemOptionIgnore)
+        {
+            $qb->andWhere('io != :itemOptionIgnore')
+                ->setParameter('itemOptionIgnore', $itemOptionIgnore);
+        }
+
+        $query = $qb->getQuery();
+        return (is_null($query->getOneOrNullResult()));
     }
 
     /**

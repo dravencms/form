@@ -87,7 +87,8 @@ class ItemOptionForm extends BaseControl
 
         if ($this->itemOption) {
             $defaults = [
-                'position' => $this->itemOption->getPosition()
+                'position' => $this->itemOption->getPosition(),
+                'identifier' => $this->itemOption->getIdentifier()
             ];
 
             foreach ($this->itemOption->getTranslations() AS $translation)
@@ -112,7 +113,10 @@ class ItemOptionForm extends BaseControl
                 ->setRequired('Please enter form name.')
                 ->addRule(Form::MAX_LENGTH, 'Form name is too long.', 255);
         }
-        
+
+        $form->addText('identifier')
+            ->setRequired('Please enter form identifier.');
+
         $form->addText('position')
             ->setDisabled(is_null($this->itemOption))
             ->setType('number');
@@ -131,6 +135,11 @@ class ItemOptionForm extends BaseControl
     public function editFormValidate(Form $form)
     {
         $values = $form->getValues();
+
+        if (!$this->itemOptionRepository->isIdentifierFree($values->identifier, $this->item, $this->itemOption)) {
+            $form->addError('Tento identifier je již zabrán.');
+        }
+
         foreach ($this->localeRepository->getActive() AS $activeLocale) {
             if (!$this->itemOptionRepository->isNameFree($values->{$activeLocale->getLanguageCode()}->name, $activeLocale, $this->item, $this->itemOption)) {
                 $form->addError('Tento název je již zabrán.');
@@ -153,8 +162,9 @@ class ItemOptionForm extends BaseControl
         if ($this->itemOption) {
             $itemOption = $this->itemOption;
             $itemOption->setPosition($values->position);
+            $itemOption->setIdentifier($values->identifier);
         } else {
-            $itemOption = new ItemOption($this->item);
+            $itemOption = new ItemOption($this->item, $values->identifier);
         }
 
         $this->entityManager->persist($itemOption);

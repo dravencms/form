@@ -25,6 +25,7 @@ use Dravencms\Components\BaseControl\BaseControl;
 use Dravencms\Components\BaseGrid\BaseGridFactory;
 use Dravencms\Locale\CurrentLocale;
 use Dravencms\Model\Form\Entities\Form;
+use Dravencms\Model\Form\Entities\Item;
 use Dravencms\Model\Form\Entities\Save;
 use Dravencms\Model\Form\Repository\SaveRepository;
 use Dravencms\Model\Form\Repository\SaveValueRepository;
@@ -119,7 +120,23 @@ class SaveGrid extends BaseControl
                 $grid->addColumnText('formItem_'.$item->getId(), $item->getName())
                     ->setCustomRender(function($row) use ($item){
                         /** @var Save $row */
-                        return $this->saveValueRepository->getByItemAndSave($item, $row)->getValue();
+                        $value = $this->saveValueRepository->getByItemAndSave($item, $row)->getValue();
+                        if (in_array($item->getType(), [Item::TYPE_CHECKBOXLIST, Item::TYPE_MULTISELECT, Item::TYPE_SELECT, Item::TYPE_RADIOLIST]))
+                        {
+                            foreach($item->getItemOptions() AS $itemOption)
+                            {
+                                if ($itemOption->getId() == $value)
+                                {
+                                    return $itemOption->getIdentifier();
+                                }
+                            }
+
+                            return 'Value not in list';
+                        }
+                        else
+                        {
+                            return $value;
+                        }
                     });
             }
         }

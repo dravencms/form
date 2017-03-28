@@ -282,7 +282,24 @@ class Detail extends BaseControl
         $formData = [];
         foreach ($this->formInfo->getItemGroups() AS $formsItemsGroup) {
             foreach ($formsItemsGroup->getItems() AS $formsItem) {
-                $formData[$formsItem->getName()] = $values->{'formItem_' . $formsItem->getId()};
+
+                $value = $values->{'formItem_' . $formsItem->getId()};
+                if (in_array($value , [Item::TYPE_CHECKBOXLIST, Item::TYPE_MULTISELECT, Item::TYPE_SELECT, Item::TYPE_RADIOLIST]))
+                {
+                    foreach($formsItem->getItemOptions() AS $itemOption)
+                    {
+                        if ($itemOption->getId() == $value)
+                        {
+                            $formData[$formsItem->getName()] = $itemOption->getIdentifier();
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    $formData[$formsItem->getName()] = $value;
+                }
+
                 $saveValue = new SaveValue($values->{'formItem_' . $formsItem->getId()},$formsItem, $save);
                 $this->entityManager->persist($saveValue);
             }

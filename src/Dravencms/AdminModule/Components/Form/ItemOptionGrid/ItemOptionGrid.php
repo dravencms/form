@@ -79,7 +79,7 @@ class ItemOptionGrid extends BaseControl
 
         $grid->setModel($this->itemOptionRepository->getItemOptionQueryBuilder($this->item));
 
-        $grid->addColumnText('name', 'Name')
+        $grid->addColumnText('identifier', 'Identifier')
             ->setSortable()
             ->setFilterText()
             ->setSuggestion();
@@ -87,7 +87,7 @@ class ItemOptionGrid extends BaseControl
         if ($this->presenter->isAllowed('form', 'edit')) {
             $grid->addActionHref('edit', 'Upravit')
                 ->setCustomHref(function($row){
-                    return $this->presenter->link('ItemOption:edit', ['itemId' => $this->item->getId(), 'id' => $row->getItemOption()->getId()]);
+                    return $this->presenter->link('ItemOption:edit', ['itemId' => $this->item->getId(), 'id' => $row->getId()]);
                 })
                 ->setIcon('pencil');
         }
@@ -95,11 +95,11 @@ class ItemOptionGrid extends BaseControl
         if ($this->presenter->isAllowed('form', 'delete')) {
             $grid->addActionHref('delete', 'Smazat', 'delete!')
                 ->setCustomHref(function($row){
-                    return $this->link('delete!', $row->getItemOption()->getId());
+                    return $this->link('delete!', $row->getId());
                 })
                 ->setIcon('trash-o')
                 ->setConfirm(function ($row) {
-                    return ['Opravdu chcete smazat form %s ?', $row->getName()];
+                    return ['Opravdu chcete smazat form %s ?', $row->getIdentifier()];
                 });
 
 

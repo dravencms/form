@@ -27,6 +27,12 @@ class ItemOption extends Nette\Object
     private $position;
 
     /**
+     * @var string
+     * @ORM\Column(type="string",length=255,nullable=false,unique=true)
+     */
+    private $identifier;
+
+    /**
      * @var Item
      * @ORM\ManyToOne(targetEntity="Item", inversedBy="itemOptions")
      * @ORM\JoinColumn(name="item_id", referencedColumnName="id")
@@ -42,11 +48,21 @@ class ItemOption extends Nette\Object
     /**
      * ItemOption constructor.
      * @param Item $item
+     * @param $identifier
      */
-    public function __construct(Item $item)
+    public function __construct(Item $item, $identifier)
     {
         $this->item = $item;
+        $this->identifier = $identifier;
         $this->translations = new ArrayCollection();
+    }
+
+    /**
+     * @param string $identifier
+     */
+    public function setIdentifier($identifier)
+    {
+        $this->identifier = $identifier;
     }
 
     /**
@@ -79,6 +95,14 @@ class ItemOption extends Nette\Object
     public function getTranslations()
     {
         return $this->translations;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIdentifier()
+    {
+        return $this->identifier;
     }
 }
 
