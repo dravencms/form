@@ -15,10 +15,10 @@
     }
   ],
   "require": {
-    "dravencms/structure": "@dev",
-    "dravencms/recaptcha": "@dev",
-    "dravencms/admin": "@dev",
-    "dravencms/templated-email": "@dev"
+    "dravencms/structure": "^v1.0",
+    "dravencms/recaptcha": "^v1.0",
+    "dravencms/admin": "^v1.0",
+    "dravencms/templated-email": "^v1.0"
   },
   "require-dev": {
     "nette/tester": "@dev"
