@@ -13,7 +13,7 @@ use Nette;
  * Class ItemOption
  * @package App\Model\Form\Entities
  * @ORM\Entity
- * @ORM\Table(name="formItemOptionTranslation", uniqueConstraints={@UniqueConstraint(name="item_option_idlocale_id", columns={"item_option_id", "locale_id"})})
+ * @ORM\Table(name="formItemOptionTranslation", uniqueConstraints={@UniqueConstraint(name="item_option_idlocale_id", columns={"item_option_id", "locale_id", "name"})})
  */
 class ItemOptionTranslation extends Nette\Object
 {
@@ -22,7 +22,7 @@ class ItemOptionTranslation extends Nette\Object
 
     /**
      * @var string
-     * @ORM\Column(type="string",length=255,nullable=false,unique=true)
+     * @ORM\Column(type="string",length=255,nullable=false)
      */
     private $name;
 
