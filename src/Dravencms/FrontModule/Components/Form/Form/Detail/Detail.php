@@ -21,6 +21,7 @@ use Nette\Application\UI\Form;
 use Nette\Http\Request;
 use Salamek\Cms\ICmsActionOption;
 use Salamek\TemplatedEmail\TemplatedEmail;
+use Salamek\Tempnam\Tempnam;
 use Tracy\Debugger;
 
 /**
@@ -66,6 +67,9 @@ class Detail extends BaseControl
     /** @var ItemOptionRepository */
     private $itemOptionRepository;
 
+    /** @var Tempnam */
+    private $tempnam;
+
     /**
      * Detail constructor.
      * @param ICmsActionOption $cmsActionOption
@@ -78,6 +82,7 @@ class Detail extends BaseControl
      * @param TemplatedEmail $templatedEmail
      * @param ItemOptionRepository $itemOptionRepository
      * @param CurrentLocale $currentLocale
+     * @param Tempnam $tempnam
      */
     public function __construct(
         ICmsActionOption $cmsActionOption,
@@ -89,7 +94,8 @@ class Detail extends BaseControl
         EntityManager $entityManager,
         TemplatedEmail $templatedEmail,
         ItemOptionRepository $itemOptionRepository,
-        CurrentLocale $currentLocale
+        CurrentLocale $currentLocale,
+        Tempnam $tempnam
     )
     {
         parent::__construct();
@@ -103,6 +109,7 @@ class Detail extends BaseControl
         $this->itemGroupRepository = $itemGroupRepository;
         $this->itemRepository = $itemRepository;
         $this->itemOptionRepository = $itemOptionRepository;
+        $this->tempnam = $tempnam;
 
         $this->formInfo = $this->formRepository->getOneById($this->cmsActionOption->getParameter('id'));
         $this->formInfoTranslation = $this->formRepository->getTranslation($this->formInfo, $this->currentLocale);
@@ -116,10 +123,15 @@ class Detail extends BaseControl
 
         if ($this->formInfoTranslation->getLatteTemplate())
         {
-            //!FIXME HACK SPEED ISSUE
-            $tmpfname = tempnam(sys_get_temp_dir(), 'detail.latte');
-            file_put_contents($tmpfname, $this->formInfoTranslation->getLatteTemplate());
-            $template->setFile($tmpfname);
+            $key = __CLASS__ . $this->formInfoTranslation->getId();
+
+            $tempFile = $this->tempnam->load($key, $this->formInfoTranslation->getUpdatedAt());
+
+            if ($tempFile === null) {
+                $tempFile = $this->tempnam->save($key, $this->formInfoTranslation->getLatteTemplate(), $this->formInfoTranslation->getUpdatedAt());
+            }
+
+            $template->setFile($tempFile);
         }
         else
         {
