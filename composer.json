@@ -18,7 +18,8 @@
     "dravencms/structure": "^v1.0",
     "dravencms/recaptcha": "^v1.0",
     "dravencms/admin": "^v1.0",
-    "dravencms/templated-email": "^v1.0"
+    "dravencms/templated-email": "^v1.0",
+    "dravencms/tempnam": "^1.0"
   },
   "require-dev": {
     "nette/tester": "@dev"
