@@ -15,5 +15,5 @@ Then you have to register extension in `config.neon`.
 
 ```yaml
 extensions:
-	form: Dravencms\Form\DI\FormExtension
+    form: Dravencms\Form\DI\FormExtension
 ```
