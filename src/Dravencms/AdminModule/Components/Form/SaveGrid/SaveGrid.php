@@ -23,7 +23,7 @@ namespace Dravencms\AdminModule\Components\Form\SaveGrid;
 
 use Dravencms\Components\BaseControl\BaseControl;
 use Dravencms\Components\BaseGrid\BaseGridFactory;
-use Dravencms\Locale\CurrentLocale;
+use Dravencms\Locale\CurrentLocaleResolver;
 use Dravencms\Model\Form\Entities\Form;
 use Dravencms\Model\Form\Entities\Item;
 use Dravencms\Model\Form\Entities\Save;
@@ -51,7 +51,7 @@ class SaveGrid extends BaseControl
     /** @var SaveValueRepository */
     private $saveValueRepository;
 
-    /** @var CurrentLocale */
+    /** @var ILocale */
     private $currentLocale;
 
     /** @var Form */
@@ -68,7 +68,7 @@ class SaveGrid extends BaseControl
      * @param SaveRepository $saveRepository
      * @param BaseGridFactory $baseGridFactory
      * @param EntityManager $entityManager
-     * @param CurrentLocale $currentLocale
+     * @param CurrentLocaleResolver $currentLocaleResolver
      * @param SaveValueRepository $saveValueRepository
      */
     public function __construct(
@@ -76,7 +76,7 @@ class SaveGrid extends BaseControl
         SaveRepository $saveRepository,
         BaseGridFactory $baseGridFactory,
         EntityManager $entityManager,
-        CurrentLocale $currentLocale,
+        CurrentLocaleResolver $currentLocaleResolver,
         SaveValueRepository $saveValueRepository
     )
     {
@@ -87,7 +87,7 @@ class SaveGrid extends BaseControl
         $this->saveRepository = $saveRepository;
         $this->entityManager = $entityManager;
         $this->saveValueRepository = $saveValueRepository;
-        $this->currentLocale = $currentLocale;
+        $this->currentLocale = $currentLocaleResolver->getCurrentLocale();
     }
 
 

@@ -23,7 +23,7 @@ namespace Dravencms\AdminModule\Components\Form\ItemGrid;
 
 use Dravencms\Components\BaseControl\BaseControl;
 use Dravencms\Components\BaseGrid\BaseGridFactory;
-use Dravencms\Locale\CurrentLocale;
+use Dravencms\Locale\CurrentLocaleResolver;
 use Dravencms\Model\Form\Entities\Item;
 use Dravencms\Model\Form\Entities\ItemGroup;
 use Dravencms\Model\Form\Repository\ItemRepository;
@@ -68,7 +68,7 @@ class ItemGrid extends BaseControl
      * @param ItemRepository $itemRepository
      * @param BaseGridFactory $baseGridFactory
      * @param EntityManager $entityManager
-     * @param CurrentLocale $currentLocale
+     * @param CurrentLocaleResolver $currentLocaleResolver
      * @param LocaleRepository $localeRepository
      */
     public function __construct(
@@ -76,7 +76,7 @@ class ItemGrid extends BaseControl
         ItemRepository $itemRepository,
         BaseGridFactory $baseGridFactory,
         EntityManager $entityManager,
-        CurrentLocale $currentLocale,
+        CurrentLocaleResolver $currentLocaleResolver,
         LocaleRepository $localeRepository
     )
     {
@@ -85,7 +85,7 @@ class ItemGrid extends BaseControl
         $this->baseGridFactory = $baseGridFactory;
         $this->itemRepository = $itemRepository;
         $this->entityManager = $entityManager;
-        $this->currentLocale = $currentLocale;
+        $this->currentLocale = $currentLocaleResolver->getCurrentLocale();
         $this->localeRepository = $localeRepository;
     }
 

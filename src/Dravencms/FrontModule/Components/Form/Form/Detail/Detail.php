@@ -5,7 +5,7 @@ namespace Dravencms\FrontModule\Components\Form\Form\Detail;
 use Dravencms\Components\BaseControl\BaseControl;
 use Dravencms\Components\BaseForm\BaseFormFactory;
 use Dravencms\Flash;
-use Dravencms\Locale\CurrentLocale;
+use Dravencms\Locale\CurrentLocaleResolver;
 use Dravencms\Model\Form\Entities\FormTranslation;
 use Dravencms\Model\Form\Entities\Item;
 use Dravencms\Model\Form\Entities\ItemGroup;
@@ -52,7 +52,7 @@ class Detail extends BaseControl
     /** @var \Dravencms\Model\Form\Entities\Form|mixed|null */
     private $formInfo;
 
-    /** @var CurrentLocale */
+    /** @var ILocale */
     private $currentLocale;
 
     /** @var ItemGroupRepository */
@@ -81,7 +81,7 @@ class Detail extends BaseControl
      * @param EntityManager $entityManager
      * @param TemplatedEmail $templatedEmail
      * @param ItemOptionRepository $itemOptionRepository
-     * @param CurrentLocale $currentLocale
+     * @param CurrentLocaleResolver $currentLocaleResolver
      * @param Tempnam $tempnam
      */
     public function __construct(
@@ -94,7 +94,7 @@ class Detail extends BaseControl
         EntityManager $entityManager,
         TemplatedEmail $templatedEmail,
         ItemOptionRepository $itemOptionRepository,
-        CurrentLocale $currentLocale,
+        CurrentLocaleResolver $currentLocaleResolver,
         Tempnam $tempnam
     )
     {
@@ -105,7 +105,7 @@ class Detail extends BaseControl
         $this->request = $request;
         $this->entityManager = $entityManager;
         $this->templatedEmail = $templatedEmail;
-        $this->currentLocale = $currentLocale;
+        $this->currentLocale = $currentLocaleResolver->getCurrentLocale();
         $this->itemGroupRepository = $itemGroupRepository;
         $this->itemRepository = $itemRepository;
         $this->itemOptionRepository = $itemOptionRepository;
