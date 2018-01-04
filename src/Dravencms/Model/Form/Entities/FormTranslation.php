@@ -21,8 +21,9 @@ use Nette;
  * @ORM\Entity
  * @ORM\Table(name="formFormTranslantion", uniqueConstraints={@UniqueConstraint(name="form_idlocale_id", columns={"form_id", "locale_id"})})
  */
-class FormTranslation extends Nette\Object
+class FormTranslation
 {
+    use Nette\SmartObject;
     use Identifier;
     use TimestampableEntity;
 

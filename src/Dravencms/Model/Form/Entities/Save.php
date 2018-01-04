@@ -15,11 +15,11 @@ use Nette;
  * @ORM\Entity
  * @ORM\Table(name="formSave")
  */
-class Save extends Nette\Object
+class Save
 {
+    use Nette\SmartObject;
     use Identifier;
     use TimestampableEntity;
-
 
     /**
      * @var string

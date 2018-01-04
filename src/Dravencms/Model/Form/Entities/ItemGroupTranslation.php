@@ -15,8 +15,9 @@ use Nette;
  * @ORM\Entity
  * @ORM\Table(name="formItemGroupTranslation", uniqueConstraints={@UniqueConstraint(name="item_group_idlocale_id", columns={"item_group_id", "locale_id"})})
  */
-class ItemGroupTranslation extends Nette\Object
+class ItemGroupTranslation
 {
+    use Nette\SmartObject;
     use Identifier;
     use TimestampableEntity;
 

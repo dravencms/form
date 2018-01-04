@@ -15,8 +15,9 @@ use Nette;
  * @ORM\Entity
  * @ORM\Table(name="formItemTranslantion")
  */
-class ItemTranslantion extends Nette\Object
+class ItemTranslantion
 {
+    use Nette\SmartObject;
     use Identifier;
     use TimestampableEntity;
 

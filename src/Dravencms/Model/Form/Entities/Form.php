@@ -15,8 +15,9 @@ use Nette;
  * @ORM\Entity
  * @ORM\Table(name="formForm")
  */
-class Form extends Nette\Object
+class Form
 {
+    use Nette\SmartObject;
     use Identifier;
     use TimestampableEntity;
 

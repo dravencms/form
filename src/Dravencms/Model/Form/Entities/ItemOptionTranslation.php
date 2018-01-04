@@ -15,8 +15,9 @@ use Nette;
  * @ORM\Entity
  * @ORM\Table(name="formItemOptionTranslation", uniqueConstraints={@UniqueConstraint(name="item_option_idlocale_id", columns={"item_option_id", "locale_id", "name"})})
  */
-class ItemOptionTranslation extends Nette\Object
+class ItemOptionTranslation
 {
+    use Nette\SmartObject;
     use Identifier;
     use TimestampableEntity;
 

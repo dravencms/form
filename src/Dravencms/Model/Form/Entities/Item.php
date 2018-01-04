@@ -16,8 +16,9 @@ use Nette;
  * @ORM\Entity(repositoryClass="Gedmo\Sortable\Entity\Repository\SortableRepository")
  * @ORM\Table(name="formItem", uniqueConstraints={@UniqueConstraint(name="name_unique", columns={"name", "item_group_id"})})
  */
-class Item extends Nette\Object
+class Item
 {
+    use Nette\SmartObject;
     use Identifier;
     use TimestampableEntity;
 
