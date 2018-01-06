@@ -215,6 +215,14 @@ class Item
     }
 
     /**
+     * @return ItemGroup
+     */
+    public function getItemGroup()
+    {
+        return $this->itemGroup;
+    }
+    
+    /**
      * @return ItemOption[]|ArrayCollection
      */
     public function getItemOptions()

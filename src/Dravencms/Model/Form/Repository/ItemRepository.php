@@ -56,13 +56,11 @@ class ItemRepository
      * @param ItemGroup $itemGroup
      * @return \Kdyby\Doctrine\QueryBuilder
      */
-    public function getItemQueryBuilder(ItemGroup $itemGroup, ILocale $locale, ILocale $defaultLocale)
+    public function getItemQueryBuilder(ItemGroup $itemGroup)
     {
-        $qb = $this->itemTranslationRepository->createQueryBuilder('t')
-            ->select('t')
-            ->join('t.item', 'i')
+        $qb = $this->itemRepository->createQueryBuilder('i')
+            ->select('i')
             ->where('i.itemGroup = :itemGroup')
-            ->groupBy('i')
             ->setParameter('itemGroup', $itemGroup);
         return $qb;
     }

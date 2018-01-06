@@ -6,6 +6,7 @@
 namespace Dravencms\Model\Form\Repository;
 
 use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\QueryBuilder;
 use Dravencms\Model\Form\Entities\Form;
 use Dravencms\Model\Form\Entities\ItemGroup;
 use Dravencms\Model\Form\Entities\ItemGroupTranslation;
@@ -56,23 +57,45 @@ class ItemGroupRepository
 
     /**
      * @param Form $form
-     * @param ILocale $locale
-     * @return static
+     * @return QueryBuilder
      */
-    public function getItemGroupQueryBuilder(Form $form, ILocale $locale, ILocale $defaultLocale)
+    public function getItemGroupQueryBuilder(Form $form)
     {
-        $qb = $this->itemGroupTranslantionRepository->createQueryBuilder('t')
-            ->select('t')
-            ->join('t.itemGroup', 'it')
-            //->where('t.locale = :locale OR t.locale = :defaultLocale')
-            ->andWhere('it.form = :form')
-            ->groupBy('it')
+        $qb = $this->itemGroupRepository->createQueryBuilder('ig')
+            ->select('ig')
+            ->andWhere('ig.form = :form')
             ->setParameters([
-                'form' => $form,
-                /*'locale' => $locale->getId(),
-                'defaultLocale' => $defaultLocale*/
+                'form' => $form
             ]);
         return $qb;
+    }
+
+    /**
+     * @param $identifier
+     * @param Form $form
+     * @param ItemGroup|null $itemGroupIgnore
+     * @return mixed
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function isIdentifierFree($identifier, Form $form, ItemGroup $itemGroupIgnore = null)
+    {
+        $qb = $this->itemGroupRepository->createQueryBuilder('ig')
+            ->select('ig')
+            ->where('ig.identifier = :identifier')
+            ->andWhere('ig.form = :form')
+            ->setParameters([
+                'identifier' => $identifier,
+                'form' => $form
+            ]);
+
+        if ($itemGroupIgnore)
+        {
+            $qb->andWhere('ig != :itemGroupIgnore')
+                ->setParameter('itemGroupIgnore', $itemGroupIgnore);
+        }
+
+        $query = $qb->getQuery();
+        return (is_null($query->getOneOrNullResult()));
     }
 
     /**

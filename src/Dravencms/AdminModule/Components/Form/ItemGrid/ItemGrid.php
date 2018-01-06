@@ -23,6 +23,7 @@ namespace Dravencms\AdminModule\Components\Form\ItemGrid;
 
 use Dravencms\Components\BaseControl\BaseControl;
 use Dravencms\Components\BaseGrid\BaseGridFactory;
+use Dravencms\Components\BaseGrid\Grid;
 use Dravencms\Locale\CurrentLocaleResolver;
 use Dravencms\Model\Form\Entities\Item;
 use Dravencms\Model\Form\Entities\ItemGroup;
@@ -96,86 +97,77 @@ class ItemGrid extends BaseControl
      */
     public function createComponentGrid($name)
     {
+        /** @var Grid $grid */
         $grid = $this->baseGridFactory->create($this, $name);
 
-        $grid->setModel($this->itemRepository->getItemQueryBuilder($this->itemGroup, $this->currentLocale, $this->localeRepository->getDefault()));
+        $grid->setDataSource($this->itemRepository->getItemQueryBuilder($this->itemGroup));
 
-        $grid->addColumnText('item.name', 'Name')
+        $grid->addColumnText('name', 'Name')
             ->setSortable()
-            ->setFilterText()
-            ->setSuggestion();
+            ->setFilterText();
 
         $grid->addColumnText('latteName', 'Latte name')
-            ->setCustomRender(function($row){
-                return 'formItem_'.$row->getItem()->getId();
+            ->setRenderer(function($row){
+                return 'formItem_'.$row->getId();
             });
 
-        $grid->addColumnText('item.type', 'Type')
-            ->setCustomRender(function ($row) {
-
-                $multiOptions = [Item::TYPE_SELECT, Item::TYPE_MULTISELECT, Item::TYPE_RADIOLIST, Item::TYPE_CHECKBOXLIST];
-
-                if (in_array($row->getItem()->getType(), $multiOptions)) {
-                    $el = Html::el('a', 'Options');
-                    $el->href = $this->presenter->link('ItemOption:', ['itemId' => $row->getItem()->getId()]);
-                    $el->class = 'btn btn-default btn-xs';
-                    return Item::$typeList[$row->getItem()->getType()] . ' ' . $el;
-                } else {
-                    return Item::$typeList[$row->getItem()->getType()];
-                }
+        $grid->addColumnText('type', 'Type')
+            ->setRenderer(function ($row) {
+                return Item::$typeList[$row->getType()];
             })
-            ->setFilterText()
-            ->setSuggestion();
+            ->setFilterText();
 
-        $grid->addColumnText('defaultValue', 'Default value')
-            ->setFilterText()
-            ->setSuggestion();
 
-        if ($this->presenter->isAllowed('form', 'edit')) {
-            $grid->addActionHref('edit', 'Upravit')
-                ->setCustomHref(function($row){
-                    return $this->presenter->link('Item:edit', ['itemGroupId' => $this->itemGroup->getId(), 'id' => $row->getItem()->getId()]);
-                })
-                ->setIcon('pencil');
+        $grid->addAction('itemOption', 'Options', 'ItemOption:', ['itemId' => 'id'])
+            ->setIcon('bars')
+            ->setTitle('Options')
+            ->setClass('btn btn-xs btn-default');
+
+        $grid->allowRowsAction('itemOption', function($item) {
+            $multiOptions = [Item::TYPE_SELECT, Item::TYPE_MULTISELECT, Item::TYPE_RADIOLIST, Item::TYPE_CHECKBOXLIST];
+            return $this->presenter->isAllowed('form', 'edit') && in_array($item->getType(), $multiOptions);
+        });
+
+        if ($this->presenter->isAllowed('form', 'edit'))
+        {
+            $grid->addAction('edit', '', 'Item:edit', ['itemGroupId' => 'itemGroup.id', 'id'])
+                ->setIcon('pencil')
+                ->setTitle('Upravit')
+                ->setClass('btn btn-xs btn-primary');
         }
 
-        if ($this->presenter->isAllowed('form', 'delete')) {
-            $grid->addActionHref('delete', 'Smazat', 'delete!')
-                ->setCustomHref(function($row){
-                    return $this->link('delete!', $row->getItem()->getId());
-                })
-                ->setIcon('trash-o')
-                ->setConfirm(function ($row) {
-                    return ['Opravdu chcete smazat form %s ?', $row->getItem()->getName()];
-                });
+        if ($this->presenter->isAllowed('form', 'delete'))
+        {
+            $grid->addAction('delete', '', 'delete!')
+                ->setIcon('trash')
+                ->setTitle('Smazat')
+                ->setClass('btn btn-xs btn-danger ajax')
+                ->setConfirm('Do you really want to delete row %s?', 'name');
 
-
-            $operations = ['delete' => 'Smazat'];
-            $grid->setOperation($operations, [$this, 'gridOperationsHandler'])
-                ->setConfirm('delete', 'Opravu chcete smazat %i form ?');
+            $grid->addGroupAction('Smazat')->onSelect[] = [$this, 'gridGroupActionDelete'];
         }
-        $grid->setExport();
+
+        $grid->addExportCsvFiltered('Csv export (filtered)', 'acl_resource_filtered.csv')
+            ->setTitle('Csv export (filtered)');
+
+        $grid->addExportCsv('Csv export', 'acl_resource_all.csv')
+            ->setTitle('Csv export');
 
         return $grid;
     }
 
     /**
-     * @param $action
-     * @param $ids
+     * @param array $ids
      */
-    public function gridOperationsHandler($action, $ids)
+    public function gridGroupActionDelete(array $ids)
     {
-        switch ($action)
-        {
-            case 'delete':
-                $this->handleDelete($ids);
-                break;
-        }
+        $this->handleDelete($ids);
     }
 
     /**
      * @param $id
      * @throws \Exception
+     * @isAllowed(form, delete)
      */
     public function handleDelete($id)
     {

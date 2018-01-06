@@ -21,6 +21,12 @@ class ItemGroup
     use TimestampableEntity;
 
     /**
+     * @var string
+     * @ORM\Column(type="string",length=255,nullable=false,unique=true)
+     */
+    private $identifier;
+
+    /**
      * @var boolean
      * @ORM\Column(type="boolean")
      */
@@ -56,10 +62,12 @@ class ItemGroup
     /**
      * ItemGroup constructor.
      * @param Form $form
+     * @param string $identifier
      * @param bool $isShowName
      */
-    public function __construct(Form $form, $isShowName = false)
+    public function __construct(Form $form, $identifier, $isShowName = false)
     {
+        $this->identifier = $identifier;
         $this->isShowName = $isShowName;
         $this->form = $form;
 
@@ -73,6 +81,15 @@ class ItemGroup
     {
         $this->isShowName = $isShowName;
     }
+
+    /**
+     * @param string $identifier
+     */
+    public function setIdentifier($identifier)
+    {
+        $this->identifier = $identifier;
+    }
+
 
     /**
      * @param int $position
@@ -96,6 +113,14 @@ class ItemGroup
     public function isShowName()
     {
         return $this->isShowName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIdentifier()
+    {
+        return $this->identifier;
     }
 
     /**

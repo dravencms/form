@@ -23,6 +23,7 @@ namespace Dravencms\AdminModule\Components\Form\ItemGroupGrid;
 
 use Dravencms\Components\BaseControl\BaseControl;
 use Dravencms\Components\BaseGrid\BaseGridFactory;
+use Dravencms\Components\BaseGrid\Grid;
 use Dravencms\Locale\CurrentLocaleResolver;
 use Dravencms\Model\Form\Entities\Form;
 use Dravencms\Model\Form\Repository\ItemGroupRepository;
@@ -96,68 +97,59 @@ class ItemGroupGrid extends BaseControl
      */
     public function createComponentGrid($name)
     {
+        /** @var Grid $grid */
         $grid = $this->baseGridFactory->create($this, $name);
 
-        $grid->setModel($this->itemGroupRepository->getItemGroupQueryBuilder($this->form, $this->currentLocale, $this->localeRepository->getDefault()));
+        $grid->setDataSource($this->itemGroupRepository->getItemGroupQueryBuilder($this->form));
 
-        $grid->addColumnText('name', 'Name')
+        $grid->addColumnText('identifier', 'Identifier')
             ->setSortable()
-            ->setFilterText()
-            ->setSuggestion();
+            ->setFilterText();
 
-        $grid->addColumnBoolean('itemGroup.isShowName', 'Show name');
+        $grid->addColumnBoolean('isShowName', 'Show name');
         
         if ($this->presenter->isAllowed('form', 'edit')) {
 
-            $grid->addActionHref('Item', 'Items', 'Item:')
-                ->setCustomHref(function($row){
-                    return $this->presenter->link('Item:', ['itemGroupId' => $row->getItemGroup()->getId()]);
-                })
+            $grid->addAction('Item', 'Items', 'Item:', ['itemGroupId' => 'id'])
                 ->setIcon('bars');
 
-            $grid->addActionHref('edit', 'Upravit')
-                ->setCustomHref(function($row){
-                   return $this->presenter->link('ItemGroup:edit', ['formId' => $this->form->getId(), 'id' => $row->getItemGroup()->getId()]);
-                })
-                ->setIcon('pencil');
+            $grid->addAction('edit', 'Upravit', 'ItemGroup:edit', ['formId' => 'form.id', 'id'])
+                ->setIcon('pencil')
+                ->setClass('btn btn-xs btn-primary');
         }
 
-        if ($this->presenter->isAllowed('form', 'delete')) {
-            $grid->addActionHref('delete', 'Smazat', 'delete!')
-                ->setCustomHref(function($row){
-                    return $this->link('delete!', $row->getItemGroup()->getId());
-                })
-                ->setIcon('trash-o')
-                ->setConfirm(function ($row) {
-                    return ['Opravdu chcete smazat item group %s ?', $row->getName()];
-                });
+        if ($this->presenter->isAllowed('form', 'delete'))
+        {
+            $grid->addAction('delete', '', 'delete!')
+                ->setIcon('trash')
+                ->setTitle('Smazat')
+                ->setClass('btn btn-xs btn-danger ajax')
+                ->setConfirm('Do you really want to delete row %s?', 'identifier');
 
-            $operations = ['delete' => 'Smazat'];
-            $grid->setOperation($operations, [$this, 'gridOperationsHandler'])
-                ->setConfirm('delete', 'Opravu chcete smazat %i item groups ?');
+            $grid->addGroupAction('Smazat')->onSelect[] = [$this, 'gridGroupActionDelete'];
         }
-        $grid->setExport();
+
+        $grid->addExportCsvFiltered('Csv export (filtered)', 'acl_resource_filtered.csv')
+            ->setTitle('Csv export (filtered)');
+
+        $grid->addExportCsv('Csv export', 'acl_resource_all.csv')
+            ->setTitle('Csv export');
 
         return $grid;
     }
 
     /**
-     * @param $action
-     * @param $ids
+     * @param array $ids
      */
-    public function gridOperationsHandler($action, $ids)
+    public function gridGroupActionDelete(array $ids)
     {
-        switch ($action)
-        {
-            case 'delete':
-                $this->handleDelete($ids);
-                break;
-        }
+        $this->handleDelete($ids);
     }
 
     /**
      * @param $id
      * @throws \Exception
+     * @isAllowed(form, delete)
      */
     public function handleDelete($id)
     {

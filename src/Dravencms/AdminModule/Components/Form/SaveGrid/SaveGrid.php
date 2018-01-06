@@ -23,6 +23,7 @@ namespace Dravencms\AdminModule\Components\Form\SaveGrid;
 
 use Dravencms\Components\BaseControl\BaseControl;
 use Dravencms\Components\BaseGrid\BaseGridFactory;
+use Dravencms\Components\BaseGrid\Grid;
 use Dravencms\Locale\CurrentLocaleResolver;
 use Dravencms\Model\Form\Entities\Form;
 use Dravencms\Model\Form\Entities\Item;
@@ -97,28 +98,28 @@ class SaveGrid extends BaseControl
      */
     public function createComponentGrid($name)
     {
+        /** @var Grid $grid */
         $grid = $this->baseGridFactory->create($this, $name);
 
-        $grid->setModel($this->saveRepository->getSaveQueryBuilder($this->form));
+        $grid->setDataSource($this->saveRepository->getSaveQueryBuilder($this->form));
 
-        $grid->addColumnDate('createdAt', 'Created', $this->currentLocale->getDateTimeFormat());
+        $grid->addColumnDateTime('createdAt', 'Created')
+            ->setFormat($this->currentLocale->getDateTimeFormat());
 
         $grid->addColumnText('ip', 'IP')
             ->setSortable()
-            ->setFilterText()
-            ->setSuggestion();
+            ->setFilterText();
 
         $grid->addColumnText('userAgent', 'User Agent')
             ->setSortable()
-            ->setFilterText()
-            ->setSuggestion();
+            ->setFilterText();
 
         foreach ($this->form->getItemGroups() AS $itemGroup)
         {
             foreach ($itemGroup->getItems() AS $item)
             {
                 $grid->addColumnText('formItem_'.$item->getId(), $item->getName())
-                    ->setCustomRender(function($row) use ($item){
+                    ->setRenderer(function($row) use ($item){
                         /** @var Save $row */
                         $value = $this->saveValueRepository->getByItemAndSave($item, $row)->getValue();
                         if (in_array($item->getType(), [Item::TYPE_CHECKBOXLIST, Item::TYPE_MULTISELECT, Item::TYPE_SELECT, Item::TYPE_RADIOLIST]))
@@ -141,43 +142,38 @@ class SaveGrid extends BaseControl
             }
         }
 
-        if ($this->presenter->isAllowed('form', 'delete')) {
-            $grid->addActionHref('delete', 'Smazat', 'delete!')
-                ->setCustomHref(function($row){
-                    return $this->link('delete!', $row->getId());
-                })
-                ->setIcon('trash-o')
-                ->setConfirm(function ($row) {
-                    return ['Opravdu chcete smazat saved form %s ?', $row->getIp()];
-                });
+        if ($this->presenter->isAllowed('form', 'delete'))
+        {
+            $grid->addAction('delete', '', 'delete!')
+                ->setIcon('trash')
+                ->setTitle('Smazat')
+                ->setClass('btn btn-xs btn-danger ajax')
+                ->setConfirm('Do you really want to delete row %s?', 'ip');
 
-
-            $operations = ['delete' => 'Smazat'];
-            $grid->setOperation($operations, [$this, 'gridOperationsHandler'])
-                ->setConfirm('delete', 'Opravu chcete smazat %i saved forms ?');
+            $grid->addGroupAction('Smazat')->onSelect[] = [$this, 'gridGroupActionDelete'];
         }
-        $grid->setExport();
+
+        $grid->addExportCsvFiltered('Csv export (filtered)', 'acl_resource_filtered.csv')
+            ->setTitle('Csv export (filtered)');
+
+        $grid->addExportCsv('Csv export', 'acl_resource_all.csv')
+            ->setTitle('Csv export');
 
         return $grid;
     }
 
     /**
-     * @param $action
-     * @param $ids
+     * @param array $ids
      */
-    public function gridOperationsHandler($action, $ids)
+    public function gridGroupActionDelete(array $ids)
     {
-        switch ($action)
-        {
-            case 'delete':
-                $this->handleDelete($ids);
-                break;
-        }
+        $this->handleDelete($ids);
     }
 
     /**
      * @param $id
      * @throws \Exception
+     * @isAllowed(form, delete)
      */
     public function handleDelete($id)
     {

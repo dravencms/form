@@ -87,7 +87,8 @@ class ItemGroupForm extends BaseControl
 
         if ($this->itemGroup) {
             $defaults = [
-                'isShowName' => $this->itemGroup->isShowName()
+                'isShowName' => $this->itemGroup->isShowName(),
+                'identifier' => $this->itemGroup->getIdentifier()
             ];
 
             foreach ($this->itemGroup->getTranslations() AS $translation)
@@ -119,6 +120,8 @@ class ItemGroupForm extends BaseControl
                 ->addRule(NForm::MAX_LENGTH, 'Form name is too long.', 255);
         }
 
+        $form->addText('identifier');
+
         $form->addCheckbox('isShowName');
 
         $form->addSubmit('send');
@@ -135,6 +138,11 @@ class ItemGroupForm extends BaseControl
     public function editFormValidate(NForm $form)
     {
         $values = $form->getValues();
+
+        if (!$this->itemGroupRepository->isIdentifierFree($values->identifier, $this->form, $this->itemGroup))
+        {
+            $form->addError('Tento identifier je již zabrán.');
+        }
 
         foreach ($this->localeRepository->getActive() AS $activeLocale) {
             if (!$this->itemGroupRepository->isNameFree($values->{$activeLocale->getLanguageCode()}->name, $activeLocale, $this->form, $this->itemGroup)) {
@@ -157,9 +165,10 @@ class ItemGroupForm extends BaseControl
 
         if ($this->itemGroup) {
             $itemGroup = $this->itemGroup;
+            $itemGroup->setIdentifier($values->identifier);
             $itemGroup->setIsShowName($values->isShowName);
         } else {
-            $itemGroup = new ItemGroup($this->form, $values->isShowName);
+            $itemGroup = new ItemGroup($this->form, $values->identifier, $values->isShowName);
         }
 
         $this->entityManager->persist($itemGroup);

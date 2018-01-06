@@ -23,6 +23,7 @@ namespace Dravencms\AdminModule\Components\Form\FormGrid;
 
 use Dravencms\Components\BaseControl\BaseControl;
 use Dravencms\Components\BaseGrid\BaseGridFactory;
+use Dravencms\Components\BaseGrid\Grid;
 use Dravencms\Model\Form\Repository\FormRepository;
 use Kdyby\Doctrine\EntityManager;
 
@@ -70,72 +71,68 @@ class FormGrid extends BaseControl
      */
     public function createComponentGrid($name)
     {
+        /** @var Grid $grid */
         $grid = $this->baseGridFactory->create($this, $name);
 
-        $grid->setModel($this->formRepository->getFormQueryBuilder());
+        $grid->setDataSource($this->formRepository->getFormQueryBuilder());
 
         $grid->addColumnText('name', 'Name')
             ->setSortable()
-            ->setFilterText()
-            ->setSuggestion();
+            ->setFilterText();
 
         $grid->addColumnBoolean('isActive', 'Active');
 
+        if ($this->presenter->isAllowed('form', 'edit'))
+        {
+            $grid->addAction('itemGroup', 'Item groups', 'ItemGroup:', ['formId' => 'id'])
+                ->setIcon('bars')
+                ->setTitle('Item groups')
+                ->setClass('btn btn-xs btn-default');
 
-        if ($this->presenter->isAllowed('form', 'edit')) {
-            $grid->addActionHref('ItemGroup', 'Item groups', 'ItemGroup:')
-                ->setCustomHref(function($row){
-                    return $this->presenter->link('ItemGroup:', ['formId' => $row->getId()]);
-                })
-                ->setIcon('bars');
+            $grid->addAction('savedData', 'Saved data', 'Save:', ['formId' => 'id'])
+                ->setIcon('bars')
+                ->setTitle('Saved data')
+                ->setClass('btn btn-xs btn-default');
 
-            $grid->addActionHref('SavedData', 'Saved data', 'Save:')
-                ->setCustomHref(function($row){
-                    return $this->presenter->link('Save:', ['formId' => $row->getId()]);
-                })
-                ->setIcon('bars');
 
-            $grid->addActionHref('edit', 'Upravit')
-                ->setIcon('pencil');
+            $grid->addAction('edit', '')
+                ->setIcon('pencil')
+                ->setTitle('Upravit')
+                ->setClass('btn btn-xs btn-primary');
         }
 
-        if ($this->presenter->isAllowed('form', 'delete')) {
-            $grid->addActionHref('delete', 'Smazat', 'delete!')
-                ->setCustomHref(function($row){
-                    return $this->link('delete!', $row->getId());
-                })
-                ->setIcon('trash-o')
-                ->setConfirm(function ($row) {
-                    return ['Opravdu chcete smazat form %s ?', $row->name];
-                });
+        if ($this->presenter->isAllowed('form', 'delete'))
+        {
+            $grid->addAction('delete', '', 'delete!')
+                ->setIcon('trash')
+                ->setTitle('Smazat')
+                ->setClass('btn btn-xs btn-danger ajax')
+                ->setConfirm('Do you really want to delete row %s?', 'name');
 
-
-            $operations = ['delete' => 'Smazat'];
-            $grid->setOperation($operations, [$this, 'gridOperationsHandler'])
-                ->setConfirm('delete', 'Opravu chcete smazat %i form ?');
+            $grid->addGroupAction('Smazat')->onSelect[] = [$this, 'gridGroupActionDelete'];
         }
-        $grid->setExport();
+
+        $grid->addExportCsvFiltered('Csv export (filtered)', 'acl_resource_filtered.csv')
+            ->setTitle('Csv export (filtered)');
+
+        $grid->addExportCsv('Csv export', 'acl_resource_all.csv')
+            ->setTitle('Csv export');
 
         return $grid;
     }
 
     /**
-     * @param $action
-     * @param $ids
+     * @param array $ids
      */
-    public function gridOperationsHandler($action, $ids)
+    public function gridGroupActionDelete(array $ids)
     {
-        switch ($action)
-        {
-            case 'delete':
-                $this->handleDelete($ids);
-                break;
-        }
+        $this->handleDelete($ids);
     }
 
     /**
      * @param $id
      * @throws \Exception
+     * @isAllowed(form, delete)
      */
     public function handleDelete($id)
     {
