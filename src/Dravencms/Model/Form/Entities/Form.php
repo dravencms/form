@@ -29,9 +29,15 @@ class Form
 
     /**
      * @var string
-     * @ORM\Column(type="string",length=255,nullable=false)
+     * @ORM\Column(type="string",length=255,nullable=true)
      */
     private $email;
+
+    /**
+     * @var string
+     * @ORM\Column(type="text",nullable=true)
+     */
+    private $hookUrl;
 
     /**
      * @var boolean
@@ -44,6 +50,12 @@ class Form
      * @ORM\Column(type="boolean", nullable=false)
      */
     private $isAntispam;
+
+    /**
+     * @var boolean
+     * @ORM\Column(type="boolean", nullable=false)
+     */
+    private $isSaveToDatabase;
 
     /**
      * @var ArrayCollection|ItemGroup[]
@@ -65,12 +77,14 @@ class Form
      * @param bool $isActive
      * @param bool $isAntispam
      */
-    public function __construct($name, $email, $isActive = true, $isAntispam = true)
+    public function __construct($name, $email = null, $hookUrl = null, $isSaveToDatabase = true, $isActive = true, $isAntispam = true)
     {
         $this->name = $name;
         $this->email = $email;
         $this->isActive = $isActive;
         $this->isAntispam = $isAntispam;
+        $this->hookUrl = $hookUrl;
+        $this->isSaveToDatabase = $isSaveToDatabase;
 
         $this->itemGroups = new ArrayCollection();
         $this->translations = new ArrayCollection();
@@ -96,7 +110,7 @@ class Form
     /**
      * @param string $email
      */
-    public function setEmail($email)
+    public function setEmail($email = null)
     {
         $this->email = $email;
     }
@@ -107,6 +121,22 @@ class Form
     public function setIsAntispam($isAntispam)
     {
         $this->isAntispam = $isAntispam;
+    }
+
+    /**
+     * @param string $hookUrl
+     */
+    public function setHookUrl($hookUrl = null)
+    {
+        $this->hookUrl = $hookUrl;
+    }
+
+    /**
+     * @param boolean $isSaveToDatabase
+     */
+    public function setIsSaveToDatabase($isSaveToDatabase)
+    {
+        $this->isSaveToDatabase = $isSaveToDatabase;
     }
 
     /**
@@ -155,6 +185,22 @@ class Form
     public function isAntispam()
     {
         return $this->isAntispam;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHookUrl()
+    {
+        return $this->hookUrl;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isSaveToDatabase()
+    {
+        return $this->isSaveToDatabase;
     }
 }
 

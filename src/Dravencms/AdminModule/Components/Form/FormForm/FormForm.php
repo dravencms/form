@@ -83,8 +83,10 @@ class FormForm extends BaseControl
             $defaults = [
                 'name' => $this->form->getName(),
                 'email' => $this->form->getEmail(),
+                'hookUrl' => $this->form->getHookUrl(),
                 'isActive' => $this->form->isActive(),
                 'isAntispam' => $this->form->isAntispam(),
+                'isSaveToDatabase' => $this->form->isSaveToDatabase(),
             ];
 
             foreach ($this->form->getTranslations() AS $translation)
@@ -96,7 +98,8 @@ class FormForm extends BaseControl
         }
         else{
             $defaults = [
-                'isActive' => true
+                'isActive' => true,
+                'isSaveToDatabase' => true
             ];
         }
 
@@ -132,10 +135,14 @@ class FormForm extends BaseControl
             ->setRequired(false)
             ->addRule(NForm::MAX_LENGTH, 'Form target emails field is too long.', 255);
 
+        $form->addText('hookUrl')
+            ->setRequired(false)
+            ->addRule(NForm::URL, 'Hook URL must be valid URL');
 
 
         $form->addCheckbox('isActive');
         $form->addCheckbox('isAntispam');
+        $form->addCheckbox('isSaveToDatabase');
 
         $form->addSubmit('send');
 
@@ -174,8 +181,17 @@ class FormForm extends BaseControl
             $form->setEmail($values->email);
             $form->setIsActive($values->isActive);
             $form->setIsAntispam($values->isAntispam);
+            $form->setHookUrl($values->hookUrl);
+            $form->setIsSaveToDatabase($values->isSaveToDatabase);
         } else {
-            $form = new Form($values->name, $values->email, $values->isActive, $values->isAntispam);
+            $form = new Form(
+                $values->name,
+                $values->email,
+                $values->hookUrl,
+                $values->isSaveToDatabase,
+                $values->isActive,
+                $values->isAntispam
+            );
         }
 
         $this->entityManager->persist($form);

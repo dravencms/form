@@ -287,9 +287,12 @@ class Detail extends BaseControl
     {
         $values = $form->getValues();
 
-        $save = new Save($this->request->getRemoteAddress(), $this->request->getHeader('User-Agent'));
+        if ($this->formInfo->isSaveToDatabase())
+        {
+            $save = new Save($this->request->getRemoteAddress(), $this->request->getHeader('User-Agent'));
 
-        $this->entityManager->persist($save);
+            $this->entityManager->persist($save);
+        }
 
         $formData = [];
         foreach ($this->formInfo->getItemGroups() AS $formsItemsGroup) {
@@ -312,12 +315,16 @@ class Detail extends BaseControl
                     $formData[$formsItem->getName()] = $value;
                 }
 
-                $saveValue = new SaveValue($values->{'formItem_' . $formsItem->getId()},$formsItem, $save);
-                $this->entityManager->persist($saveValue);
+                if ($this->formInfo->isSaveToDatabase()) {
+                    $saveValue = new SaveValue($values->{'formItem_' . $formsItem->getId()}, $formsItem, $save);
+                    $this->entityManager->persist($saveValue);
+                }
             }
         }
 
-        $this->entityManager->flush();
+        if ($this->formInfo->isSaveToDatabase()) {
+            $this->entityManager->flush();
+        }
 
         if ($this->formInfo->getEmail())
         {
@@ -328,6 +335,23 @@ class Detail extends BaseControl
                 ->addTo($this->formInfo->getEmail())
                 ->setSubject($this->formInfo->getName())
                 ->send();
+        }
+
+        if ($this->formInfo->getHookUrl())
+        {
+            $opts = [
+                'http' =>
+                    [
+                        'method' => 'POST',
+                        'header' => 'Content-type: application/json',
+                        'content' => json_encode($formData),
+                        'ignore_errors' => true
+                    ]
+            ];
+
+            $context = stream_context_create($opts);
+
+            @file_get_contents($this->formInfo->getHookUrl(), false, $context);
         }
 
         $this->presenter->flashMessage($this->formInfoTranslation->getSuccessMessage(), Flash::SUCCESS);
