@@ -339,12 +339,17 @@ class Detail extends BaseControl
 
         if ($this->formInfo->getHookUrl())
         {
+            $data = [
+                'id' => $this->formInfo->getId(),
+                'title' => $this->formInfo->getName(),
+                'formData' => $formData
+            ];
             $opts = [
                 'http' =>
                     [
                         'method' => 'POST',
                         'header' => 'Content-type: application/json',
-                        'content' => json_encode($formData),
+                        'content' => json_encode($data),
                         'ignore_errors' => true
                     ]
             ];
