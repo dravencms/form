@@ -294,6 +294,7 @@ class Detail extends BaseControl
             $this->entityManager->persist($save);
         }
 
+        $detectedEmails = [];
         $formData = [];
         foreach ($this->formInfo->getItemGroups() AS $formsItemsGroup) {
             foreach ($formsItemsGroup->getItems() AS $formsItem) {
@@ -312,6 +313,10 @@ class Detail extends BaseControl
                 }
                 else
                 {
+                    if ($formsItem->getType() == Item::TYPE_EMAIL)
+                    {
+                        $detectedEmails[] = $value;
+                    }
                     $formData[$formsItem->getName()] = $value;
                 }
 
@@ -342,6 +347,8 @@ class Detail extends BaseControl
             $data = [
                 'id' => $this->formInfo->getId(),
                 'title' => $this->formInfo->getName(),
+                'locale' => $this->currentLocale->getLanguageCode(),
+                'emails' => $detectedEmails,
                 'formData' => $formData
             ];
             $opts = [
