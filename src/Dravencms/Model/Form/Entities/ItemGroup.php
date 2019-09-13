@@ -2,7 +2,9 @@
 namespace Dravencms\Model\Form\Entities;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
+use Dravencms\Model\Locale\Entities\ILocale;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Kdyby\Doctrine\Entities\Attributes\Identifier;
@@ -153,6 +155,16 @@ class ItemGroup
     public function getTranslations()
     {
         return $this->translations;
+    }
+
+    /**
+     * @param ILocale $locale
+     * @return GalleryTranslation
+     */
+    public function translate(ILocale $locale)
+    {
+        $criteria = Criteria::create()->where(Criteria::expr()->eq("locale", $locale));
+        return $this->getTranslations()->matching($criteria)->first();
     }
 }
 

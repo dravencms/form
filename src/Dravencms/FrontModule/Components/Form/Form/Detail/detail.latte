@@ -3,6 +3,10 @@
         <li n:foreach="$form->errors as $error">{$error}</li>
     </ul>
     {foreach $formInfo->getItemGroups() AS $formsItemsGroups}
+        {if $formsItemsGroups->isShowName()}
+        <fieldset>
+            <legend>{$formsItemsGroups->translate($currentLocale)->getName()}</legend>
+        {/if}
         {foreach $formsItemsGroups->getItems() AS $formsItems}
             <div class="form-group control-group">
                 {if $formsItems->getType() == 'select'}
@@ -14,6 +18,9 @@
                 {/if}
             </div>
         {/foreach}
+            {if $formsItemsGroups->isShowName()}
+            </fieldset>
+            {/if}
     {/foreach}
 
     <div n:if="$formInfo->isAntispam()" class="form-group control-group">

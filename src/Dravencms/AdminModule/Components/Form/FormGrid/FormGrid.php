@@ -139,6 +139,18 @@ class FormGrid extends BaseControl
         $forms = $this->formRepository->getById($id);
         foreach ($forms AS $form)
         {
+            foreach ($form->getItemGroups() AS $itemGroup)
+            {
+                foreach ($itemGroup->getItems() AS $item)
+                {
+                    foreach ($item->getItemOptions() AS $itemOption)
+                    {
+                        $this->entityManager->remove($itemOption);
+                    }
+                    $this->entityManager->remove($item);
+                }
+                $this->entityManager->remove($itemGroup);
+            }
             $this->entityManager->remove($form);
         }
 

@@ -156,6 +156,14 @@ class ItemGroupGrid extends BaseControl
         $itemGroups = $this->itemGroupRepository->getById($id);
         foreach ($itemGroups AS $itemGroup)
         {
+            foreach ($itemGroup->getItems() AS $item)
+            {
+                foreach ($item->getItemOptions() AS $itemOption)
+                {
+                    $this->entityManager->remove($itemOption);
+                }
+                $this->entityManager->remove($item);
+            }
             $this->entityManager->remove($itemGroup);
         }
 

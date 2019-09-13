@@ -174,6 +174,10 @@ class ItemGrid extends BaseControl
         $items = $this->itemRepository->getById($id);
         foreach ($items AS $item)
         {
+            foreach ($item->getItemOptions() AS $itemOption)
+            {
+                $this->entityManager->remove($itemOption);
+            }
             $this->entityManager->remove($item);
         }
 

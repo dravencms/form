@@ -120,6 +120,7 @@ class Detail extends BaseControl
         $template = $this->template;
 
         $template->formInfo = $this->formInfo;
+        $template->currentLocale = $this->currentLocale;
 
         if ($this->formInfoTranslation->getLatteTemplate())
         {
