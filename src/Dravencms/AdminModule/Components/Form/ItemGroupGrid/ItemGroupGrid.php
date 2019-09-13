@@ -101,10 +101,12 @@ class ItemGroupGrid extends BaseControl
         $grid = $this->baseGridFactory->create($this, $name);
 
         $grid->setDataSource($this->itemGroupRepository->getItemGroupQueryBuilder($this->form));
-
+        $grid->setDefaultSort(['position' => 'ASC']);
         $grid->addColumnText('identifier', 'Identifier')
             ->setSortable()
             ->setFilterText();
+
+        $grid->addColumnPosition('position', 'Position', 'up!', 'down!');
 
         $grid->addColumnBoolean('isShowName', 'Show name');
         
@@ -126,7 +128,7 @@ class ItemGroupGrid extends BaseControl
                 ->setClass('btn btn-xs btn-danger ajax')
                 ->setConfirm('Do you really want to delete row %s?', 'identifier');
 
-            $grid->addGroupAction('Smazat')->onSelect[] = [$this, 'gridGroupActionDelete'];
+            $grid->addGroupAction('Smazat')->onSelect[] = [$this, 'handleDelete'];
         }
 
         $grid->addExportCsvFiltered('Csv export (filtered)', 'acl_resource_filtered.csv')
@@ -136,14 +138,6 @@ class ItemGroupGrid extends BaseControl
             ->setTitle('Csv export');
 
         return $grid;
-    }
-
-    /**
-     * @param array $ids
-     */
-    public function gridGroupActionDelete(array $ids)
-    {
-        $this->handleDelete($ids);
     }
 
     /**
@@ -171,6 +165,23 @@ class ItemGroupGrid extends BaseControl
 
         $this->onDelete();
     }
+
+    public function handleUp($id)
+    {
+        $item = $this->itemGroupRepository->getOneById($id);
+        $item->setPosition($item->getPosition() - 1);
+        $this->entityManager->persist($item);
+        $this->entityManager->flush();
+    }
+
+    public function handleDown($id)
+    {
+        $item = $this->itemGroupRepository->getOneById($id);
+        $item->setPosition($item->getPosition() + 1);
+        $this->entityManager->persist($item);
+        $this->entityManager->flush();
+    }
+
 
     public function render()
     {

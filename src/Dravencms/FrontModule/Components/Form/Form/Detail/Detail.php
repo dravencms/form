@@ -212,6 +212,16 @@ class Detail extends BaseControl
                                 }
 
                                 break;
+                            case Item::TYPE_NUMBER:
+                                $objInput->addRule(Form::NUMERIC, 'You must enter an number');
+                                if ($formsItems->getMinValue()) {
+                                    $objInput->addRule(Form::MIN, 'Minimal number is %d', $formsItems->getMinValue());
+                                }
+
+                                if ($formsItems->getMaxValue()) {
+                                    $objInput->addRule(Form::MAX, 'Maximal number is %d', $formsItems->getMaxValue());
+                                }
+                                break;
                         }
 
                         break;
@@ -252,7 +262,7 @@ class Detail extends BaseControl
                     $objInput->setAttribute('placeholder', $itemTranslation->getPlaceholder());
                 }
 
-                if ($itemTranslation->getDefaultValue() && !$form->isSubmitted()) {
+                if ($itemTranslation->getDefaultValue()) {
                     $objInput->setValue($itemTranslation->getDefaultValue());
                 }
             }

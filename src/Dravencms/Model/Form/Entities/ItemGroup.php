@@ -52,6 +52,7 @@ class ItemGroup
     /**
      * @var ArrayCollection|Item[]
      * @ORM\OneToMany(targetEntity="Item", mappedBy="itemGroup",cascade={"persist"})
+     * @ORM\OrderBy({"position" = "ASC"})
      */
     private $items;
 

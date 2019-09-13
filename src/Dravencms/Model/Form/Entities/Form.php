@@ -60,6 +60,7 @@ class Form
     /**
      * @var ArrayCollection|ItemGroup[]
      * @ORM\OneToMany(targetEntity="ItemGroup", mappedBy="form",cascade={"persist"})
+     * @ORM\OrderBy({"position" = "ASC"})
      */
     private $itemGroups;
 

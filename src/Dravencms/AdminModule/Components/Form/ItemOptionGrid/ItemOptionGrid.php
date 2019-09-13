@@ -80,11 +80,12 @@ class ItemOptionGrid extends BaseControl
         $grid = $this->baseGridFactory->create($this, $name);
 
         $grid->setDataSource($this->itemOptionRepository->getItemOptionQueryBuilder($this->item));
-
+        $grid->setDefaultSort(['position' => 'ASC']);
         $grid->addColumnText('identifier', 'Identifier')
             ->setSortable()
             ->setFilterText();
 
+        $grid->addColumnPosition('position', 'Position', 'up!', 'down!');
 
         if ($this->presenter->isAllowed('form', 'edit'))
         {
@@ -100,9 +101,9 @@ class ItemOptionGrid extends BaseControl
                 ->setIcon('trash')
                 ->setTitle('Smazat')
                 ->setClass('btn btn-xs btn-danger ajax')
-                ->setConfirm('Do you really want to delete row %s?', 'name');
+                ->setConfirm('Do you really want to delete row %s?', 'identifier');
 
-            $grid->addGroupAction('Smazat')->onSelect[] = [$this, 'gridGroupActionDelete'];
+            $grid->addGroupAction('Smazat')->onSelect[] = [$this, 'handleDelete'];
         }
 
         $grid->addExportCsvFiltered('Csv export (filtered)', 'acl_resource_filtered.csv')
@@ -114,13 +115,6 @@ class ItemOptionGrid extends BaseControl
         return $grid;
     }
 
-    /**
-     * @param array $ids
-     */
-    public function gridGroupActionDelete(array $ids)
-    {
-        $this->handleDelete($ids);
-    }
 
     /**
      * @param $id
@@ -138,6 +132,22 @@ class ItemOptionGrid extends BaseControl
         $this->entityManager->flush();
 
         $this->onDelete();
+    }
+
+    public function handleUp($id)
+    {
+        $item = $this->itemOptionRepository->getOneById($id);
+        $item->setPosition($item->getPosition() - 1);
+        $this->entityManager->persist($item);
+        $this->entityManager->flush();
+    }
+
+    public function handleDown($id)
+    {
+        $item = $this->itemOptionRepository->getOneById($id);
+        $item->setPosition($item->getPosition() + 1);
+        $this->entityManager->persist($item);
+        $this->entityManager->flush();
     }
 
     public function render()

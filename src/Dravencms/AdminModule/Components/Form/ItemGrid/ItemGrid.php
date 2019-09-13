@@ -101,7 +101,7 @@ class ItemGrid extends BaseControl
         $grid = $this->baseGridFactory->create($this, $name);
 
         $grid->setDataSource($this->itemRepository->getItemQueryBuilder($this->itemGroup));
-
+        $grid->setDefaultSort(['position' => 'ASC']);
         $grid->addColumnText('name', 'Name')
             ->setSortable()
             ->setFilterText();
@@ -117,6 +117,7 @@ class ItemGrid extends BaseControl
             })
             ->setFilterText();
 
+        $grid->addColumnPosition('position', 'Position', 'up!', 'down!');
 
         $grid->addAction('itemOption', 'Options', 'ItemOption:', ['itemId' => 'id'])
             ->setIcon('bars')
@@ -144,7 +145,7 @@ class ItemGrid extends BaseControl
                 ->setClass('btn btn-xs btn-danger ajax')
                 ->setConfirm('Do you really want to delete row %s?', 'name');
 
-            $grid->addGroupAction('Smazat')->onSelect[] = [$this, 'gridGroupActionDelete'];
+            $grid->addGroupAction('Smazat')->onSelect[] = [$this, 'handleDelete'];
         }
 
         $grid->addExportCsvFiltered('Csv export (filtered)', 'acl_resource_filtered.csv')
@@ -154,14 +155,6 @@ class ItemGrid extends BaseControl
             ->setTitle('Csv export');
 
         return $grid;
-    }
-
-    /**
-     * @param array $ids
-     */
-    public function gridGroupActionDelete(array $ids)
-    {
-        $this->handleDelete($ids);
     }
 
     /**
@@ -185,6 +178,23 @@ class ItemGrid extends BaseControl
 
         $this->onDelete();
     }
+
+    public function handleUp($id)
+    {
+        $item = $this->itemRepository->getOneById($id);
+        $item->setPosition($item->getPosition() - 1);
+        $this->entityManager->persist($item);
+        $this->entityManager->flush();
+    }
+
+    public function handleDown($id)
+    {
+        $item = $this->itemRepository->getOneById($id);
+        $item->setPosition($item->getPosition() + 1);
+        $this->entityManager->persist($item);
+        $this->entityManager->flush();
+    }
+
 
     public function render()
     {
