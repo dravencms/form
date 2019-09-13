@@ -1,4 +1,4 @@
-<form n:name="form" class="{$formInfo->name|webalize}">
+<form n:name="form" class="{$formInfo->getName()|webalize}">
     <ul class="alert alert-danger" n:if="$form->hasErrors()">
         <li n:foreach="$form->errors as $error">{$error}</li>
     </ul>
