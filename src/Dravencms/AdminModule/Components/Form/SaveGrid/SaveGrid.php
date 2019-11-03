@@ -121,7 +121,11 @@ class SaveGrid extends BaseControl
                 $grid->addColumnText('formItem_'.$item->getId(), $item->getName())
                     ->setRenderer(function($row) use ($item){
                         /** @var Save $row */
-                        $value = $this->saveValueRepository->getByItemAndSave($item, $row)->getValue();
+                        $dataRow = $this->saveValueRepository->getByItemAndSave($item, $row);
+                        if (!$dataRow) {
+                            return '?';
+                        }
+                        $value = $dataRow->getValue();
                         if (in_array($item->getType(), [Item::TYPE_CHECKBOXLIST, Item::TYPE_MULTISELECT, Item::TYPE_SELECT, Item::TYPE_RADIOLIST]))
                         {
                             foreach($item->getItemOptions() AS $itemOption)
