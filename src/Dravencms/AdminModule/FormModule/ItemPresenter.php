@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -10,7 +10,9 @@ namespace Dravencms\AdminModule\FormModule;
 
 
 use Dravencms\AdminModule\Components\Form\ItemForm\ItemFormFactory;
+use Dravencms\AdminModule\Components\Form\ItemForm\ItemForm;
 use Dravencms\AdminModule\Components\Form\ItemGrid\ItemGridFactory;
+use Dravencms\AdminModule\Components\Form\ItemGrid\ItemGrid;
 use Dravencms\AdminModule\SecuredPresenter;
 use Dravencms\Model\Form\Entities\Item;
 use Dravencms\Model\Form\Entities\ItemGroup;
@@ -45,7 +47,7 @@ class ItemPresenter extends SecuredPresenter
      * @param integer $itemGroupId
      * @isAllowed(form,edit)
      */
-    public function actionDefault($itemGroupId)
+    public function actionDefault(int $itemGroupId): void
     {
         $this->itemGroup = $this->itemGroupRepository->getOneById($itemGroupId);
         $this->template->itemGroup = $this->itemGroup;
@@ -58,7 +60,7 @@ class ItemPresenter extends SecuredPresenter
      * @param null $id
      * @throws \Nette\Application\BadRequestException
      */
-    public function actionEdit($itemGroupId, $id = null)
+    public function actionEdit(int $itemGroupId, int $id = null): void
     {
         $this->itemGroup = $this->itemGroupRepository->getOneById($itemGroupId);
 
@@ -78,9 +80,9 @@ class ItemPresenter extends SecuredPresenter
     }
 
     /**
-     * @return \AdminModule\Components\Form\ItemGrid
+     * @return ItemGrid
      */
-    public function createComponentGridItem()
+    public function createComponentGridItem(): ItemGrid
     {
         $control = $this->itemGridFactory->create($this->itemGroup);
         $control->onDelete[] = function()
@@ -92,9 +94,9 @@ class ItemPresenter extends SecuredPresenter
     }
 
     /**
-     * @return \AdminModule\Components\Form\ItemForm
+     * @return ItemForm
      */
-    public function createComponentFormItem()
+    public function createComponentFormItem(): ItemForm
     {
         $control = $this->itemFormFactory->create($this->itemGroup, $this->item);
         $control->onSuccess[] = function()

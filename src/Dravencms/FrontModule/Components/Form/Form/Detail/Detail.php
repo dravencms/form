@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 namespace Dravencms\FrontModule\Components\Form\Form\Detail;
 
 
@@ -8,7 +8,6 @@ use Dravencms\Flash;
 use Dravencms\Locale\CurrentLocaleResolver;
 use Dravencms\Model\Form\Entities\FormTranslation;
 use Dravencms\Model\Form\Entities\Item;
-use Dravencms\Model\Form\Entities\ItemGroup;
 use Dravencms\Model\Form\Entities\ItemOption;
 use Dravencms\Model\Form\Entities\Save;
 use Dravencms\Model\Form\Entities\SaveValue;
@@ -19,10 +18,11 @@ use Dravencms\Model\Form\Repository\ItemRepository;
 use Kdyby\Doctrine\EntityManager;
 use Nette\Application\UI\Form;
 use Nette\Http\Request;
+use Dravencms\Components\BaseForm\Form;
 use Salamek\Cms\ICmsActionOption;
 use Salamek\TemplatedEmail\TemplatedEmail;
 use Salamek\Tempnam\Tempnam;
-use Tracy\Debugger;
+
 
 /**
  * Description of FormPresenter
@@ -98,7 +98,6 @@ class Detail extends BaseControl
         Tempnam $tempnam
     )
     {
-        parent::__construct();
         $this->cmsActionOption = $cmsActionOption;
         $this->baseFormFactory = $baseFormFactory;
         $this->formRepository = $formRepository;
@@ -115,7 +114,7 @@ class Detail extends BaseControl
         $this->formInfoTranslation = $this->formRepository->getTranslation($this->formInfo, $this->currentLocale);
     }
 
-    public function render()
+    public function render(): void
     {
         $template = $this->template;
 
@@ -146,7 +145,7 @@ class Detail extends BaseControl
      * @param ItemOption[] $itemOptions
      * @return array
      */
-    private function itemOptionsToArray($itemOptions)
+    private function itemOptionsToArray($itemOptions): array
     {
         $return = [];
         foreach ($itemOptions AS $itemOption)
@@ -158,7 +157,10 @@ class Detail extends BaseControl
         return $return;
     }
 
-    public function createComponentForm()
+    /**
+     * @return Form
+     */
+    public function createComponentForm(): Form
     {
         $form = $this->baseFormFactory->create();
 
@@ -286,7 +288,7 @@ class Detail extends BaseControl
     /**
      * @param Form $form
      */
-    public function mainFormValidate(Form $form)
+    public function mainFormValidate(Form $form): void
     {
     }
 
@@ -294,7 +296,7 @@ class Detail extends BaseControl
      * @param Form $form
      * @throws \Exception
      */
-    public function mainFormSucceeded(Form $form)
+    public function mainFormSucceeded(Form $form): void
     {
         $values = $form->getValues();
 

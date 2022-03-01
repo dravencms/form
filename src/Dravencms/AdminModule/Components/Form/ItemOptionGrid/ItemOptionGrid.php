@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 /*
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
@@ -47,6 +47,9 @@ class ItemOptionGrid extends BaseControl
 
     /** @var Item */
     private $item;
+    
+    /** @var User */
+    private $user;
 
     /**
      * @var array
@@ -58,12 +61,19 @@ class ItemOptionGrid extends BaseControl
      * @param Item $item
      * @param ItemOptionRepository $itemOptionRepository
      * @param BaseGridFactory $baseGridFactory
+     * @param User $user
      * @param EntityManager $entityManager
      */
-    public function __construct(Item $item, ItemOptionRepository $itemOptionRepository, BaseGridFactory $baseGridFactory, EntityManager $entityManager)
+    public function __construct(
+            Item $item,
+            ItemOptionRepository $itemOptionRepository,
+            BaseGridFactory $baseGridFactory,
+            User $user,
+            EntityManager $entityManager
+            )
     {
-        parent::__construct();
         $this->item = $item;
+        $this->user = $user;
         $this->baseGridFactory = $baseGridFactory;
         $this->itemOptionRepository = $itemOptionRepository;
         $this->entityManager = $entityManager;
@@ -71,10 +81,10 @@ class ItemOptionGrid extends BaseControl
 
 
     /**
-     * @param $name
-     * @return \Dravencms\Components\BaseGrid\BaseGrid
+     * @param string $name
+     * @return Grid
      */
-    public function createComponentGrid($name)
+    public function createComponentGrid(string $name): Grid
     {
         /** @var Grid $grid */
         $grid = $this->baseGridFactory->create($this, $name);
@@ -87,7 +97,7 @@ class ItemOptionGrid extends BaseControl
 
         $grid->addColumnPosition('position', 'Position', 'up!', 'down!');
 
-        if ($this->presenter->isAllowed('form', 'edit'))
+        if ($this->user->isAllowed('form', 'edit'))
         {
             $grid->addAction('edit', '', 'ItemOption:edit', ['itemId' => 'item.id', 'id'])
                 ->setIcon('pencil')
@@ -95,13 +105,13 @@ class ItemOptionGrid extends BaseControl
                 ->setClass('btn btn-xs btn-primary');
         }
 
-        if ($this->presenter->isAllowed('form', 'delete'))
+        if ($this->user->isAllowed('form', 'delete'))
         {
             $grid->addAction('delete', '', 'delete!')
                 ->setIcon('trash')
                 ->setTitle('Smazat')
                 ->setClass('btn btn-xs btn-danger ajax')
-                ->setConfirm('Do you really want to delete row %s?', 'identifier');
+                ->setConfirmation(new StringConfirmation('Do you really want to delete row %s?', 'identifier'));
 
             $grid->addGroupAction('Smazat')->onSelect[] = [$this, 'handleDelete'];
         }
@@ -121,7 +131,7 @@ class ItemOptionGrid extends BaseControl
      * @throws \Exception
      * @isAllowed(form, edit)
      */
-    public function handleDelete($id)
+    public function handleDelete($id): void
     {
         $itemOptions = $this->itemOptionRepository->getById($id);
         foreach ($itemOptions AS $itemOption)
@@ -134,7 +144,7 @@ class ItemOptionGrid extends BaseControl
         $this->onDelete();
     }
 
-    public function handleUp($id)
+    public function handleUp(int $id): void
     {
         $item = $this->itemOptionRepository->getOneById($id);
         $item->setPosition($item->getPosition() - 1);
@@ -142,7 +152,7 @@ class ItemOptionGrid extends BaseControl
         $this->entityManager->flush();
     }
 
-    public function handleDown($id)
+    public function handleDown(int $id): void
     {
         $item = $this->itemOptionRepository->getOneById($id);
         $item->setPosition($item->getPosition() + 1);
@@ -150,7 +160,7 @@ class ItemOptionGrid extends BaseControl
         $this->entityManager->flush();
     }
 
-    public function render()
+    public function render(): void
     {
         $template = $this->template;
         $template->setFile(__DIR__ . '/ItemOptionGrid.latte');

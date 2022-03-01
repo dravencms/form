@@ -1,11 +1,11 @@
-<?php
+<?php declare(strict_types = 1);
 namespace Dravencms\Model\Form\Entities;
 
 use Doctrine\ORM\Mapping as ORM;
 use Dravencms\Model\Locale\Entities\Locale;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Kdyby\Doctrine\Entities\Attributes\Identifier;
+use Dravencms\Database\Attributes\Identifier;
 use Doctrine\ORM\Mapping\UniqueConstraint;
 use Nette;
 
@@ -47,7 +47,7 @@ class ItemGroupTranslation
      * @param Locale $locale
      * @param $name
      */
-    public function __construct(ItemGroup $itemGroup, Locale $locale, $name)
+    public function __construct(ItemGroup $itemGroup, Locale $locale, string $name)
     {
         $this->name = $name;
         $this->itemGroup = $itemGroup;
@@ -57,7 +57,7 @@ class ItemGroupTranslation
     /**
      * @param string $name
      */
-    public function setName($name)
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
@@ -65,7 +65,7 @@ class ItemGroupTranslation
     /**
      * @param ItemGroup $itemGroup
      */
-    public function setItemGroup($itemGroup)
+    public function setItemGroup(ItemGroup $itemGroup): void
     {
         $this->itemGroup = $itemGroup;
     }
@@ -73,7 +73,7 @@ class ItemGroupTranslation
     /**
      * @param Locale $locale
      */
-    public function setLocale($locale)
+    public function setLocale(Locale $locale): void
     {
         $this->locale = $locale;
     }
@@ -81,7 +81,7 @@ class ItemGroupTranslation
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -89,7 +89,7 @@ class ItemGroupTranslation
     /**
      * @return ItemGroup
      */
-    public function getItemGroup()
+    public function getItemGroup(): ItemGroup
     {
         return $this->itemGroup;
     }
@@ -97,7 +97,7 @@ class ItemGroupTranslation
     /**
      * @return Locale
      */
-    public function getLocale()
+    public function getLocale(): Locale
     {
         return $this->locale;
     }

@@ -1,18 +1,14 @@
-<?php
+<?php declare(strict_types = 1);
 /**
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  */
 
 namespace Dravencms\Model\Form\Repository;
 
-use Dravencms\Locale\TLocalizedRepository;
 use Dravencms\Model\Form\Entities\Form;
-use Kdyby\Doctrine\EntityManager;
-use Nette;
 use Salamek\Cms\CmsActionOption;
 use Salamek\Cms\ICmsActionOption;
 use Salamek\Cms\ICmsComponentRepository;
-use Salamek\Cms\Models\ILocale;
 
 class FormCmsRepository implements ICmsComponentRepository
 {
@@ -33,7 +29,7 @@ class FormCmsRepository implements ICmsComponentRepository
      * @param string $componentAction
      * @return ICmsActionOption[]
      */
-    public function getActionOptions($componentAction)
+    public function getActionOptions(string $componentAction)
     {
         switch ($componentAction)
         {
@@ -59,7 +55,7 @@ class FormCmsRepository implements ICmsComponentRepository
      * @param array $parameters
      * @return null|CmsActionOption
      */
-    public function getActionOption($componentAction, array $parameters)
+    public function getActionOption(string $componentAction, array $parameters)
     {
         $found = $this->formRepository->getOneByParameters($parameters);
         

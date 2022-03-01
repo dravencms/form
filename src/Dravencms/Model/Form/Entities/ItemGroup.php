@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 namespace Dravencms\Model\Form\Entities;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Dravencms\Model\Locale\Entities\ILocale;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Kdyby\Doctrine\Entities\Attributes\Identifier;
+use Dravencms\Database\Attributes\Identifier;
 use Nette;
 
 /**
@@ -68,7 +68,7 @@ class ItemGroup
      * @param string $identifier
      * @param bool $isShowName
      */
-    public function __construct(Form $form, $identifier, $isShowName = false)
+    public function __construct(Form $form, string $identifier, bool $isShowName = false)
     {
         $this->identifier = $identifier;
         $this->isShowName = $isShowName;
@@ -80,7 +80,7 @@ class ItemGroup
     /**
      * @param boolean $isShowName
      */
-    public function setIsShowName($isShowName)
+    public function setIsShowName(bool $isShowName): void
     {
         $this->isShowName = $isShowName;
     }
@@ -88,7 +88,7 @@ class ItemGroup
     /**
      * @param string $identifier
      */
-    public function setIdentifier($identifier)
+    public function setIdentifier(string $identifier): void
     {
         $this->identifier = $identifier;
     }
@@ -97,7 +97,7 @@ class ItemGroup
     /**
      * @param int $position
      */
-    public function setPosition($position)
+    public function setPosition(int $position): void
     {
         $this->position = $position;
     }
@@ -105,7 +105,7 @@ class ItemGroup
     /**
      * @param Form $form
      */
-    public function setForm($form)
+    public function setForm(Form $form): void
     {
         $this->form = $form;
     }
@@ -113,7 +113,7 @@ class ItemGroup
     /**
      * @return boolean
      */
-    public function isShowName()
+    public function isShowName(): bool
     {
         return $this->isShowName;
     }
@@ -121,7 +121,7 @@ class ItemGroup
     /**
      * @return string
      */
-    public function getIdentifier()
+    public function getIdentifier(): string
     {
         return $this->identifier;
     }
@@ -129,7 +129,7 @@ class ItemGroup
     /**
      * @return int
      */
-    public function getPosition()
+    public function getPosition(): int
     {
         return $this->position;
     }
@@ -137,7 +137,7 @@ class ItemGroup
     /**
      * @return Form
      */
-    public function getForm()
+    public function getForm(): Form
     {
         return $this->form;
     }

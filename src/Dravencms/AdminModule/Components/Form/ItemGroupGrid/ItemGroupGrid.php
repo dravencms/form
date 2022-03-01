@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 /*
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
@@ -29,7 +29,6 @@ use Dravencms\Model\Form\Entities\Form;
 use Dravencms\Model\Form\Repository\ItemGroupRepository;
 use Dravencms\Model\Locale\Repository\LocaleRepository;
 use Kdyby\Doctrine\EntityManager;
-use Tracy\Debugger;
 
 /**
  * Description of ItemGroupGrid
@@ -50,6 +49,9 @@ class ItemGroupGrid extends BaseControl
 
     /** @var EntityManager */
     private $entityManager;
+    
+    /** @var User */
+    private $user;
 
     /** @var Form */
     private $form;
@@ -70,6 +72,7 @@ class ItemGroupGrid extends BaseControl
      * @param BaseGridFactory $baseGridFactory
      * @param CurrentLocaleResolver $currentLocaleResolver
      * @param EntityManager $entityManager
+     * @param User $user
      */
     public function __construct(
         Form $form,
@@ -77,14 +80,14 @@ class ItemGroupGrid extends BaseControl
         LocaleRepository $localeRepository,
         BaseGridFactory $baseGridFactory,
         CurrentLocaleResolver $currentLocaleResolver,
-        EntityManager $entityManager
+        EntityManager $entityManager,
+        User $user
     )
     {
-        parent::__construct();
-
         $this->baseGridFactory = $baseGridFactory;
         $this->itemGroupRepository = $itemGroupRepository;
         $this->entityManager = $entityManager;
+        $this->user = $user;
         $this->currentLocale = $currentLocaleResolver->getCurrentLocale();
         $this->localeRepository = $localeRepository;
         $this->form = $form;
@@ -92,10 +95,10 @@ class ItemGroupGrid extends BaseControl
 
 
     /**
-     * @param $name
-     * @return \Dravencms\Components\BaseGrid\BaseGrid
+     * @param string $name
+     * @return Grid
      */
-    public function createComponentGrid($name)
+    public function createComponentGrid(string $name): Grid
     {
         /** @var Grid $grid */
         $grid = $this->baseGridFactory->create($this, $name);
@@ -110,7 +113,7 @@ class ItemGroupGrid extends BaseControl
 
         $grid->addColumnBoolean('isShowName', 'Show name');
         
-        if ($this->presenter->isAllowed('form', 'edit')) {
+        if ($this->user->isAllowed('form', 'edit')) {
 
             $grid->addAction('Item', 'Items', 'Item:', ['itemGroupId' => 'id'])
                 ->setIcon('bars');
@@ -120,13 +123,13 @@ class ItemGroupGrid extends BaseControl
                 ->setClass('btn btn-xs btn-primary');
         }
 
-        if ($this->presenter->isAllowed('form', 'delete'))
+        if ($this->user->isAllowed('form', 'delete'))
         {
             $grid->addAction('delete', '', 'delete!')
                 ->setIcon('trash')
                 ->setTitle('Smazat')
                 ->setClass('btn btn-xs btn-danger ajax')
-                ->setConfirm('Do you really want to delete row %s?', 'identifier');
+                ->setConfirmation(new StringConfirmation('Do you really want to delete row %s?', 'identifier'));
 
             $grid->addGroupAction('Smazat')->onSelect[] = [$this, 'handleDelete'];
         }
@@ -145,7 +148,7 @@ class ItemGroupGrid extends BaseControl
      * @throws \Exception
      * @isAllowed(form, delete)
      */
-    public function handleDelete($id)
+    public function handleDelete($id): void
     {
         $itemGroups = $this->itemGroupRepository->getById($id);
         foreach ($itemGroups AS $itemGroup)
@@ -166,7 +169,7 @@ class ItemGroupGrid extends BaseControl
         $this->onDelete();
     }
 
-    public function handleUp($id)
+    public function handleUp(int $id): void
     {
         $item = $this->itemGroupRepository->getOneById($id);
         $item->setPosition($item->getPosition() - 1);
@@ -174,7 +177,7 @@ class ItemGroupGrid extends BaseControl
         $this->entityManager->flush();
     }
 
-    public function handleDown($id)
+    public function handleDown(int $id): void
     {
         $item = $this->itemGroupRepository->getOneById($id);
         $item->setPosition($item->getPosition() + 1);
@@ -183,7 +186,7 @@ class ItemGroupGrid extends BaseControl
     }
 
 
-    public function render()
+    public function render(): void
     {
         $template = $this->template;
         $template->setFile(__DIR__ . '/ItemGroupGrid.latte');

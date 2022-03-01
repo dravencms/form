@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 /*
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
@@ -29,8 +29,8 @@ use Dravencms\Model\Form\Entities\Item;
 use Dravencms\Model\Form\Entities\ItemGroup;
 use Dravencms\Model\Form\Repository\ItemRepository;
 use Dravencms\Model\Locale\Repository\LocaleRepository;
-use Kdyby\Doctrine\EntityManager;
-use Nette\Utils\Html;
+use Dravencms\Database\EntityManager;
+use Nette\Security\User;
 
 /**
  * Description of ItemGrid
@@ -48,6 +48,9 @@ class ItemGrid extends BaseControl
 
     /** @var EntityManager */
     private $entityManager;
+    
+    /** @var User */
+    private $user;
 
     /** @var ItemGroup */
     private $itemGroup;
@@ -69,6 +72,7 @@ class ItemGrid extends BaseControl
      * @param ItemRepository $itemRepository
      * @param BaseGridFactory $baseGridFactory
      * @param EntityManager $entityManager
+     * @param User $user
      * @param CurrentLocaleResolver $currentLocaleResolver
      * @param LocaleRepository $localeRepository
      */
@@ -77,25 +81,26 @@ class ItemGrid extends BaseControl
         ItemRepository $itemRepository,
         BaseGridFactory $baseGridFactory,
         EntityManager $entityManager,
+        User $user,
         CurrentLocaleResolver $currentLocaleResolver,
         LocaleRepository $localeRepository
     )
     {
-        parent::__construct();
         $this->itemGroup = $itemGroup;
         $this->baseGridFactory = $baseGridFactory;
         $this->itemRepository = $itemRepository;
         $this->entityManager = $entityManager;
+        $this->user = $user;
         $this->currentLocale = $currentLocaleResolver->getCurrentLocale();
         $this->localeRepository = $localeRepository;
     }
 
 
     /**
-     * @param $name
-     * @return \Dravencms\Components\BaseGrid\BaseGrid
+     * @param string $name
+     * @return Grid
      */
-    public function createComponentGrid($name)
+    public function createComponentGrid(string $name): Grid
     {
         /** @var Grid $grid */
         $grid = $this->baseGridFactory->create($this, $name);
@@ -126,10 +131,10 @@ class ItemGrid extends BaseControl
 
         $grid->allowRowsAction('itemOption', function($item) {
             $multiOptions = [Item::TYPE_SELECT, Item::TYPE_MULTISELECT, Item::TYPE_RADIOLIST, Item::TYPE_CHECKBOXLIST];
-            return $this->presenter->isAllowed('form', 'edit') && in_array($item->getType(), $multiOptions);
+            return $this->user->isAllowed('form', 'edit') && in_array($item->getType(), $multiOptions);
         });
 
-        if ($this->presenter->isAllowed('form', 'edit'))
+        if ($this->user->isAllowed('form', 'edit'))
         {
             $grid->addAction('edit', '', 'Item:edit', ['itemGroupId' => 'itemGroup.id', 'id'])
                 ->setIcon('pencil')
@@ -137,13 +142,13 @@ class ItemGrid extends BaseControl
                 ->setClass('btn btn-xs btn-primary');
         }
 
-        if ($this->presenter->isAllowed('form', 'delete'))
+        if ($this->user->isAllowed('form', 'delete'))
         {
             $grid->addAction('delete', '', 'delete!')
                 ->setIcon('trash')
                 ->setTitle('Smazat')
                 ->setClass('btn btn-xs btn-danger ajax')
-                ->setConfirm('Do you really want to delete row %s?', 'name');
+                ->setConfirmation(new StringConfirmation('Do you really want to delete row %s?', 'name'));
 
             $grid->addGroupAction('Smazat')->onSelect[] = [$this, 'handleDelete'];
         }
@@ -162,7 +167,7 @@ class ItemGrid extends BaseControl
      * @throws \Exception
      * @isAllowed(form, delete)
      */
-    public function handleDelete($id)
+    public function handleDelete($id): void
     {
         $items = $this->itemRepository->getById($id);
         foreach ($items AS $item)
@@ -179,7 +184,7 @@ class ItemGrid extends BaseControl
         $this->onDelete();
     }
 
-    public function handleUp($id)
+    public function handleUp(int $id): void
     {
         $item = $this->itemRepository->getOneById($id);
         $item->setPosition($item->getPosition() - 1);
@@ -187,7 +192,7 @@ class ItemGrid extends BaseControl
         $this->entityManager->flush();
     }
 
-    public function handleDown($id)
+    public function handleDown(int $id): void
     {
         $item = $this->itemRepository->getOneById($id);
         $item->setPosition($item->getPosition() + 1);
@@ -196,7 +201,7 @@ class ItemGrid extends BaseControl
     }
 
 
-    public function render()
+    public function render(): void
     {
         $template = $this->template;
         $template->setFile(__DIR__ . '/ItemGrid.latte');

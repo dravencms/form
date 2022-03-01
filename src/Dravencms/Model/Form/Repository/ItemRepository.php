@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /**
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  */
@@ -9,15 +9,15 @@ use Dravencms\Model\Form\Entities\Item;
 use Dravencms\Model\Form\Entities\ItemGroup;
 use Dravencms\Model\Form\Entities\ItemTranslantion;
 use Dravencms\Model\Locale\Entities\ILocale;
-use Kdyby\Doctrine\EntityManager;
-use Nette;
+use Dravencms\Database\EntityManager;
+
 
 class ItemRepository
 {
-    /** @var \Kdyby\Doctrine\EntityRepository */
+    /** @var \Doctrine\Persistence\ObjectRepository|Item */
     private $itemRepository;
 
-    /** @var \Kdyby\Doctrine\EntityRepository */
+    /** @var \Doctrine\Persistence\ObjectRepository|ItemTranslantion */
     private $itemTranslationRepository;
 
     /** @var EntityManager */
@@ -36,9 +36,9 @@ class ItemRepository
 
     /**
      * @param $id
-     * @return mixed|null|Item
+     * @return null|Item
      */
-    public function getOneById($id)
+    public function getOneById(int $id): ?Item
     {
         return $this->itemRepository->find($id);
     }
@@ -72,7 +72,7 @@ class ItemRepository
      * @return mixed
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function isNameFree($name, ItemGroup $itemGroup, Item $itemIgnore = null)
+    public function isNameFree(string $name, ItemGroup $itemGroup, Item $itemIgnore = null): bool
     {
         $qb = $this->itemRepository->createQueryBuilder('i')
             ->select('i')
@@ -99,7 +99,7 @@ class ItemRepository
      * @param ILocale $locale
      * @return ItemTranslantion
      */
-    public function getTranslation(Item $item, ILocale $locale)
+    public function getTranslation(Item $item, ILocale $locale): ?ItemTranslantion
     {
         $qb = $this->itemTranslationRepository->createQueryBuilder('t')
             ->select('t')

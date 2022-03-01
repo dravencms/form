@@ -1,11 +1,11 @@
-<?php
+<?php declare(strict_types = 1);
 namespace Dravencms\Model\Form\Entities;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Kdyby\Doctrine\Entities\Attributes\Identifier;
+use Dravencms\Database\Attributes\Identifier;
 use Nette;
 
 /**
@@ -51,7 +51,7 @@ class ItemOption
      * @param Item $item
      * @param $identifier
      */
-    public function __construct(Item $item, $identifier)
+    public function __construct(Item $item, string $identifier)
     {
         $this->item = $item;
         $this->identifier = $identifier;
@@ -61,7 +61,7 @@ class ItemOption
     /**
      * @param string $identifier
      */
-    public function setIdentifier($identifier)
+    public function setIdentifier(string $identifier): void
     {
         $this->identifier = $identifier;
     }
@@ -69,7 +69,7 @@ class ItemOption
     /**
      * @param int $position
      */
-    public function setPosition($position)
+    public function setPosition(int $position): void
     {
         $this->position = $position;
     }
@@ -77,7 +77,7 @@ class ItemOption
     /**
      * @return int
      */
-    public function getPosition()
+    public function getPosition(): int
     {
         return $this->position;
     }
@@ -85,7 +85,7 @@ class ItemOption
     /**
      * @return Item
      */
-    public function getItem()
+    public function getItem(): Item
     {
         return $this->item;
     }
@@ -101,7 +101,7 @@ class ItemOption
     /**
      * @return string
      */
-    public function getIdentifier()
+    public function getIdentifier(): string
     {
         return $this->identifier;
     }

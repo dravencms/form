@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /*
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  *
@@ -35,5 +35,5 @@ interface ItemGroupFormFactory
      * @param ItemGroup|null $itemGroup
      * @return ItemGroupForm
      */
-    public function create(Form $form, ItemGroup $itemGroup = null);
+    public function create(Form $form, ItemGroup $itemGroup = null): ItemGroupForm;
 }

@@ -1,12 +1,11 @@
-<?php
+<?php declare(strict_types = 1);
 namespace Dravencms\Model\Form\Entities;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Gedmo\Translatable\Translatable;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Kdyby\Doctrine\Entities\Attributes\Identifier;
+use Dravencms\Database\Attributes\Identifier;
 use Nette;
 
 /**
@@ -78,7 +77,14 @@ class Form
      * @param bool $isActive
      * @param bool $isAntispam
      */
-    public function __construct($name, $email = null, $hookUrl = null, $isSaveToDatabase = true, $isActive = true, $isAntispam = true)
+    public function __construct(
+            string $name, 
+            string $email = null, 
+            string $hookUrl = null, 
+            bool $isSaveToDatabase = true, 
+            bool $isActive = true, 
+            bool $isAntispam = true
+            )
     {
         $this->name = $name;
         $this->email = $email;
@@ -95,7 +101,7 @@ class Form
     /**
      * @param boolean $isActive
      */
-    public function setIsActive($isActive)
+    public function setIsActive(bool $isActive): void
     {
         $this->isActive = $isActive;
     }
@@ -103,7 +109,7 @@ class Form
     /**
      * @param string $name
      */
-    public function setName($name)
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
@@ -111,7 +117,7 @@ class Form
     /**
      * @param string $email
      */
-    public function setEmail($email = null)
+    public function setEmail(string $email = null): void
     {
         $this->email = $email;
     }
@@ -119,7 +125,7 @@ class Form
     /**
      * @param boolean $isAntispam
      */
-    public function setIsAntispam($isAntispam)
+    public function setIsAntispam(bool $isAntispam): void
     {
         $this->isAntispam = $isAntispam;
     }
@@ -127,7 +133,7 @@ class Form
     /**
      * @param string $hookUrl
      */
-    public function setHookUrl($hookUrl = null)
+    public function setHookUrl(string $hookUrl = null): void
     {
         $this->hookUrl = $hookUrl;
     }
@@ -135,7 +141,7 @@ class Form
     /**
      * @param boolean $isSaveToDatabase
      */
-    public function setIsSaveToDatabase($isSaveToDatabase)
+    public function setIsSaveToDatabase(bool $isSaveToDatabase): void
     {
         $this->isSaveToDatabase = $isSaveToDatabase;
     }
@@ -143,7 +149,7 @@ class Form
     /**
      * @return boolean
      */
-    public function isActive()
+    public function isActive(): bool
     {
         return $this->isActive;
     }
@@ -151,15 +157,15 @@ class Form
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getEmail()
+    public function getEmail(): ?string
     {
         return $this->email;
     }
@@ -183,15 +189,15 @@ class Form
     /**
      * @return boolean
      */
-    public function isAntispam()
+    public function isAntispam(): bool
     {
         return $this->isAntispam;
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getHookUrl()
+    public function getHookUrl(): ?string
     {
         return $this->hookUrl;
     }
@@ -199,7 +205,7 @@ class Form
     /**
      * @return boolean
      */
-    public function isSaveToDatabase()
+    public function isSaveToDatabase(): bool
     {
         return $this->isSaveToDatabase;
     }

@@ -1,0 +1,6 @@
+extensions:
+    dravencms.form: Dravencms\Form\DI\FormExtension
+
+nettrine.orm.annotations:
+    mapping:
+        Dravencms\Model\Form: %appDir%/../vendor/dravencms/form/src/Dravencms/Model/Form/Entities

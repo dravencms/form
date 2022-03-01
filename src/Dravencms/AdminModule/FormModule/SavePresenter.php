@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -9,6 +9,7 @@
 namespace Dravencms\AdminModule\FormModule;
 
 use Dravencms\AdminModule\Components\Form\SaveGrid\SaveGridFactory;
+use Dravencms\AdminModule\Components\Form\SaveGrid\SaveGrid;
 use Dravencms\AdminModule\SecuredPresenter;
 use Dravencms\Model\Form\Entities\Form;
 use Dravencms\Model\Form\Repository\FormRepository;
@@ -28,16 +29,16 @@ class SavePresenter extends SecuredPresenter
      * @param integer $formId
      * @isAllowed(form,edit)
      */
-    public function actionDefault($formId)
+    public function actionDefault(int $formId): void
     {
         $this->form = $this->formRepository->getOneById($formId);
         $this->template->h1 = 'Forms';
     }
 
     /**
-     * @return \Dravencms\AdminModule\Components\Form\SaveGrid\SaveGrid
+     * @return SaveGrid
      */
-    public function createComponentGridSave()
+    public function createComponentGridSave(): SaveGrid
     {
         $control = $this->saveGridFactory->create($this->form);
         $control->onDelete[] = function()

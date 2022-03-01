@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /*
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  *
@@ -34,5 +34,5 @@ interface ItemOptionFormFactory
      * @param ItemOption|null $itemOption
      * @return ItemOptionForm
      */
-    public function create(Item $item, ItemOption $itemOption = null);
+    public function create(Item $item, ItemOption $itemOption = null): ItemOptionForm;
 }

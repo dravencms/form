@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /**
  * Created by PhpStorm.
  * User: sadam
@@ -11,7 +11,7 @@ namespace Dravencms\Model\Form\Entities;
 use Doctrine\ORM\Mapping as ORM;
 use Dravencms\Model\Locale\Entities\Locale;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Kdyby\Doctrine\Entities\Attributes\Identifier;
+use Dravencms\Database\Attributes\Identifier;
 use Doctrine\ORM\Mapping\UniqueConstraint;
 use Nette;
 
@@ -67,7 +67,13 @@ class FormTranslation
      * @param $successMessage
      * @param null $latteTemplate
      */
-    public function __construct(Form $form, Locale $locale, $sendButtonValue, $successMessage, $latteTemplate = null)
+    public function __construct(
+            Form $form, 
+            Locale $locale, 
+            string $sendButtonValue, 
+            string $successMessage,
+            string $latteTemplate = null
+            )
     {
         $this->form = $form;
         $this->locale = $locale;
@@ -79,7 +85,7 @@ class FormTranslation
     /**
      * @param string $sendButtonValue
      */
-    public function setSendButtonValue($sendButtonValue)
+    public function setSendButtonValue(string $sendButtonValue): void
     {
         $this->sendButtonValue = $sendButtonValue;
     }
@@ -87,15 +93,15 @@ class FormTranslation
     /**
      * @param string $successMessage
      */
-    public function setSuccessMessage($successMessage)
+    public function setSuccessMessage(string $successMessage): void
     {
         $this->successMessage = $successMessage;
     }
 
     /**
-     * @param string $latteTemplate
+     * @param null|string $latteTemplate
      */
-    public function setLatteTemplate($latteTemplate)
+    public function setLatteTemplate(string $latteTemplate = null): void
     {
         $this->latteTemplate = $latteTemplate;
     }
@@ -103,7 +109,7 @@ class FormTranslation
     /**
      * @param Locale $locale
      */
-    public function setLocale(Locale $locale)
+    public function setLocale(Locale $locale): void
     {
         $this->locale = $locale;
     }
@@ -111,7 +117,7 @@ class FormTranslation
     /**
      * @return string
      */
-    public function getSendButtonValue()
+    public function getSendButtonValue(): string
     {
         return $this->sendButtonValue;
     }
@@ -119,15 +125,15 @@ class FormTranslation
     /**
      * @return string
      */
-    public function getSuccessMessage()
+    public function getSuccessMessage(): string
     {
         return $this->successMessage;
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getLatteTemplate()
+    public function getLatteTemplate(): ?string
     {
         return $this->latteTemplate;
     }
@@ -135,7 +141,7 @@ class FormTranslation
     /**
      * @return Locale
      */
-    public function getLocale()
+    public function getLocale(): Locale
     {
         return $this->locale;
     }

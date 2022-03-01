@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /**
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  */
@@ -8,12 +8,12 @@ namespace Dravencms\Model\Form\Repository;
 use Dravencms\Model\Form\Entities\Item;
 use Dravencms\Model\Form\Entities\Save;
 use Dravencms\Model\Form\Entities\SaveValue;
-use Kdyby\Doctrine\EntityManager;
-use Nette;
+use Dravencms\Database\EntityManager;
+
 
 class SaveValueRepository
 {
-    /** @var \Kdyby\Doctrine\EntityRepository */
+    /** @var \Doctrine\Persistence\ObjectRepository|SaveValue */
     private $saveValueRepository;
 
     /** @var EntityManager */
@@ -30,10 +30,10 @@ class SaveValueRepository
     }
 
     /**
-     * @param $id
+     * @param int $id
      * @return mixed|null|SaveValue
      */
-    public function getOneById($id)
+    public function getOneById(int $id): ?SaveValue
     {
         return $this->saveValueRepository->find($id);
     }
@@ -63,7 +63,7 @@ class SaveValueRepository
      * @return boolean
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function isNameFree($name, SaveValue $saveValueIgnore = null)
+    public function isNameFree(string $name, SaveValue $saveValueIgnore = null): bool
     {
         $qb = $this->saveValueRepository->createQueryBuilder('sv')
             ->select('sv')
@@ -84,9 +84,9 @@ class SaveValueRepository
     /**
      * @param Item $item
      * @param Save $save
-     * @return mixed|null|SaveValue
+     * @return null|SaveValue
      */
-    public function getByItemAndSave(Item $item, Save $save)
+    public function getByItemAndSave(Item $item, Save $save): ?SaveValue
     {
         return $this->saveValueRepository->findOneBy(['item' => $item, 'save' => $save]);
     }

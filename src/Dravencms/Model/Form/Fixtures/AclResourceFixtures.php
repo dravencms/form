@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /**
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  */
@@ -8,7 +8,7 @@ namespace Dravencms\Model\Form\Fixtures;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Dravencms\Model\User\Entities\AclResource;
 use Doctrine\Common\DataFixtures\AbstractFixture;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 
 class AclResourceFixtures extends AbstractFixture
 {
@@ -17,7 +17,7 @@ class AclResourceFixtures extends AbstractFixture
      *
      * @param ObjectManager $manager
      */
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $resources = [
             'form' => 'Form'

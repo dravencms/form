@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 /*
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
@@ -25,7 +25,8 @@ use Dravencms\Components\BaseControl\BaseControl;
 use Dravencms\Components\BaseGrid\BaseGridFactory;
 use Dravencms\Components\BaseGrid\Grid;
 use Dravencms\Model\Form\Repository\FormRepository;
-use Kdyby\Doctrine\EntityManager;
+use Dravencms\Database\EntityManager;
+use Nette\Security\User;
 
 /**
  * Description of FormGrid
@@ -43,6 +44,9 @@ class FormGrid extends BaseControl
 
     /** @var EntityManager */
     private $entityManager;
+    
+    /** @var User */
+    private $user;
 
     /**
      * @var array
@@ -50,26 +54,30 @@ class FormGrid extends BaseControl
     public $onDelete = [];
 
     /**
-     * FormGrid constructor.
      * @param FormRepository $formRepository
      * @param BaseGridFactory $baseGridFactory
+     * @param User $user
      * @param EntityManager $entityManager
      */
-    public function __construct(FormRepository $formRepository, BaseGridFactory $baseGridFactory, EntityManager $entityManager)
+    public function __construct(
+            FormRepository $formRepository,
+            BaseGridFactory $baseGridFactory,
+            User $user,
+            EntityManager $entityManager
+            )
     {
-        parent::__construct();
-
         $this->baseGridFactory = $baseGridFactory;
         $this->formRepository = $formRepository;
         $this->entityManager = $entityManager;
+        $this->user = $user;
     }
 
 
     /**
-     * @param $name
-     * @return \Dravencms\Components\BaseGrid
+     * @param string $name
+     * @return Grid
      */
-    public function createComponentGrid($name)
+    public function createComponentGrid(string $name): Grid
     {
         /** @var Grid $grid */
         $grid = $this->baseGridFactory->create($this, $name);
@@ -82,7 +90,7 @@ class FormGrid extends BaseControl
 
         $grid->addColumnBoolean('isActive', 'Active');
 
-        if ($this->presenter->isAllowed('form', 'edit'))
+        if ($this->user->isAllowed('form', 'edit'))
         {
             $grid->addAction('itemGroup', 'Item groups', 'ItemGroup:', ['formId' => 'id'])
                 ->setIcon('bars')
@@ -101,13 +109,13 @@ class FormGrid extends BaseControl
                 ->setClass('btn btn-xs btn-primary');
         }
 
-        if ($this->presenter->isAllowed('form', 'delete'))
+        if ($this->user->isAllowed('form', 'delete'))
         {
             $grid->addAction('delete', '', 'delete!')
                 ->setIcon('trash')
                 ->setTitle('Smazat')
                 ->setClass('btn btn-xs btn-danger ajax')
-                ->setConfirm('Do you really want to delete row %s?', 'name');
+                ->setConfirmation(new StringConfirmation('Do you really want to delete row %s?', 'identifier'));
 
             $grid->addGroupAction('Smazat')->onSelect[] = [$this, 'gridGroupActionDelete'];
         }
@@ -124,7 +132,7 @@ class FormGrid extends BaseControl
     /**
      * @param array $ids
      */
-    public function gridGroupActionDelete(array $ids)
+    public function gridGroupActionDelete(array $ids): void
     {
         $this->handleDelete($ids);
     }
@@ -134,7 +142,7 @@ class FormGrid extends BaseControl
      * @throws \Exception
      * @isAllowed(form, delete)
      */
-    public function handleDelete($id)
+    public function handleDelete($id): void
     {
         $forms = $this->formRepository->getById($id);
         foreach ($forms AS $form)
@@ -159,7 +167,7 @@ class FormGrid extends BaseControl
         $this->onDelete();
     }
 
-    public function render()
+    public function render(): void
     {
         $template = $this->template;
         $template->setFile(__DIR__ . '/FormGrid.latte');

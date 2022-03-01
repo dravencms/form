@@ -15,11 +15,13 @@
     }
   ],
   "require": {
-    "dravencms/structure": "^v1.0",
-    "dravencms/recaptcha": "^v1.0",
-    "dravencms/admin": "^v1.0",
-    "dravencms/templated-email": "^v1.0",
+    "dravencms/recaptcha": ">=v2.0",
+    "dravencms/admin": ">=v2.0",
+    "dravencms/templated-email": "^v1.1",
     "dravencms/tempnam": "^1.0"
+  },
+  "suggest": {
+    "dravencms/structure": "Allows file download components to be used in cms"
   },
   "require-dev": {
     "nette/tester": "@dev"
@@ -31,20 +33,7 @@
   },
   "extra": {
     "dravencms": {
-      "configuration": {
-        "extensions": {
-          "form": "Dravencms\\Form\\DI\\FormExtension"
-        },
-        "doctrine":{
-          "metadata": {
-            "Dravencms\\Model\\Form": "%appDir%/../vendor/dravencms/form/src/Dravencms/Model/Form"
-          }
-        }
-      },
-      "scripts": {
-        "post-install": "Dravencms\\Form\\Script\\PostInstall",
-        "pre-uninstall": "Dravencms\\Form\\Script\\PreUninstall"
-      }
+      "configuration": "dravencms.config.neon"
     }
   }
 }

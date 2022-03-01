@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /**
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  */
@@ -7,12 +7,11 @@ namespace Dravencms\Model\Form\Repository;
 
 use Dravencms\Model\Form\Entities\Form;
 use Dravencms\Model\Form\Entities\Save;
-use Kdyby\Doctrine\EntityManager;
-use Nette;
+use Dravencms\Database\EntityManager;
 
 class SaveRepository
 {
-    /** @var \Kdyby\Doctrine\EntityRepository */
+    /** @var \Doctrine\Persistence\ObjectRepository|Save */
     private $saveRepository;
 
     /** @var EntityManager */
@@ -29,10 +28,10 @@ class SaveRepository
     }
 
     /**
-     * @param $id
-     * @return mixed|null|Save
+     * @param int $id
+     * @return null|Save
      */
-    public function getOneById($id)
+    public function getOneById(int $id): ?Save
     {
         return $this->saveRepository->find($id);
     }
@@ -69,7 +68,7 @@ class SaveRepository
      * @return boolean
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function isNameFree($name, Save $saveIgnore = null)
+    public function isNameFree(string $name, Save $saveIgnore = null): bool
     {
         $qb = $this->saveRepository->createQueryBuilder('s')
             ->select('s')

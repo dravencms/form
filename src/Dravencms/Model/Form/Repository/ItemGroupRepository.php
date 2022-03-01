@@ -1,26 +1,23 @@
-<?php
+<?php declare(strict_types = 1);
 /**
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  */
 
 namespace Dravencms\Model\Form\Repository;
 
-use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Dravencms\Model\Form\Entities\Form;
 use Dravencms\Model\Form\Entities\ItemGroup;
 use Dravencms\Model\Form\Entities\ItemGroupTranslation;
-use Gedmo\Translatable\TranslatableListener;
-use Kdyby\Doctrine\EntityManager;
-use Nette;
+use Dravencms\Database\EntityManager;
 use Dravencms\Model\Locale\Entities\ILocale;
 
 class ItemGroupRepository
 {
-    /** @var \Kdyby\Doctrine\EntityRepository */
+    /** @var \Doctrine\Persistence\ObjectRepository|ItemGroup */
     private $itemGroupRepository;
 
-    /** @var \Kdyby\Doctrine\EntityRepository */
+    /** @var \Doctrine\Persistence\ObjectRepository|ItemGroupTranslation */
     private $itemGroupTranslantionRepository;
 
     /** @var EntityManager */
@@ -38,10 +35,10 @@ class ItemGroupRepository
     }
 
     /**
-     * @param $id
-     * @return mixed|null|ItemGroup
+     * @param int $id
+     * @return null|ItemGroup
      */
-    public function getOneById($id)
+    public function getOneById(int $id): ?ItemGroup
     {
         return $this->itemGroupRepository->find($id);
     }
@@ -77,7 +74,7 @@ class ItemGroupRepository
      * @return mixed
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function isIdentifierFree($identifier, Form $form, ItemGroup $itemGroupIgnore = null)
+    public function isIdentifierFree(string $identifier, Form $form, ItemGroup $itemGroupIgnore = null): bool
     {
         $qb = $this->itemGroupRepository->createQueryBuilder('ig')
             ->select('ig')
@@ -106,7 +103,7 @@ class ItemGroupRepository
      * @return mixed
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function isNameFree($name, ILocale $locale, Form $form, ItemGroup $itemGroupIgnore = null)
+    public function isNameFree(string $name, ILocale $locale, Form $form, ItemGroup $itemGroupIgnore = null): bool
     {
         $qb = $this->itemGroupRepository->createQueryBuilder('ig')
             ->select('ig')
@@ -135,7 +132,7 @@ class ItemGroupRepository
      * @param ILocale $locale
      * @return ItemGroupTranslation
      */
-    public function getTranslation(ItemGroup $itemGroup, ILocale $locale)
+    public function getTranslation(ItemGroup $itemGroup, ILocale $locale): ?ItemGroupTranslation
     {
         $qb = $this->itemGroupTranslantionRepository->createQueryBuilder('t')
             ->select('t')

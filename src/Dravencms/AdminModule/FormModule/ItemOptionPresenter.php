@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -10,7 +10,9 @@ namespace Dravencms\AdminModule\FormModule;
 
 
 use Dravencms\AdminModule\Components\Form\ItemOptionForm\ItemOptionFormFactory;
+use Dravencms\AdminModule\Components\Form\ItemOptionForm\ItemOptionForm;
 use Dravencms\AdminModule\Components\Form\ItemOptionGrid\ItemOptionGridFactory;
+use Dravencms\AdminModule\Components\Form\ItemOptionGrid\ItemOptionGrid;
 use Dravencms\AdminModule\SecuredPresenter;
 use Dravencms\Model\Form\Entities\Item;
 use Dravencms\Model\Form\Entities\ItemOption;
@@ -45,7 +47,7 @@ class ItemOptionPresenter extends SecuredPresenter
      * @param integer $itemId
      * @isAllowed(form,edit)
      */
-    public function actionDefault($itemId)
+    public function actionDefault(int $itemId): void
     {
         $this->item = $this->formItemRepository->getOneById($itemId);
         $this->template->item = $this->item;
@@ -58,7 +60,7 @@ class ItemOptionPresenter extends SecuredPresenter
      * @param null $id
      * @throws \Nette\Application\BadRequestException
      */
-    public function actionEdit($itemId, $id = null)
+    public function actionEdit(int $itemId, int $id = null): void
     {
         $this->item = $this->formItemRepository->getOneById($itemId);
         if ($id) {
@@ -77,9 +79,9 @@ class ItemOptionPresenter extends SecuredPresenter
     }
 
     /**
-     * @return \AdminModule\Components\Form\ItemOptionGrid
+     * @return ItemOptionGrid
      */
-    public function createComponentGridItemOption()
+    public function createComponentGridItemOption(): ItemOptionGrid
     {
         $control = $this->itemOptionGridFactory->create($this->item);
         $control->onDelete[] = function()
@@ -91,9 +93,9 @@ class ItemOptionPresenter extends SecuredPresenter
     }
 
     /**
-     * @return \AdminModule\Components\Form\ItemForm
+     * @return ItemOptionForm
      */
-    public function createComponentFormItemOption()
+    public function createComponentFormItemOption(): ItemOptionForm
     {
         $control = $this->itemOptionFormFactory->create($this->item, $this->itemOption);
         $control->onSuccess[] = function()

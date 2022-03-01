@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types = 1);
 namespace Dravencms\Model\Form\Entities;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Kdyby\Doctrine\Entities\Attributes\Identifier;
+use Dravencms\Database\Attributes\Identifier;
 use Doctrine\ORM\Mapping\UniqueConstraint;
 use Dravencms\Model\Locale\Entities\Locale;
 use Nette;
@@ -47,7 +47,7 @@ class ItemOptionTranslation
      * @param Locale $locale
      * @param $name
      */
-    public function __construct(ItemOption $itemOption, Locale $locale, $name)
+    public function __construct(ItemOption $itemOption, Locale $locale, string $name)
     {
         $this->name = $name;
         $this->itemOption = $itemOption;
@@ -57,7 +57,7 @@ class ItemOptionTranslation
     /**
      * @param string $name
      */
-    public function setName($name)
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
@@ -65,7 +65,7 @@ class ItemOptionTranslation
     /**
      * @param ItemOption $itemOption
      */
-    public function setItemOption($itemOption)
+    public function setItemOption(ItemOption $itemOption): void
     {
         $this->itemOption = $itemOption;
     }
@@ -73,7 +73,7 @@ class ItemOptionTranslation
     /**
      * @param Locale $locale
      */
-    public function setLocale($locale)
+    public function setLocale(Locale $locale): void
     {
         $this->locale = $locale;
     }
@@ -81,7 +81,7 @@ class ItemOptionTranslation
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -89,7 +89,7 @@ class ItemOptionTranslation
     /**
      * @return ItemOption
      */
-    public function getItemOption()
+    public function getItemOption(): ItemOption
     {
         return $this->itemOption;
     }
@@ -97,7 +97,7 @@ class ItemOptionTranslation
     /**
      * @return Locale
      */
-    public function getLocale()
+    public function getLocale(): Locale
     {
         return $this->locale;
     }

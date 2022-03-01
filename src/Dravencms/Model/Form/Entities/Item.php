@@ -1,13 +1,12 @@
-<?php
+<?php declare(strict_types = 1);
 namespace Dravencms\Model\Form\Entities;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping\UniqueConstraint;
-use Gedmo\Translatable\Translatable;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Kdyby\Doctrine\Entities\Attributes\Identifier;
+use Dravencms\Database\Attributes\Identifier;
 use Nette;
 
 /**
@@ -117,7 +116,7 @@ class Item
      * @param null $minValue
      * @param null $maxValue
      */
-    public function __construct(ItemGroup $itemGroup, $name, $type, $minValue = null, $maxValue = null)
+    public function __construct(ItemGroup $itemGroup, string $name, string $type, int $minValue = null, int $maxValue = null)
     {
         $this->itemGroup = $itemGroup;
         $this->name = $name;
@@ -133,7 +132,7 @@ class Item
     /**
      * @param string $name
      */
-    public function setName($name)
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
@@ -141,7 +140,7 @@ class Item
     /**
      * @param string $type
      */
-    public function setType($type)
+    public function setType(string $type): void
     {
         if (!array_key_exists($type, self::$typeList))
         {
@@ -153,7 +152,7 @@ class Item
     /**
      * @param int $minValue
      */
-    public function setMinValue($minValue)
+    public function setMinValue(int $minValue = null): void
     {
         $this->minValue = $minValue;
     }
@@ -161,7 +160,7 @@ class Item
     /**
      * @param int $maxValue
      */
-    public function setMaxValue($maxValue)
+    public function setMaxValue(int $maxValue = null): void
     {
         $this->maxValue = $maxValue;
     }
@@ -169,7 +168,7 @@ class Item
     /**
      * @param int $position
      */
-    public function setPosition($position)
+    public function setPosition(int $position): void
     {
         $this->position = $position;
     }
@@ -177,7 +176,7 @@ class Item
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -185,23 +184,23 @@ class Item
     /**
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
 
     /**
-     * @return int
+     * @return null|int
      */
-    public function getMinValue()
+    public function getMinValue(): ?int
     {
         return $this->minValue;
     }
 
     /**
-     * @return int
+     * @return null|int
      */
-    public function getMaxValue()
+    public function getMaxValue(): ?int
     {
         return $this->maxValue;
     }
@@ -209,7 +208,7 @@ class Item
     /**
      * @return int
      */
-    public function getPosition()
+    public function getPosition(): int
     {
         return $this->position;
     }
@@ -217,7 +216,7 @@ class Item
     /**
      * @return ItemGroup
      */
-    public function getItemGroup()
+    public function getItemGroup(): ItemGroup
     {
         return $this->itemGroup;
     }

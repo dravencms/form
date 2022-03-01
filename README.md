@@ -8,7 +8,7 @@ The best way to install dravencms/form is using  [Composer](http://getcomposer.o
 
 
 ```sh
-$ composer require dravencms/form:@dev
+$ composer require dravencms/form
 ```
 
 Then you have to register extension in `config.neon`.

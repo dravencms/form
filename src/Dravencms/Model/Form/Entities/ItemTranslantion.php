@@ -1,12 +1,11 @@
-<?php
+<?php declare(strict_types = 1);
 namespace Dravencms\Model\Form\Entities;
 
 use Doctrine\ORM\Mapping as ORM;
 use Dravencms\Model\Locale\Entities\Locale;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Doctrine\ORM\Mapping\UniqueConstraint;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Kdyby\Doctrine\Entities\Attributes\Identifier;
+use Dravencms\Database\Attributes\Identifier;
 use Nette;
 
 /**
@@ -63,12 +62,12 @@ class ItemTranslantion
      * ItemTranslantion constructor.
      * @param Item $item
      * @param Locale $locale
-     * @param $title
+     * @param string $title
      * @param null $defaultValue
      * @param null $placeholder
      * @param null $required
      */
-    public function __construct(Item $item, Locale $locale, $title, $defaultValue = null, $placeholder = null, $required = null)
+    public function __construct(Item $item, Locale $locale, string $title, string $defaultValue = null, string $placeholder = null, string $required = null)
     {
         $this->item = $item;
         $this->locale = $locale;
@@ -81,7 +80,7 @@ class ItemTranslantion
     /**
      * @param string $defaultValue
      */
-    public function setDefaultValue($defaultValue)
+    public function setDefaultValue(string $defaultValue): void
     {
         $this->defaultValue = $defaultValue;
     }
@@ -89,7 +88,7 @@ class ItemTranslantion
     /**
      * @param string $placeholder
      */
-    public function setPlaceholder($placeholder)
+    public function setPlaceholder(string $placeholder): void
     {
         $this->placeholder = $placeholder;
     }
@@ -97,7 +96,7 @@ class ItemTranslantion
     /**
      * @param string $title
      */
-    public function setTitle($title)
+    public function setTitle(string $title): void
     {
         $this->title = $title;
     }
@@ -105,7 +104,7 @@ class ItemTranslantion
     /**
      * @param boolean $required
      */
-    public function setRequired($required)
+    public function setRequired(string $required = null): void
     {
         $this->required = $required;
     }
@@ -113,7 +112,7 @@ class ItemTranslantion
     /**
      * @param Locale $locale
      */
-    public function setLocale(Locale $locale)
+    public function setLocale(Locale $locale): void
     {
         $this->locale = $locale;
     }
@@ -121,7 +120,7 @@ class ItemTranslantion
     /**
      * @return string
      */
-    public function getDefaultValue()
+    public function getDefaultValue(): string
     {
         return $this->defaultValue;
     }
@@ -129,7 +128,7 @@ class ItemTranslantion
     /**
      * @return string
      */
-    public function getPlaceholder()
+    public function getPlaceholder(): string
     {
         return $this->placeholder;
     }
@@ -137,7 +136,7 @@ class ItemTranslantion
     /**
      * @return string
      */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
@@ -145,7 +144,7 @@ class ItemTranslantion
     /**
      * @return string
      */
-    public function getRequired()
+    public function getRequired(): ?string
     {
         return $this->required;
     }
@@ -153,7 +152,7 @@ class ItemTranslantion
     /**
      * @return Locale
      */
-    public function getLocale()
+    public function getLocale(): Locale
     {
         return $this->locale;
     }
@@ -161,7 +160,7 @@ class ItemTranslantion
     /**
      * @return Item
      */
-    public function getItem()
+    public function getItem(): Item
     {
         return $this->item;
     }

@@ -1,12 +1,11 @@
-<?php
+<?php declare(strict_types = 1);
 namespace Dravencms\Model\Form\Entities;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Gedmo\Translatable\Translatable;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Kdyby\Doctrine\Entities\Attributes\Identifier;
+use Dravencms\Database\Attributes\Identifier;
 use Nette;
 
 /**
@@ -44,7 +43,7 @@ class Save
      * @param string $ip
      * @param string $userAgent
      */
-    public function __construct($ip, $userAgent)
+    public function __construct(string $ip, string $userAgent)
     {
         $this->ip = $ip;
         $this->userAgent = $userAgent;
@@ -54,7 +53,7 @@ class Save
     /**
      * @return string
      */
-    public function getIp()
+    public function getIp(): string
     {
         return $this->ip;
     }
@@ -62,7 +61,7 @@ class Save
     /**
      * @return string
      */
-    public function getUserAgent()
+    public function getUserAgent(): string
     {
         return $this->userAgent;
     }

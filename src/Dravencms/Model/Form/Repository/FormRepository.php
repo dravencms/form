@@ -1,23 +1,21 @@
-<?php
+<?php declare(strict_types = 1);
 /**
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  */
 
 namespace Dravencms\Model\Form\Repository;
 
-use Dravencms\Locale\TLocalizedRepository;
 use Dravencms\Model\Form\Entities\Form;
 use Dravencms\Model\Form\Entities\FormTranslation;
-use Kdyby\Doctrine\EntityManager;
-use Nette;
+use Dravencms\Database\EntityManager;
 use Dravencms\Model\Locale\Entities\ILocale;
 
 class FormRepository
 {
-    /** @var \Kdyby\Doctrine\EntityRepository */
+     /** @var \Doctrine\Persistence\ObjectRepository|Form */
     private $formRepository;
 
-    /** @var \Kdyby\Doctrine\EntityRepository */
+     /** @var \Doctrine\Persistence\ObjectRepository|FormTranslation */
     private $formTranslationRepository;
 
     /** @var EntityManager */
@@ -35,10 +33,10 @@ class FormRepository
     }
 
     /**
-     * @param $id
-     * @return mixed|null|Form
+     * @param int $id
+     * @return null|Form
      */
-    public function getOneById($id)
+    public function getOneById(int $id): ?Form
     {
         return $this->formRepository->find($id);
     }
@@ -76,7 +74,7 @@ class FormRepository
      * @return mixed
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function isNameFree($name, Form $formIgnore = null)
+    public function isNameFree(string $name, Form $formIgnore = null): bool
     {
         $qb = $this->formRepository->createQueryBuilder('f')
             ->select('f')
@@ -98,7 +96,7 @@ class FormRepository
      * @param array $parameters
      * @return Form
      */
-    public function getOneByParameters(array $parameters)
+    public function getOneByParameters(array $parameters): ?Form
     {
         return $this->formRepository->findOneBy($parameters);
     }
@@ -109,7 +107,7 @@ class FormRepository
      * @return FormTranslation
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function getTranslation(Form $form, ILocale $locale)
+    public function getTranslation(Form $form, ILocale $locale): ?FormTranslation
     {
         $qb = $this->formTranslationRepository->createQueryBuilder('t')
             ->select('t')

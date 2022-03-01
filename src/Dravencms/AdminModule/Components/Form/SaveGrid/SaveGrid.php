@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 /*
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
@@ -30,8 +30,8 @@ use Dravencms\Model\Form\Entities\Item;
 use Dravencms\Model\Form\Entities\Save;
 use Dravencms\Model\Form\Repository\SaveRepository;
 use Dravencms\Model\Form\Repository\SaveValueRepository;
-use Dravencms\Model\Locale\Repository\LocaleRepository;
-use Kdyby\Doctrine\EntityManager;
+use Dravencms\Database\EntityManager;
+use Nette\Security\User;
 
 /**
  * Description of SaveGrid
@@ -55,6 +55,9 @@ class SaveGrid extends BaseControl
     /** @var ILocale */
     private $currentLocale;
 
+    /** @var User */
+    private $user;
+    
     /** @var Form */
     private $form;
 
@@ -69,6 +72,7 @@ class SaveGrid extends BaseControl
      * @param SaveRepository $saveRepository
      * @param BaseGridFactory $baseGridFactory
      * @param EntityManager $entityManager
+     * @param User $user
      * @param CurrentLocaleResolver $currentLocaleResolver
      * @param SaveValueRepository $saveValueRepository
      */
@@ -77,26 +81,26 @@ class SaveGrid extends BaseControl
         SaveRepository $saveRepository,
         BaseGridFactory $baseGridFactory,
         EntityManager $entityManager,
+        User $user,
         CurrentLocaleResolver $currentLocaleResolver,
         SaveValueRepository $saveValueRepository
     )
     {
-        parent::__construct();
-
         $this->form = $form;
         $this->baseGridFactory = $baseGridFactory;
         $this->saveRepository = $saveRepository;
         $this->entityManager = $entityManager;
+        $this->user = $user;
         $this->saveValueRepository = $saveValueRepository;
         $this->currentLocale = $currentLocaleResolver->getCurrentLocale();
     }
 
 
     /**
-     * @param $name
-     * @return \Dravencms\Components\BaseGrid\BaseGrid
+     * @param string $name
+     * @return Grid
      */
-    public function createComponentGrid($name)
+    public function createComponentGrid(string $name): Grid
     {
         /** @var Grid $grid */
         $grid = $this->baseGridFactory->create($this, $name);
@@ -146,13 +150,13 @@ class SaveGrid extends BaseControl
             }
         }
 
-        if ($this->presenter->isAllowed('form', 'delete'))
+        if ($this->user->isAllowed('form', 'delete'))
         {
             $grid->addAction('delete', '', 'delete!')
                 ->setIcon('trash')
                 ->setTitle('Smazat')
                 ->setClass('btn btn-xs btn-danger ajax')
-                ->setConfirm('Do you really want to delete row %s?', 'ip');
+                ->setConfirmation(new StringConfirmation('Do you really want to delete row %s?', 'identifier'));
 
             $grid->addGroupAction('Smazat')->onSelect[] = [$this, 'gridGroupActionDelete'];
         }
@@ -169,7 +173,7 @@ class SaveGrid extends BaseControl
     /**
      * @param array $ids
      */
-    public function gridGroupActionDelete(array $ids)
+    public function gridGroupActionDelete(array $ids): void
     {
         $this->handleDelete($ids);
     }
@@ -179,7 +183,7 @@ class SaveGrid extends BaseControl
      * @throws \Exception
      * @isAllowed(form, delete)
      */
-    public function handleDelete($id)
+    public function handleDelete($id): void
     {
         $saves = $this->saveRepository->getById($id);
         foreach ($saves AS $save)
@@ -196,7 +200,7 @@ class SaveGrid extends BaseControl
         $this->onDelete();
     }
 
-    public function render()
+    public function render(): void
     {
         $template = $this->template;
         $template->setFile(__DIR__ . '/SaveGrid.latte');

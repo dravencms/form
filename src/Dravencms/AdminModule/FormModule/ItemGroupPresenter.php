@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -10,7 +10,9 @@ namespace Dravencms\AdminModule\FormModule;
 
 
 use Dravencms\AdminModule\Components\Form\ItemGroupForm\ItemGroupFormFactory;
+use Dravencms\AdminModule\Components\Form\ItemGroupForm\ItemGroupForm;
 use Dravencms\AdminModule\Components\Form\ItemGroupGrid\ItemGroupGridFactory;
+use Dravencms\AdminModule\Components\Form\ItemGroupGrid\ItemGroupGrid;
 use Dravencms\AdminModule\SecuredPresenter;
 use Dravencms\Model\Form\Entities\Form;
 use Dravencms\Model\Form\Entities\ItemGroup;
@@ -41,7 +43,7 @@ class ItemGroupPresenter extends SecuredPresenter
      * @param integer $formId
      * @isAllowed(form,edit)
      */
-    public function actionDefault($formId)
+    public function actionDefault(int $formId): void
     {
         $this->form = $this->formRepository->getOneById($formId);
         $this->template->form = $this->form;
@@ -54,7 +56,7 @@ class ItemGroupPresenter extends SecuredPresenter
      * @param null $id
      * @throws \Nette\Application\BadRequestException
      */
-    public function actionEdit($formId, $id = null)
+    public function actionEdit(int $formId, int $id = null): void
     {
         $this->form = $this->formRepository->getOneById($formId);
 
@@ -74,9 +76,9 @@ class ItemGroupPresenter extends SecuredPresenter
     }
 
     /**
-     * @return \AdminModule\Components\Form\ItemGroupGrid
+     * @return ItemGroupForm
      */
-    public function createComponentGridItemGroup()
+    public function createComponentGridItemGroup(): ItemGroupForm
     {
         $control = $this->itemGroupGridFactory->create($this->form);
         $control->onDelete[] = function()
@@ -88,7 +90,7 @@ class ItemGroupPresenter extends SecuredPresenter
     }
 
     /**
-     * @return \AdminModule\Components\Form\ItemGroupForm
+     * @return ItemGroupGrid
      */
     public function createComponentFormItemGroup()
     {

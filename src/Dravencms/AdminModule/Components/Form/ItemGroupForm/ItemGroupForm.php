@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /*
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  *
@@ -27,8 +27,9 @@ use Dravencms\Model\Form\Entities\ItemGroup;
 use Dravencms\Model\Form\Entities\ItemGroupTranslation;
 use Dravencms\Model\Form\Repository\ItemGroupRepository;
 use Dravencms\Model\Locale\Repository\LocaleRepository;
-use Kdyby\Doctrine\EntityManager;
-use Nette\Application\UI\Form as NForm;
+use Dravencms\Database\EntityManager;
+use Nette\Security\User;
+use Dravencms\Components\BaseForm\Form as AForm;
 
 /**
  * Description of FormForm
@@ -51,6 +52,9 @@ class ItemGroupForm extends BaseControl
 
     /** @var Form */
     private $form;
+    
+    /** @var User */
+    private $user;
 
     /** @var ItemGroup|null */
     private $itemGroup = null;
@@ -62,6 +66,7 @@ class ItemGroupForm extends BaseControl
      * ItemGroupForm constructor.
      * @param BaseFormFactory $baseFormFactory
      * @param EntityManager $entityManager
+     * @param User $user
      * @param ItemGroupRepository $itemGroupRepository
      * @param LocaleRepository $localeRepository
      * @param Form $form
@@ -70,15 +75,15 @@ class ItemGroupForm extends BaseControl
     public function __construct(
         BaseFormFactory $baseFormFactory,
         EntityManager $entityManager,
+        User $user,
         ItemGroupRepository $itemGroupRepository,
         LocaleRepository $localeRepository,
         Form $form,
         ItemGroup $itemGroup = null
     ) {
-        parent::__construct();
-
         $this->form = $form;
         $this->itemGroup = $itemGroup;
+        $this->user = $user;
 
         $this->baseFormFactory = $baseFormFactory;
         $this->entityManager = $entityManager;
@@ -106,9 +111,9 @@ class ItemGroupForm extends BaseControl
     }
 
     /**
-     * @return \Dravencms\Components\BaseForm\BaseForm
+     * @return AForm
      */
-    protected function createComponentForm()
+    protected function createComponentForm(): AForm
     {
         $form = $this->baseFormFactory->create();
 
@@ -133,9 +138,9 @@ class ItemGroupForm extends BaseControl
     }
 
     /**
-     * @param NForm $form
+     * @param AForm $form
      */
-    public function editFormValidate(NForm $form)
+    public function editFormValidate(AForm $form): void
     {
         $values = $form->getValues();
 
@@ -150,16 +155,16 @@ class ItemGroupForm extends BaseControl
             }
         }
 
-        if (!$this->presenter->isAllowed('form', 'edit')) {
+        if (!$this->user->isAllowed('form', 'edit')) {
             $form->addError('Nemáte oprávění editovat article.');
         }
     }
 
     /**
-     * @param NForm $itemGroup
+     * @param AForm $itemGroup
      * @throws \Exception
      */
-    public function editFormSucceeded(NForm $itemGroup)
+    public function editFormSucceeded(AForm $itemGroup): void
     {
         $values = $itemGroup->getValues();
 
@@ -196,7 +201,7 @@ class ItemGroupForm extends BaseControl
         $this->onSuccess();
     }
 
-    public function render()
+    public function render(): void
     {
         $template = $this->template;
         $template->activeLocales = $this->localeRepository->getActive();

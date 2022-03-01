@@ -1,12 +1,11 @@
-<?php
+<?php declare(strict_types = 1);
 namespace Dravencms\Model\Form\Entities;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Gedmo\Translatable\Translatable;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Kdyby\Doctrine\Entities\Attributes\Identifier;
+use Dravencms\Database\Attributes\Identifier;
 use Nette;
 
 /**
@@ -47,7 +46,7 @@ class SaveValue
      * @param Item $item
      * @param Save $save
      */
-    public function __construct($value, Item $item, Save $save)
+    public function __construct(string $value, Item $item, Save $save)
     {
         $this->value = $value;
         $this->item = $item;
@@ -57,7 +56,7 @@ class SaveValue
     /**
      * @return string
      */
-    public function getValue()
+    public function getValue(): string
     {
         return $this->value;
     }

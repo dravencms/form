@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /**
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  */
@@ -8,9 +8,7 @@ namespace Dravencms\Model\Form\Repository;
 use Dravencms\Model\Form\Entities\Item;
 use Dravencms\Model\Form\Entities\ItemOption;
 use Dravencms\Model\Form\Entities\ItemOptionTranslation;
-use Gedmo\Translatable\TranslatableListener;
-use Kdyby\Doctrine\EntityManager;
-use Nette;
+use Dravencms\Database\EntityManager;
 use Dravencms\Model\Locale\Entities\ILocale;
 
 /**
@@ -19,10 +17,10 @@ use Dravencms\Model\Locale\Entities\ILocale;
  */
 class ItemOptionRepository
 {
-    /** @var \Kdyby\Doctrine\EntityRepository */
+    /** @var \Doctrine\Persistence\ObjectRepository|ItemOption */
     private $itemOptionRepository;
 
-    /** @var \Kdyby\Doctrine\EntityRepository */
+    /** @var \Doctrine\Persistence\ObjectRepository|ItemOptionTranslation */
     private $itemOptionTranslationRepository;
 
     /** @var EntityManager */
@@ -41,9 +39,9 @@ class ItemOptionRepository
 
     /**
      * @param $id
-     * @return mixed|null|ItemOption
+     * @return null|ItemOption
      */
-    public function getOneById($id)
+    public function getOneById(int $id): ?ItemOption
     {
         return $this->itemOptionRepository->find($id);
     }
@@ -77,7 +75,7 @@ class ItemOptionRepository
      * @return mixed
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function isIdentifierFree($identifier, Item $item, ItemOption $itemOptionIgnore = null)
+    public function isIdentifierFree(string $identifier, Item $item, ItemOption $itemOptionIgnore = null): bool
     {
         $qb = $this->itemOptionRepository->createQueryBuilder('io')
             ->select('io')
@@ -106,7 +104,7 @@ class ItemOptionRepository
      * @return mixed
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function isNameFree($name, ILocale $locale, Item $item, ItemOption $itemOptionIgnore = null)
+    public function isNameFree(string $name, ILocale $locale, Item $item, ItemOption $itemOptionIgnore = null): bool
     {
         $qb = $this->itemOptionRepository->createQueryBuilder('io')
             ->select('io')
@@ -135,7 +133,7 @@ class ItemOptionRepository
      * @param ILocale $locale
      * @return ItemOptionTranslation
      */
-    public function getTranslation(ItemOption $itemOption, ILocale $locale)
+    public function getTranslation(ItemOption $itemOption, ILocale $locale): ?ItemOptionTranslation
     {
         $qb = $this->itemOptionTranslationRepository->createQueryBuilder('t')
             ->select('t')

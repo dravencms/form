@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -10,7 +10,9 @@ namespace Dravencms\AdminModule\FormModule;
 
 
 use Dravencms\AdminModule\Components\Form\FormForm\FormFormFactory;
+use Dravencms\AdminModule\Components\Form\FormForm\FormForm;
 use Dravencms\AdminModule\Components\Form\FormGrid\FormGridFactory;
+use Dravencms\AdminModule\Components\Form\FormGrid\FormGrid;
 use Dravencms\AdminModule\SecuredPresenter;
 use Dravencms\Model\Form\Entities\Form;
 use Dravencms\Model\Form\Repository\FormRepository;
@@ -36,7 +38,7 @@ class FormPresenter extends SecuredPresenter
     /**
      * @isAllowed(form,edit)
      */
-    public function renderDefault()
+    public function renderDefault(): void
     {
         $this->template->h1 = 'Forms';
     }
@@ -46,7 +48,7 @@ class FormPresenter extends SecuredPresenter
      * @param null $id
      * @throws \Nette\Application\BadRequestException
      */
-    public function actionEdit($id = null)
+    public function actionEdit(int $id = null): void
     {
         if ($id) {
             $form = $this->formRepository->getOneById($id);
@@ -64,9 +66,9 @@ class FormPresenter extends SecuredPresenter
     }
 
     /**
-     * @return \AdminModule\Components\Form\FormForm
+     * @return FormForm
      */
-    public function createComponentFormForm()
+    public function createComponentFormForm(): FormForm
     {
         $control = $this->formFormFactory->create($this->form);
         $control->onSuccess[] = function()
@@ -78,9 +80,9 @@ class FormPresenter extends SecuredPresenter
     }
 
     /**
-     * @return \AdminModule\Components\Form\FormGrid
+     * @return FormGrid
      */
-    public function createComponentGridForm()
+    public function createComponentGridForm(): FormGrid
     {
         $control = $this->formGridFactory->create();
         $control->onDelete[] = function()

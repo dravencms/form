@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /*
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  *
@@ -27,8 +27,9 @@ use Dravencms\Model\Form\Entities\ItemOption;
 use Dravencms\Model\Form\Entities\ItemOptionTranslation;
 use Dravencms\Model\Form\Repository\ItemOptionRepository;
 use Dravencms\Model\Locale\Repository\LocaleRepository;
-use Kdyby\Doctrine\EntityManager;
-use Nette\Application\UI\Form;
+use Dravencms\Database\EntityManager;
+use Dravencms\Components\BaseForm\Form;
+use Nette\Security\User;
 
 /**
  * Description of ItemOptionForm
@@ -52,6 +53,9 @@ class ItemOptionForm extends BaseControl
     /** @var ItemOption|null */
     private $itemOption = null;
 
+    /** @var User */
+    private $user;
+    
     /** @var Item */
     private $item;
 
@@ -63,6 +67,7 @@ class ItemOptionForm extends BaseControl
      * @param Item $item
      * @param BaseFormFactory $baseFormFactory
      * @param EntityManager $entityManager
+     * @param User $user
      * @param ItemOptionRepository $itemOptionRepository
      * @param LocaleRepository $localeRepository
      * @param ItemOption|null $itemOption
@@ -71,17 +76,18 @@ class ItemOptionForm extends BaseControl
         Item $item,
         BaseFormFactory $baseFormFactory,
         EntityManager $entityManager,
+        User $user,
         ItemOptionRepository $itemOptionRepository,
         LocaleRepository $localeRepository,
         ItemOption $itemOption = null
     ) {
-        parent::__construct();
 
         $this->itemOption = $itemOption;
         $this->item = $item;
 
         $this->baseFormFactory = $baseFormFactory;
         $this->entityManager = $entityManager;
+        $this->user = $user;
         $this->itemOptionRepository = $itemOptionRepository;
         $this->localeRepository = $localeRepository;
 
@@ -101,9 +107,9 @@ class ItemOptionForm extends BaseControl
     }
 
     /**
-     * @return \Dravencms\Components\BaseForm\BaseForm
+     * @return Form
      */
-    protected function createComponentForm()
+    protected function createComponentForm(): Form
     {
         $form = $this->baseFormFactory->create();
 
@@ -132,7 +138,7 @@ class ItemOptionForm extends BaseControl
     /**
      * @param Form $form
      */
-    public function editFormValidate(Form $form)
+    public function editFormValidate(Form $form): void
     {
         $values = $form->getValues();
 
@@ -146,7 +152,7 @@ class ItemOptionForm extends BaseControl
             }
         }
 
-        if (!$this->presenter->isAllowed('form', 'edit')) {
+        if (!$this->user->isAllowed('form', 'edit')) {
             $form->addError('Nemáte oprávění editovat item option.');
         }
     }
@@ -155,7 +161,7 @@ class ItemOptionForm extends BaseControl
      * @param Form $itemOption
      * @throws \Exception
      */
-    public function editFormSucceeded(Form $itemOption)
+    public function editFormSucceeded(Form $itemOption): void
     {
         $values = $itemOption->getValues();
 
@@ -193,7 +199,7 @@ class ItemOptionForm extends BaseControl
         $this->onSuccess();
     }
 
-    public function render()
+    public function render(): void
     {
         $template = $this->template;
         $template->activeLocales = $this->localeRepository->getActive();

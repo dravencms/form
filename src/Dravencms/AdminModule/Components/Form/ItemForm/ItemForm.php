@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /*
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  *
@@ -27,8 +27,9 @@ use Dravencms\Model\Form\Entities\ItemGroup;
 use Dravencms\Model\Form\Entities\ItemTranslantion;
 use Dravencms\Model\Form\Repository\ItemRepository;
 use Dravencms\Model\Locale\Repository\LocaleRepository;
-use Kdyby\Doctrine\EntityManager;
-use Nette\Application\UI\Form;
+use Dravencms\Database\EntityManager;
+use Dravencms\Components\BaseForm\Form;
+use Nette\Security\User;
 
 /**
  * Description of ItemForm
@@ -48,6 +49,9 @@ class ItemForm extends BaseControl
 
     /** @var LocaleRepository */
     private $localeRepository;
+    
+    /** @var User */
+    private $user;
 
     /** @var Item|null */
     private $item = null;
@@ -65,6 +69,7 @@ class ItemForm extends BaseControl
      * @param EntityManager $entityManager
      * @param ItemRepository $itemRepository
      * @param LocaleRepository $localeRepository
+     * @param User $user
      * @param Item|null $item
      */
     public function __construct(
@@ -73,12 +78,12 @@ class ItemForm extends BaseControl
         EntityManager $entityManager,
         ItemRepository $itemRepository,
         LocaleRepository $localeRepository,
+        User $user,
         Item $item = null
     ) {
-        parent::__construct();
-
         $this->item = $item;
         $this->itemGroup = $itemGroup;
+        $this->user = $user;
 
         $this->baseFormFactory = $baseFormFactory;
         $this->entityManager = $entityManager;
@@ -112,9 +117,9 @@ class ItemForm extends BaseControl
     }
 
     /**
-     * @return \Dravencms\Components\BaseForm\BaseForm
+     * @return Form
      */
-    protected function createComponentForm()
+    protected function createComponentForm(): Form
     {
         $form = $this->baseFormFactory->create();
 
@@ -144,13 +149,13 @@ class ItemForm extends BaseControl
 
         $form->addSelect('type', null, Item::$typeList);
 
-        $form->addText('minValue')
+        $form->addNumber('minValue')
             ->setType('number');
 
-        $form->addText('maxValue')
+        $form->addNumber('maxValue')
             ->setType('number');
 
-        $form->addText('position')
+        $form->addNumber('position')
             ->setDisabled(is_null($this->item))
             ->setType('number');
 
@@ -165,7 +170,7 @@ class ItemForm extends BaseControl
     /**
      * @param Form $form
      */
-    public function editFormValidate(Form $form)
+    public function editFormValidate(Form $form): void
     {
         $values = $form->getValues();
         
@@ -173,7 +178,7 @@ class ItemForm extends BaseControl
             $form->addError('Tento název je již zabrán.');
         }
 
-        if (!$this->presenter->isAllowed('form', 'edit')) {
+        if (!$this->user->isAllowed('form', 'edit')) {
             $form->addError('Nemáte oprávění editovat item.');
         }
     }
@@ -182,7 +187,7 @@ class ItemForm extends BaseControl
      * @param Form $item
      * @throws \Exception
      */
-    public function editFormSucceeded(Form $item)
+    public function editFormSucceeded(Form $item): void
     {
         $values = $item->getValues();
 
@@ -228,7 +233,7 @@ class ItemForm extends BaseControl
         $this->onSuccess();
     }
 
-    public function render()
+    public function render(): void
     {
         $template = $this->template;
         $template->activeLocales = $this->localeRepository->getActive();

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /*
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  *
@@ -26,9 +26,9 @@ use Dravencms\Model\Form\Entities\Form;
 use Dravencms\Model\Form\Entities\FormTranslation;
 use Dravencms\Model\Form\Repository\FormRepository;
 use Dravencms\Model\Locale\Repository\LocaleRepository;
-use Kdyby\Doctrine\EntityManager;
-use Nette\Application\UI\Form as NForm;
-use Tracy\Debugger;
+use Dravencms\Database\EntityManager;
+use Nette\Security\User;
+use Dravencms\Components\BaseForm\Form as AForm;
 
 /**
  * Description of FormForm
@@ -48,6 +48,9 @@ class FormForm extends BaseControl
 
     /** @var LocaleRepository */
     private $localeRepository;
+    
+    /** @var User */
+    private $user;
 
     /** @var Form|null */
     private $form = null;
@@ -66,16 +69,16 @@ class FormForm extends BaseControl
     public function __construct(
         BaseFormFactory $baseFormFactory,
         EntityManager $entityManager,
+        User $user,
         FormRepository $formRepository,
         LocaleRepository $localeRepository,
         Form $form = null
     ) {
-        parent::__construct();
-
         $this->form = $form;
 
         $this->baseFormFactory = $baseFormFactory;
         $this->entityManager = $entityManager;
+        $this->user = $user;
         $this->formRepository = $formRepository;
         $this->localeRepository = $localeRepository;
 
@@ -107,9 +110,9 @@ class FormForm extends BaseControl
     }
 
     /**
-     * @return \Dravencms\Components\BaseForm\BaseForm
+     * @return AForm
      */
-    protected function createComponentForm()
+    protected function createComponentForm(): AForm
     {
         $form = $this->baseFormFactory->create();
 
@@ -153,25 +156,25 @@ class FormForm extends BaseControl
     }
 
     /**
-     * @param NForm $form
+     * @param AForm $form
      */
-    public function editFormValidate(NForm $form)
+    public function editFormValidate(AForm $form): void
     {
         $values = $form->getValues();
         if (!$this->formRepository->isNameFree($values->name, $this->form)) {
             $form->addError('Tento název je již zabrán.');
         }
 
-        if (!$this->presenter->isAllowed('form', 'edit')) {
+        if (!$this->user->isAllowed('form', 'edit')) {
             $form->addError('Nemáte oprávění editovat article.');
         }
     }
 
     /**
-     * @param NForm $form
+     * @param AForm $form
      * @throws \Exception
      */
-    public function editFormSucceeded(NForm $form)
+    public function editFormSucceeded(AForm $form): void
     {
         $values = $form->getValues();
 
@@ -223,7 +226,7 @@ class FormForm extends BaseControl
         $this->onSuccess();
     }
 
-    public function render()
+    public function render(): void
     {
         $template = $this->template;
         $template->activeLocales = $this->localeRepository->getActive();
