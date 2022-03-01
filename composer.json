@@ -21,7 +21,7 @@
     "dravencms/tempnam": "^1.0"
   },
   "suggest": {
-    "dravencms/structure": "Allows file download components to be used in cms"
+    "dravencms/structure": "Allows form components to be used in cms"
   },
   "require-dev": {
     "nette/tester": "@dev"
