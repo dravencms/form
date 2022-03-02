@@ -26,7 +26,8 @@ use Dravencms\Components\BaseGrid\BaseGridFactory;
 use Dravencms\Components\BaseGrid\Grid;
 use Dravencms\Model\Form\Entities\Item;
 use Dravencms\Model\Form\Repository\ItemOptionRepository;
-use Kdyby\Doctrine\EntityManager;
+use Dravencms\Database\EntityManager;
+use Nette\Security\User;
 
 /**
  * Description of ItemOptionGrid

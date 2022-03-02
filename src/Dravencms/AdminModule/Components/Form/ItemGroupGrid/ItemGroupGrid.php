@@ -28,7 +28,8 @@ use Dravencms\Locale\CurrentLocaleResolver;
 use Dravencms\Model\Form\Entities\Form;
 use Dravencms\Model\Form\Repository\ItemGroupRepository;
 use Dravencms\Model\Locale\Repository\LocaleRepository;
-use Kdyby\Doctrine\EntityManager;
+use Dravencms\Database\EntityManager;
+use Nette\Security\User;
 
 /**
  * Description of ItemGroupGrid
