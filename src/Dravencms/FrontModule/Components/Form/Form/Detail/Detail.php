@@ -15,11 +15,10 @@ use Dravencms\Model\Form\Repository\FormRepository;
 use Dravencms\Model\Form\Repository\ItemGroupRepository;
 use Dravencms\Model\Form\Repository\ItemOptionRepository;
 use Dravencms\Model\Form\Repository\ItemRepository;
-use Kdyby\Doctrine\EntityManager;
-use Nette\Application\UI\Form;
+use Dravencms\Database\EntityManager;
 use Nette\Http\Request;
 use Dravencms\Components\BaseForm\Form;
-use Salamek\Cms\ICmsActionOption;
+use Dravencms\Structure\ICmsActionOption;
 use Salamek\TemplatedEmail\TemplatedEmail;
 use Salamek\Tempnam\Tempnam;
 

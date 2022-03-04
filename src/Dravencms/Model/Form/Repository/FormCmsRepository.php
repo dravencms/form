@@ -6,9 +6,9 @@
 namespace Dravencms\Model\Form\Repository;
 
 use Dravencms\Model\Form\Entities\Form;
-use Salamek\Cms\CmsActionOption;
-use Salamek\Cms\ICmsActionOption;
-use Salamek\Cms\ICmsComponentRepository;
+use Dravencms\Structure\CmsActionOption;
+use Dravencms\Structure\ICmsActionOption;
+use Dravencms\Structure\ICmsComponentRepository;
 
 class FormCmsRepository implements ICmsComponentRepository
 {

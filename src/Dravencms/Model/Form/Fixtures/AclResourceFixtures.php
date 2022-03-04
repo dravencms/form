@@ -5,7 +5,6 @@
 
 namespace Dravencms\Model\Form\Fixtures;
 
-use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Dravencms\Model\User\Entities\AclResource;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Persistence\ObjectManager;
