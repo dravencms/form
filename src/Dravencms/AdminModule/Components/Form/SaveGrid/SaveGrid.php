@@ -31,6 +31,7 @@ use Dravencms\Model\Form\Entities\Save;
 use Dravencms\Model\Form\Repository\SaveRepository;
 use Dravencms\Model\Form\Repository\SaveValueRepository;
 use Dravencms\Database\EntityManager;
+use Ublaboo\DataGrid\Column\Action\Confirmation\StringConfirmation;
 use Nette\Security\User;
 
 /**
@@ -156,7 +157,7 @@ class SaveGrid extends BaseControl
                 ->setIcon('trash')
                 ->setTitle('Smazat')
                 ->setClass('btn btn-xs btn-danger ajax')
-                ->setConfirmation(new StringConfirmation('Do you really want to delete row %s?', 'identifier'));
+                ->setConfirmation(new StringConfirmation('Do you really want to delete row %s?', 'ip'));
 
             $grid->addGroupAction('Smazat')->onSelect[] = [$this, 'gridGroupActionDelete'];
         }

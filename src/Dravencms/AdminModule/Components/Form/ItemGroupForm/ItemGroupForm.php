@@ -122,7 +122,7 @@ class ItemGroupForm extends BaseControl
 
             $container->addText('name')
                 ->setRequired('Please enter form name.')
-                ->addRule(NForm::MAX_LENGTH, 'Form name is too long.', 255);
+                ->addRule(AForm::MAX_LENGTH, 'Form name is too long.', 255);
         }
 
         $form->addText('identifier');

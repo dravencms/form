@@ -118,29 +118,29 @@ class FormForm extends BaseControl
 
         $form->addText('name')
             ->setRequired('Please enter form name.')
-            ->addRule(NForm::MAX_LENGTH, 'Form name is too long.', 255);
+            ->addRule(AForm::MAX_LENGTH, 'Form name is too long.', 255);
 
         foreach ($this->localeRepository->getActive() AS $activeLocale) {
             $container = $form->addContainer($activeLocale->getLanguageCode());
 
             $container->addText('sendButtonValue')
                 ->setRequired('Please enter send button text.')
-                ->addRule(NForm::MAX_LENGTH, 'Send button text is too long.', 255);
+                ->addRule(AForm::MAX_LENGTH, 'Send button text is too long.', 255);
 
             $container->addTextArea('successMessage')
                 ->setRequired('Please enter send success message.')
-                ->addRule(NForm::MAX_LENGTH, 'Success message is too long.', 2000);
+                ->addRule(AForm::MAX_LENGTH, 'Success message is too long.', 2000);
 
             $container->addTextArea('latteTemplate');
         }
 
         $form->addText('email')
             ->setRequired(false)
-            ->addRule(NForm::MAX_LENGTH, 'Form target emails field is too long.', 255);
+            ->addRule(AForm::MAX_LENGTH, 'Form target emails field is too long.', 255);
 
         $form->addText('hookUrl')
             ->setRequired(false)
-            ->addRule(NForm::URL, 'Hook URL must be valid URL');
+            ->addRule(AForm::URL, 'Hook URL must be valid URL');
 
 
         $form->addCheckbox('isActive');

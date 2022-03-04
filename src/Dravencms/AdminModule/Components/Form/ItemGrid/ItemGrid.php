@@ -30,6 +30,7 @@ use Dravencms\Model\Form\Entities\ItemGroup;
 use Dravencms\Model\Form\Repository\ItemRepository;
 use Dravencms\Model\Locale\Repository\LocaleRepository;
 use Dravencms\Database\EntityManager;
+use Ublaboo\DataGrid\Column\Action\Confirmation\StringConfirmation;
 use Nette\Security\User;
 
 /**

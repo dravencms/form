@@ -149,13 +149,13 @@ class ItemForm extends BaseControl
 
         $form->addSelect('type', null, Item::$typeList);
 
-        $form->addNumber('minValue')
+        $form->addInteger('minValue')
             ->setType('number');
 
-        $form->addNumber('maxValue')
+        $form->addInteger('maxValue')
             ->setType('number');
 
-        $form->addNumber('position')
+        $form->addInteger('position')
             ->setDisabled(is_null($this->item))
             ->setType('number');
 

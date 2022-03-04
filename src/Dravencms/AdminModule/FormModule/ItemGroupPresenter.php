@@ -76,9 +76,9 @@ class ItemGroupPresenter extends SecuredPresenter
     }
 
     /**
-     * @return ItemGroupForm
+     * @return ItemGroupGrid
      */
-    public function createComponentGridItemGroup(): ItemGroupForm
+    public function createComponentGridItemGroup(): ItemGroupGrid
     {
         $control = $this->itemGroupGridFactory->create($this->form);
         $control->onDelete[] = function()
@@ -90,9 +90,9 @@ class ItemGroupPresenter extends SecuredPresenter
     }
 
     /**
-     * @return ItemGroupGrid
+     * @return ItemGroupForm
      */
-    public function createComponentFormItemGroup()
+    public function createComponentFormItemGroup(): ItemGroupForm
     {
         $control = $this->itemGroupFormFactory->create($this->form, $this->itemGroup);
         $control->onSuccess[] = function()

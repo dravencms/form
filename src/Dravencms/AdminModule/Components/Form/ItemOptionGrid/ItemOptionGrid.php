@@ -27,6 +27,7 @@ use Dravencms\Components\BaseGrid\Grid;
 use Dravencms\Model\Form\Entities\Item;
 use Dravencms\Model\Form\Repository\ItemOptionRepository;
 use Dravencms\Database\EntityManager;
+use Ublaboo\DataGrid\Column\Action\Confirmation\StringConfirmation;
 use Nette\Security\User;
 
 /**
