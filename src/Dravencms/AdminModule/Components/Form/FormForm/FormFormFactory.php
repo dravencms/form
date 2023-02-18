@@ -33,5 +33,5 @@ interface FormFormFactory
      * @param Form|null $form
      * @return FormForm
      */
-    public function create(Form $form = null);
+    public function create(Form $form = null): FormForm;
 }
