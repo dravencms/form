@@ -333,7 +333,7 @@ class Detail extends BaseControl
                 }
 
                 if ($this->formInfo->isSaveToDatabase()) {
-                    $saveValue = new SaveValue($values->{'formItem_' . $formsItem->getId()}, $formsItem, $save);
+                    $saveValue = new SaveValue((string)$values->{'formItem_' . $formsItem->getId()}, $formsItem, $save);
                     $this->entityManager->persist($saveValue);
                 }
             }
