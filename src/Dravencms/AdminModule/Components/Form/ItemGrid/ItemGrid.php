@@ -177,6 +177,14 @@ class ItemGrid extends BaseControl
             {
                 $this->entityManager->remove($itemOption);
             }
+
+            // Remove saved values
+            foreach ($item->getSaveValues() AS $savedValue) 
+            {
+                $this->entityManager->remove($savedValue);
+            }
+  
+
             $this->entityManager->remove($item);
         }
 

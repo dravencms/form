@@ -230,6 +230,14 @@ class Item
     }
 
     /**
+     * @return SaveValue[]|ArrayCollection
+     */
+    public function getSaveValues()
+    {
+        return $this->saveValues;
+    }
+
+    /**
      * @return ArrayCollection|ItemTranslantion[]
      */
     public function getTranslations()
