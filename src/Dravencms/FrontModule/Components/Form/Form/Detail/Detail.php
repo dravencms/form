@@ -350,8 +350,8 @@ class Detail extends BaseControl
         {
             // Are we sending
             $mailSend = $this->templatedEmail->formFormDetail([
-                'title' => $this->formInfo->getName(),
-                'formData' => $formData
+                'name' => $this->formInfo->getName(),
+                'emailData' => $emailData
             ])
                 ->setSubject($this->formInfo->getName());
 
