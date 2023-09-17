@@ -346,15 +346,36 @@ class Detail extends BaseControl
             $this->entityManager->flush();
         }
 
-        if ($this->formInfo->getEmail())
+        if ($this->formInfo->getEmail() || $this->formInfo->isSendFormToDetectedEmail())
         {
-            $this->templatedEmail->formFormDetail([
-                'name' => $this->formInfo->getName(),
-                'emailData' => $emailData
+            // Are we sending
+            $mailSend = $this->templatedEmail->formFormDetail([
+                'title' => $this->formInfo->getName(),
+                'formData' => $formData
             ])
-                ->addTo($this->formInfo->getEmail())
-                ->setSubject($this->formInfo->getName())
-                ->send();
+                ->setSubject($this->formInfo->getName());
+
+            if ($this->formInfo->isSendFormToDetectedEmail() && $this->formInfo->getEmail())
+            {
+                // Sending to both
+                $mailSend->addBcc($this->formInfo->getEmail());
+                foreach($detectedEmails AS $detectedEmail)
+                {
+                    $mailSend->addTo($detectedEmail);
+                }
+                
+            } else if($this->formInfo->isSendFormToDetectedEmail()) {
+                // Sending only to detected email
+                foreach($detectedEmails AS $detectedEmail)
+                {
+                    $mailSend->addTo($detectedEmail);
+                }
+            } else {
+                // Sending only to specified email
+                $mailSend->addTo($this->formInfo->getEmail());
+            }
+
+            $mailSend->send();
         }
 
         if ($this->formInfo->getHookUrl())
