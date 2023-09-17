@@ -85,28 +85,28 @@ class FormGrid extends BaseControl
 
         $grid->setDataSource($this->formRepository->getFormQueryBuilder());
 
-        $grid->addColumnText('name', 'Name')
+        $grid->addColumnText('name', 'form.form.name')
             ->setSortable()
             ->setFilterText();
 
-        $grid->addColumnBoolean('isActive', 'Active');
+        $grid->addColumnBoolean('isActive', 'form.form.isActive');
 
         if ($this->user->isAllowed('form', 'edit'))
         {
-            $grid->addAction('itemGroup', 'Item groups', 'ItemGroup:', ['formId' => 'id'])
+            $grid->addAction('itemGroup', 'form.form.itemGroups', 'ItemGroup:', ['formId' => 'id'])
                 ->setIcon('bars')
-                ->setTitle('Item groups')
+                ->setTitle('form.form.itemGroups')
                 ->setClass('btn btn-xs btn-default');
 
-            $grid->addAction('savedData', 'Saved data', 'Save:', ['formId' => 'id'])
+            $grid->addAction('savedData', 'form.form.savedData', 'Save:', ['formId' => 'id'])
                 ->setIcon('bars')
-                ->setTitle('Saved data')
+                ->setTitle('form.form.savedData')
                 ->setClass('btn btn-xs btn-default');
 
 
             $grid->addAction('edit', '')
                 ->setIcon('pencil')
-                ->setTitle('Upravit')
+                ->setTitle('form.global.edit')
                 ->setClass('btn btn-xs btn-primary');
         }
 
@@ -114,18 +114,18 @@ class FormGrid extends BaseControl
         {
             $grid->addAction('delete', '', 'delete!')
                 ->setIcon('trash')
-                ->setTitle('Smazat')
+                ->setTitle('form.global.delete')
                 ->setClass('btn btn-xs btn-danger ajax')
-                ->setConfirmation(new StringConfirmation('Do you really want to delete row %s?', 'name'));
+                ->setConfirmation(new StringConfirmation('form.global.doYouReallyWantToDeleteRow', 'name'));
 
-            $grid->addGroupAction('Smazat')->onSelect[] = [$this, 'gridGroupActionDelete'];
+            $grid->addGroupAction('form.global.delete')->onSelect[] = [$this, 'gridGroupActionDelete'];
         }
 
-        $grid->addExportCsvFiltered('Csv export (filtered)', 'acl_resource_filtered.csv')
-            ->setTitle('Csv export (filtered)');
+        $grid->addExportCsvFiltered('form.global.csvExportFiltered', 'acl_resource_filtered.csv')
+            ->setTitle('form.global.csvExportFiltered');
 
-        $grid->addExportCsv('Csv export', 'acl_resource_all.csv')
-            ->setTitle('Csv export');
+        $grid->addExportCsv('form.global.csvExport', 'acl_resource_all.csv')
+            ->setTitle('form.global.csvExport');
 
         return $grid;
     }

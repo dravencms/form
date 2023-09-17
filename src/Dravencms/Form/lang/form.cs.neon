@@ -1,0 +1,90 @@
+email:
+    formNameHasBeenFilled: "Formulář %name% byl vyplněn"
+    filledData: "Vyplněná data:"
+
+global:
+    save: "Uložit"
+    doYouReallyWantToDeleteRow: "Opravdu chcete smazat řádek %s?"
+    edit: "Upravit"
+    delete: "Smazat"
+    csvExportFiltered: "Exportovat CSV (filtrované)"
+    csvExport: "Exportovat CSV"
+    
+form:
+    sendButtonText: "Text tlačítka odeslat"
+    successMessage: "Text úspěchu"
+    latteTemplate: "Šablona latte"
+    name: "Název"
+    sendToEmails: "Odeslat na email/y"
+    postDataToUrl: "POST data na URL"
+    isActive: "Aktivní"
+    isAntispamProtected: "Antispam ochrana"
+    isSaveFormDataToDatabase: "Uložit data do databáze"
+    isSendFormToDetectedEmail: "Poslat data na detekované emaily"
+    pleaseEnterFormName: "Zadejte prosím název formuláře."
+    formNameIsTooLong: "Název formuláře je příliš dlouhý."
+    pleaseEnterSendButtonText: "Zadejte prosím test tlačítka odeslat."
+    sendButtonTextIsTooLong: "Text tlačítka odeslat je příliš dlouhý."
+    pleaseEnterSendSuccessMessage: "Zadejte prosím text úspěchu."
+    successMessageIsTooLong: "Text úspěchu je příliš dlouhý."
+    formTargetEmailsFieldsIsTooLong: "Seznam cílových emailů je příliš dlouhý."
+    hookUrlMustBeValidUrl: "Hook URL musí být validní URL."
+    thisNameIsAlreadyTaken: "Tento název je již zabrán."
+    youHaveNoPermissionToEditForm: "Nemáte oprávění editovat formulář."
+    itemGroups: "Skupina položek"
+    savedData: "Uložená data"
+
+    
+item:
+    title: "Titulek"
+    placeholder: "Zástupný text"
+    defaultValue: "Výchozí hodnota"
+    required: "Povinný"
+    name: "Název"
+    type: "Typ"
+    position: "Pozice"
+    maxValue: "Max. hodnota"
+    minValue: "Min. hodnota"
+    defaultValueIsTooLong: "Výchozí hodnota je příliš dlouhá."
+    placeholderIsTooLong: "Zástupný text je příliš dlouhý."
+    titleIsTooLong: "Titulek je příliš dlouhý."
+    requiredTextIsTooLong: "Povinný text je příliš dlouhý."
+    pleaseEnterFormItemName: "Zadejte prosím název položky."
+    formItemNameIsTooLong: "Název položky je příliš dlouhý."
+    thisNameIsAlreadyTaken: "Tento název je již zabrán."
+    youHaveNoPermissionToEditFormItem: "Nemáte oprávění editovat položky formuláře."
+    latteName: "Latte název"
+    options: "Možnosti"
+
+    
+itemGroup:
+    name: "Název"
+    identifier: "Identifikátor"
+    showGroupName: "Zobrazit název skupiny"
+    pleaseEnterFormGroupName: "Zadejte prosím název skupiny."
+    formGroupNameIsTooLong: "Název skupiny je příliš dlouhý."
+    thisIdentifierIsAlreadyTaken: "Tento identifikátor je již zabrán."
+    thisNameIsAlreadyTaken: "Tento název je již zabrán"
+    youHaveNoPermissionToEditFormGroup: "Nemáte oprávění editovat skupinu formuláře."
+    position: "Pozice"
+    showName: "Zobrazit název"
+    items: "Položky"
+
+    
+itemOption:
+    name: "Název"
+    identifier: "Identifikátor"
+    pleaseEnterItemOptionIdentifier: "Zadejte prosím idetifikátor možnosti."
+    position: "Pozice"
+    pleaseEnterItemOptionName: "Zadejte prosím název možnosti."
+    itemOptionNameIsTooLong: "Název možnosti je příliš dlouhý."
+    thisIdentifierIsAlreadyTaken: "Tento identifikátor je již zabrán."
+    thisNameIsAlreadyTaken: "Tento název je již zabrán."
+    youHaveNoPermissionToEditItemOption: "Nemáte oprávění editovat možnosti položek."
+
+    
+saved:
+    createdAt: "Vytvořeno"
+    ip: "IP adresa"
+    userAgent: "User Agent"
+    valueIsNotInTheList: "Hodnota není v seznamu"

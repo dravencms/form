@@ -108,14 +108,14 @@ class SaveGrid extends BaseControl
 
         $grid->setDataSource($this->saveRepository->getSaveQueryBuilder($this->form));
 
-        $grid->addColumnDateTime('createdAt', 'Created')
+        $grid->addColumnDateTime('createdAt', 'form.saved.createdAt')
             ->setFormat($this->currentLocale->getDateTimeFormat());
 
-        $grid->addColumnText('ip', 'IP')
+        $grid->addColumnText('ip', 'form.saved.ip')
             ->setSortable()
             ->setFilterText();
 
-        $grid->addColumnText('userAgent', 'User Agent')
+        $grid->addColumnText('userAgent', 'form.saved.userAgent')
             ->setSortable()
             ->setFilterText();
 
@@ -141,7 +141,7 @@ class SaveGrid extends BaseControl
                                 }
                             }
 
-                            return 'Value not in list';
+                            return 'form.saved.valueIsNotInTheList';
                         }
                         else
                         {
@@ -155,18 +155,18 @@ class SaveGrid extends BaseControl
         {
             $grid->addAction('delete', '', 'delete!')
                 ->setIcon('trash')
-                ->setTitle('Smazat')
+                ->setTitle('form.global.delete')
                 ->setClass('btn btn-xs btn-danger ajax')
-                ->setConfirmation(new StringConfirmation('Do you really want to delete row %s?', 'ip'));
+                ->setConfirmation(new StringConfirmation('form.global.doYouReallyWantToDeleteRow', 'ip'));
 
-            $grid->addGroupAction('Smazat')->onSelect[] = [$this, 'gridGroupActionDelete'];
+            $grid->addGroupAction('form.global.delete')->onSelect[] = [$this, 'gridGroupActionDelete'];
         }
 
-        $grid->addExportCsvFiltered('Csv export (filtered)', 'acl_resource_filtered.csv')
-            ->setTitle('Csv export (filtered)');
+        $grid->addExportCsvFiltered('form.global.csvExportFiltered', 'acl_resource_filtered.csv')
+            ->setTitle('form.global.csvExportFiltered');
 
-        $grid->addExportCsv('Csv export', 'acl_resource_all.csv')
-            ->setTitle('Csv export');
+        $grid->addExportCsv('form.global.csvExport', 'acl_resource_all.csv')
+            ->setTitle('form.global.csvExport');
 
         return $grid;
     }

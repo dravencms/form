@@ -308,9 +308,10 @@ class Detail extends BaseControl
 
         $detectedEmails = [];
         $formData = [];
+        $emailData = [];
         foreach ($this->formInfo->getItemGroups() AS $formsItemsGroup) {
             foreach ($formsItemsGroup->getItems() AS $formsItem) {
-
+                $itemTranslation = $this->itemRepository->getTranslation($formsItem, $this->currentLocale);
                 $value = $values->{'formItem_' . $formsItem->getId()};
                 if (in_array($formsItem->getType() , [Item::TYPE_CHECKBOXLIST, Item::TYPE_MULTISELECT, Item::TYPE_SELECT, Item::TYPE_RADIOLIST]))
                 {
@@ -319,6 +320,7 @@ class Detail extends BaseControl
                         if ($itemOption->getId() == $value)
                         {
                             $formData[$formsItem->getName()] = $itemOption->getIdentifier();
+                            $emailData[$itemTranslation->getTitle()] = $itemOption->getIdentifier();
                             break;
                         }
                     }
@@ -330,10 +332,11 @@ class Detail extends BaseControl
                         $detectedEmails[] = $value;
                     }
                     $formData[$formsItem->getName()] = $value;
+                    $emailData[$itemTranslation->getTitle()] = $value;
                 }
 
                 if ($this->formInfo->isSaveToDatabase()) {
-                    $saveValue = new SaveValue((string)$values->{'formItem_' . $formsItem->getId()}, $formsItem, $save);
+                    $saveValue = new SaveValue((string)$value, $formsItem, $save);
                     $this->entityManager->persist($saveValue);
                 }
             }
@@ -346,8 +349,8 @@ class Detail extends BaseControl
         if ($this->formInfo->getEmail())
         {
             $this->templatedEmail->formFormDetail([
-                'title' => $this->formInfo->getName(),
-                'formData' => $formData
+                'name' => $this->formInfo->getName(),
+                'emailData' => $emailData
             ])
                 ->addTo($this->formInfo->getEmail())
                 ->setSubject($this->formInfo->getName())

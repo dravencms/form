@@ -1,3 +1,9 @@
-{define content}
-    Form has been just filled, check administration for more info.
-{/define}
+{block content}
+
+<h1>{_"form.email.formNameHasBeenFilled", name => $name}</h1>
+
+<h2>{_"form.email.filledData"}</h2>
+
+{foreach $emailData AS $title => $value}
+    {$name}: {$value}<br>
+{/foreach}

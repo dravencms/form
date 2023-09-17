@@ -128,24 +128,24 @@ class ItemForm extends BaseControl
 
             $container->addText('defaultValue')
                 ->setRequired(false)
-                ->addRule(Form::MAX_LENGTH, 'Default value is too long.', 255);
+                ->addRule(Form::MAX_LENGTH, 'form.item.defaultValueIsTooLong', 255);
 
             $container->addText('placeholder')
                 ->setRequired(false)
-                ->addRule(Form::MAX_LENGTH, 'Placeholder is too long.', 255);
+                ->addRule(Form::MAX_LENGTH, 'form.item.placeholderIsTooLong', 255);
 
             $container->addText('title')
                 ->setRequired(true)
-                ->addRule(Form::MAX_LENGTH, 'Title is too long.', 255);
+                ->addRule(Form::MAX_LENGTH, 'form.item.titleIsTooLong', 255);
 
             $container->addText('required')
                 ->setRequired(false)
-                ->addRule(Form::MAX_LENGTH, 'Required text is too long.', 255);
+                ->addRule(Form::MAX_LENGTH, 'form.item.requiredTextIsTooLong', 255);
         }
 
         $form->addText('name')
-            ->setRequired('Please enter form name.')
-            ->addRule(Form::MAX_LENGTH, 'Form name is too long.', 255);
+            ->setRequired('form.item.pleaseEnterFormItemName')
+            ->addRule(Form::MAX_LENGTH, 'form.item.formItemNameIsTooLong', 255);
 
         $form->addSelect('type', null, Item::$typeList);
 
@@ -175,11 +175,11 @@ class ItemForm extends BaseControl
         $values = $form->getValues();
         
         if (!$this->itemRepository->isNameFree($values->name, $this->itemGroup, $this->item)) {
-            $form->addError('Tento název je již zabrán.');
+            $form->addError('form.item.thisNameIsAlreadyTaken');
         }
 
         if (!$this->user->isAllowed('form', 'edit')) {
-            $form->addError('Nemáte oprávění editovat item.');
+            $form->addError('form.item.youHaveNoPermissionToEditFormItem');
         }
     }
 

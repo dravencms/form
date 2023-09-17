@@ -6,12 +6,19 @@ use Nette;
 use Dravencms\Form\Form;
 use Nette\DI\CompilerExtension;
 use Dravencms\Structure\DI\StructureExtension;
+use Contributte\Translation\DI\TranslationProviderInterface;
+
 /**
  * Class FormExtension
  * @package Dravencms\Form\DI
  */
-class FormExtension extends CompilerExtension
+class FormExtension extends CompilerExtension implements TranslationProviderInterface
 {
+    public function getTranslationResources(): array
+    {
+        return [__DIR__.'/../lang'];
+    }
+
     public function loadConfiguration(): void
     {
         $builder = $this->getContainerBuilder();

@@ -108,26 +108,26 @@ class ItemGrid extends BaseControl
 
         $grid->setDataSource($this->itemRepository->getItemQueryBuilder($this->itemGroup));
         $grid->setDefaultSort(['position' => 'ASC']);
-        $grid->addColumnText('name', 'Name')
+        $grid->addColumnText('name', 'form.item.name')
             ->setSortable()
             ->setFilterText();
 
-        $grid->addColumnText('latteName', 'Latte name')
+        $grid->addColumnText('latteName', 'form.item.latteName')
             ->setRenderer(function($row){
                 return 'formItem_'.$row->getId();
             });
 
-        $grid->addColumnText('type', 'Type')
+        $grid->addColumnText('type', 'form.formItem.type')
             ->setRenderer(function ($row) {
                 return Item::$typeList[$row->getType()];
             })
             ->setFilterText();
 
-        $grid->addColumnPosition('position', 'Position', 'up!', 'down!');
+        $grid->addColumnPosition('position', 'form.item.position', 'up!', 'down!');
 
-        $grid->addAction('itemOption', 'Options', 'ItemOption:', ['itemId' => 'id'])
+        $grid->addAction('itemOption', 'form.item.options', 'ItemOption:', ['itemId' => 'id'])
             ->setIcon('bars')
-            ->setTitle('Options')
+            ->setTitle('form.item.options')
             ->setClass('btn btn-xs btn-default');
 
         $grid->allowRowsAction('itemOption', function($item) {
@@ -139,7 +139,7 @@ class ItemGrid extends BaseControl
         {
             $grid->addAction('edit', '', 'Item:edit', ['itemGroupId' => 'itemGroup.id', 'id'])
                 ->setIcon('pencil')
-                ->setTitle('Upravit')
+                ->setTitle('form.global.edit')
                 ->setClass('btn btn-xs btn-primary');
         }
 
@@ -147,18 +147,18 @@ class ItemGrid extends BaseControl
         {
             $grid->addAction('delete', '', 'delete!')
                 ->setIcon('trash')
-                ->setTitle('Smazat')
+                ->setTitle('form.global.delete')
                 ->setClass('btn btn-xs btn-danger ajax')
-                ->setConfirmation(new StringConfirmation('Do you really want to delete row %s?', 'name'));
+                ->setConfirmation(new StringConfirmation('form.global.doYouReallyWantToDeleteRow', 'name'));
 
-            $grid->addGroupAction('Smazat')->onSelect[] = [$this, 'handleDelete'];
+            $grid->addGroupAction('form.global.delete')->onSelect[] = [$this, 'handleDelete'];
         }
 
-        $grid->addExportCsvFiltered('Csv export (filtered)', 'acl_resource_filtered.csv')
-            ->setTitle('Csv export (filtered)');
+        $grid->addExportCsvFiltered('form.global.csvExportFiltered', 'acl_resource_filtered.csv')
+            ->setTitle('form.global.csvExportFiltered');
 
-        $grid->addExportCsv('Csv export', 'acl_resource_all.csv')
-            ->setTitle('Csv export');
+        $grid->addExportCsv('form.global.csvExport', 'acl_resource_all.csv')
+            ->setTitle('form.global.csvExport');
 
         return $grid;
     }
@@ -184,7 +184,6 @@ class ItemGrid extends BaseControl
                 $this->entityManager->remove($savedValue);
             }
   
-
             $this->entityManager->remove($item);
         }
 

@@ -57,6 +57,12 @@ class Form
     private $isSaveToDatabase;
 
     /**
+     * @var boolean
+     * @ORM\Column(type="boolean", nullable=false)
+     */
+    private $isSendFormToDetectedEmail;
+
+    /**
      * @var ArrayCollection|ItemGroup[]
      * @ORM\OneToMany(targetEntity="ItemGroup", mappedBy="form",cascade={"persist"})
      * @ORM\OrderBy({"position" = "ASC"})
@@ -83,7 +89,8 @@ class Form
             string $hookUrl = null, 
             bool $isSaveToDatabase = true, 
             bool $isActive = true, 
-            bool $isAntispam = true
+            bool $isAntispam = true,
+            bool $isSendFormToDetectedEmail = true
             )
     {
         $this->name = $name;
@@ -92,6 +99,7 @@ class Form
         $this->isAntispam = $isAntispam;
         $this->hookUrl = $hookUrl;
         $this->isSaveToDatabase = $isSaveToDatabase;
+        $this->isSendFormToDetectedEmail = $isSendFormToDetectedEmail;
 
         $this->itemGroups = new ArrayCollection();
         $this->translations = new ArrayCollection();
@@ -144,6 +152,14 @@ class Form
     public function setIsSaveToDatabase(bool $isSaveToDatabase): void
     {
         $this->isSaveToDatabase = $isSaveToDatabase;
+    }
+
+    /**
+     * @param boolean $isSendFormToDetectedEmail
+     */
+    public function setIsSendFormToDetectedEmail(bool $isSendFormToDetectedEmail): void
+    {
+        $this->isSendFormToDetectedEmail = $isSendFormToDetectedEmail;
     }
 
     /**
@@ -208,6 +224,14 @@ class Form
     public function isSaveToDatabase(): bool
     {
         return $this->isSaveToDatabase;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isSendFormToDetectedEmail(): bool
+    {
+        return $this->isSendFormToDetectedEmail;
     }
 }
 

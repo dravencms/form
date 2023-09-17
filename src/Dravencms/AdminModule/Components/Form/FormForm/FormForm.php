@@ -90,6 +90,7 @@ class FormForm extends BaseControl
                 'isActive' => $this->form->isActive(),
                 'isAntispam' => $this->form->isAntispam(),
                 'isSaveToDatabase' => $this->form->isSaveToDatabase(),
+                'isSendFormToDetectedEmail' => $this->form->isSendFormToDetectedEmail(),
             ];
 
             foreach ($this->form->getTranslations() AS $translation)
@@ -102,7 +103,8 @@ class FormForm extends BaseControl
         else{
             $defaults = [
                 'isActive' => true,
-                'isSaveToDatabase' => true
+                'isSaveToDatabase' => true,
+                'isSendFormToDetectedEmail' => true
             ];
         }
 
@@ -117,35 +119,36 @@ class FormForm extends BaseControl
         $form = $this->baseFormFactory->create();
 
         $form->addText('name')
-            ->setRequired('Please enter form name.')
-            ->addRule(AForm::MAX_LENGTH, 'Form name is too long.', 255);
+            ->setRequired('form.form.pleaseEnterFormName')
+            ->addRule(AForm::MAX_LENGTH, 'form.form.formNameIsTooLong', 255);
 
         foreach ($this->localeRepository->getActive() AS $activeLocale) {
             $container = $form->addContainer($activeLocale->getLanguageCode());
 
             $container->addText('sendButtonValue')
-                ->setRequired('Please enter send button text.')
-                ->addRule(AForm::MAX_LENGTH, 'Send button text is too long.', 255);
+                ->setRequired('form.form.pleaseEnterSendButtonText')
+                ->addRule(AForm::MAX_LENGTH, 'form.form.sendButtonTextIsTooLong', 255);
 
             $container->addTextArea('successMessage')
-                ->setRequired('Please enter send success message.')
-                ->addRule(AForm::MAX_LENGTH, 'Success message is too long.', 2000);
+                ->setRequired('form.form.pleaseEnterSendSuccessMessage')
+                ->addRule(AForm::MAX_LENGTH, 'form.form.successMessageIsTooLong', 2000);
 
             $container->addTextArea('latteTemplate');
         }
 
         $form->addText('email')
             ->setRequired(false)
-            ->addRule(AForm::MAX_LENGTH, 'Form target emails field is too long.', 255);
+            ->addRule(AForm::MAX_LENGTH, 'form.form.formTargetEmailsFieldsIsTooLong', 255);
 
         $form->addText('hookUrl')
             ->setRequired(false)
-            ->addRule(AForm::URL, 'Hook URL must be valid URL');
+            ->addRule(AForm::URL, 'form.form.hookUrlMustBeValidUrl');
 
 
         $form->addCheckbox('isActive');
         $form->addCheckbox('isAntispam');
         $form->addCheckbox('isSaveToDatabase');
+        $form->addCheckbox('isSendFormToDetectedEmail');
 
         $form->addSubmit('send');
 
@@ -162,11 +165,11 @@ class FormForm extends BaseControl
     {
         $values = $form->getValues();
         if (!$this->formRepository->isNameFree($values->name, $this->form)) {
-            $form->addError('Tento název je již zabrán.');
+            $form->addError('form.form.thisNameIsAlreadyTaken');
         }
 
         if (!$this->user->isAllowed('form', 'edit')) {
-            $form->addError('Nemáte oprávění editovat article.');
+            $form->addError('form.form.youHaveNoPermissionToEditForm');
         }
     }
 
@@ -186,6 +189,7 @@ class FormForm extends BaseControl
             $form->setIsAntispam($values->isAntispam);
             $form->setHookUrl($values->hookUrl);
             $form->setIsSaveToDatabase($values->isSaveToDatabase);
+            $form->setIsSendFormToDetectedEmail($values->isSendFormToDetectedEmail);
         } else {
             $form = new Form(
                 $values->name,
@@ -193,7 +197,8 @@ class FormForm extends BaseControl
                 $values->hookUrl,
                 $values->isSaveToDatabase,
                 $values->isActive,
-                $values->isAntispam
+                $values->isAntispam,
+                $values->isSendFormToDetectedEmail
             );
         }
 

@@ -1,0 +1,91 @@
+email:
+    formNameHasBeenFilled: "Form %name% has been filled in."
+    filledData: "Filled in data:"
+
+global:
+    save: "Save"
+    doYouReallyWantToDeleteRow: "Do you really want to delete row %s?"
+    edit: "Edit"
+    delete: "Delete"
+    csvExportFiltered: "CSV export (filtered)"
+    csvExport: "CSV export"
+    
+form:
+    sendButtonText: "Send button text"
+    successMessage: "Success message"
+    latteTemplate: "Latte template"
+    name: "Name"
+    sendToEmails: "Send to email/s"
+    postDataToUrl: "POST data to URL"
+    isActive: "Active"
+    isAntispamProtected: "Antispam protected"
+    isSaveFormDataToDatabase: "Save form data to database"
+    isSendFormToDetectedEmail: "Save form data to detected email"
+    
+    pleaseEnterFormName: "Please enter form name."
+    formNameIsTooLong: "Form name is too long."
+    pleaseEnterSendButtonText: "Please enter send button text."
+    sendButtonTextIsTooLong: "Send button text is too long."
+    pleaseEnterSendSuccessMessage: "Please enter success message."
+    successMessageIsTooLong: "Success message is too long."
+    formTargetEmailsFieldsIsTooLong: "Form target emails field is too long."
+    hookUrlMustBeValidUrl: "Hook URL must be valid URL"
+    thisNameIsAlreadyTaken: "This name is already taken."
+    youHaveNoPermissionToEditForm: "You have no permission to edit form."
+    itemGroups: "Item groups"
+    savedData: "Saved data"
+
+    
+item:
+    title: "Title"
+    placeholder: "Placeholder"
+    defaultValue: "Default value"
+    required: "Required"
+    name: "Name"
+    type: "Type"
+    position: "Position"
+    maxValue: "Max. value"
+    minValue: "Min. value"
+    defaultValueIsTooLong: "Default value is too long."
+    placeholderIsTooLong: "Placeholder is too long."
+    titleIsTooLong: "Title is too long."
+    requiredTextIsTooLong: "Required text is too long."
+    pleaseEnterFormItemName: "Please enter form item name."
+    formItemNameIsTooLong: "Form item name is too long."
+    thisNameIsAlreadyTaken: "This name is already taken."
+    youHaveNoPermissionToEditFormItem: "You have no permission to edit form item."
+    latteName: "Latte name"
+    options: "Options"
+
+    
+itemGroup:
+    name: "Name"
+    identifier: "Identifier"
+    showGroupName: "Show group name"
+    pleaseEnterFormGroupName: "Please enter form group name."
+    formGroupNameIsTooLong: "Form name is too long."
+    thisIdentifierIsAlreadyTaken: "This identifier is already taken."
+    thisNameIsAlreadyTaken: "This name is already taken."
+    youHaveNoPermissionToEditFormGroup: "You have no permission to edit form group."
+    position: "Position"
+    showName: "Show name"
+    items: "Items"
+
+    
+itemOption:
+    name: "Name"
+    identifier: "Identifier"
+    pleaseEnterItemOptionIdentifier: "Please enter item option identifier."
+    position: "Position"
+    pleaseEnterItemOptionName: "Please enter item option name."
+    itemOptionNameIsTooLong: "Item option name is too long."
+    thisIdentifierIsAlreadyTaken: "This identifier is already taken."
+    thisNameIsAlreadyTaken: "This name is already taken."
+    youHaveNoPermissionToEditItemOption: "You have no permission to edit item option."
+
+    
+saved:
+    createdAt: "Created"
+    ip: "IP address"
+    userAgent: "User Agent"
+    valueIsNotInTheList: "Value is not in the list"

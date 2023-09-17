@@ -107,20 +107,20 @@ class ItemGroupGrid extends BaseControl
 
         $grid->setDataSource($this->itemGroupRepository->getItemGroupQueryBuilder($this->form));
         $grid->setDefaultSort(['position' => 'ASC']);
-        $grid->addColumnText('identifier', 'Identifier')
+        $grid->addColumnText('identifier', 'form.itemGroup.identifier')
             ->setSortable()
             ->setFilterText();
 
-        $grid->addColumnPosition('position', 'Position', 'up!', 'down!');
+        $grid->addColumnPosition('position', 'form.itemGroup.position', 'up!', 'down!');
 
-        $grid->addColumnBoolean('isShowName', 'Show name');
+        $grid->addColumnBoolean('isShowName', 'form.itemGroup.showName');
         
         if ($this->user->isAllowed('form', 'edit')) {
 
-            $grid->addAction('Item', 'Items', 'Item:', ['itemGroupId' => 'id'])
+            $grid->addAction('Item', 'form.itemGroup.items', 'Item:', ['itemGroupId' => 'id'])
                 ->setIcon('bars');
 
-            $grid->addAction('edit', 'Upravit', 'ItemGroup:edit', ['formId' => 'form.id', 'id'])
+            $grid->addAction('edit', 'form.global.edit', 'ItemGroup:edit', ['formId' => 'form.id', 'id'])
                 ->setIcon('pencil')
                 ->setClass('btn btn-xs btn-primary');
         }
@@ -129,18 +129,18 @@ class ItemGroupGrid extends BaseControl
         {
             $grid->addAction('delete', '', 'delete!')
                 ->setIcon('trash')
-                ->setTitle('Smazat')
+                ->setTitle('form.global.delete')
                 ->setClass('btn btn-xs btn-danger ajax')
-                ->setConfirmation(new StringConfirmation('Do you really want to delete row %s?', 'identifier'));
+                ->setConfirmation(new StringConfirmation('form.global.doYouReallyWantToDeleteRow', 'identifier'));
 
-            $grid->addGroupAction('Smazat')->onSelect[] = [$this, 'handleDelete'];
+            $grid->addGroupAction('form.global.delete')->onSelect[] = [$this, 'handleDelete'];
         }
 
-        $grid->addExportCsvFiltered('Csv export (filtered)', 'acl_resource_filtered.csv')
-            ->setTitle('Csv export (filtered)');
+        $grid->addExportCsvFiltered('form.global.csvExportFiltered', 'acl_resource_filtered.csv')
+            ->setTitle('form.global.csvExportFiltered');
 
-        $grid->addExportCsv('Csv export', 'acl_resource_all.csv')
-            ->setTitle('Csv export');
+        $grid->addExportCsv('form.global.csvExport', 'acl_resource_all.csv')
+            ->setTitle('form.global.csvExport');
 
         return $grid;
     }

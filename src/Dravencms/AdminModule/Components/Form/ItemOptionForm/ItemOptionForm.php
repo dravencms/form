@@ -116,12 +116,12 @@ class ItemOptionForm extends BaseControl
         foreach ($this->localeRepository->getActive() AS $activeLocale) {
             $container = $form->addContainer($activeLocale->getLanguageCode());
             $container->addText('name')
-                ->setRequired('Please enter form name.')
-                ->addRule(Form::MAX_LENGTH, 'Form name is too long.', 255);
+                ->setRequired('form.itemOption.pleaseEnterItemOptionName')
+                ->addRule(Form::MAX_LENGTH, 'form.itemOption.itemOptionNameIsTooLong', 255);
         }
 
         $form->addText('identifier')
-            ->setRequired('Please enter form identifier.');
+            ->setRequired('form.itemOption.pleaseEnterItemOptionIdentifier');
 
         $form->addText('position')
             ->setDisabled(is_null($this->itemOption))
@@ -143,17 +143,17 @@ class ItemOptionForm extends BaseControl
         $values = $form->getValues();
 
         if (!$this->itemOptionRepository->isIdentifierFree($values->identifier, $this->item, $this->itemOption)) {
-            $form->addError('Tento identifier je již zabrán.');
+            $form->addError('form.itemOption.thisIdentifierIsAlreadyTaken');
         }
 
         foreach ($this->localeRepository->getActive() AS $activeLocale) {
             if (!$this->itemOptionRepository->isNameFree($values->{$activeLocale->getLanguageCode()}->name, $activeLocale, $this->item, $this->itemOption)) {
-                $form->addError('Tento název je již zabrán.');
+                $form->addError('form.itemOption.thisNameIsAlreadyTaken');
             }
         }
 
         if (!$this->user->isAllowed('form', 'edit')) {
-            $form->addError('Nemáte oprávění editovat item option.');
+            $form->addError('form.itemOption.youHaveNoPermissionToEditItemOption');
         }
     }
 

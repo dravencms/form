@@ -121,8 +121,8 @@ class ItemGroupForm extends BaseControl
             $container = $form->addContainer($activeLocale->getLanguageCode());
 
             $container->addText('name')
-                ->setRequired('Please enter form name.')
-                ->addRule(AForm::MAX_LENGTH, 'Form name is too long.', 255);
+                ->setRequired('form.itemGroup.pleaseEnterFormGroupName')
+                ->addRule(AForm::MAX_LENGTH, 'form.itemGroup.formGroupNameIsTooLong', 255);
         }
 
         $form->addText('identifier');
@@ -146,17 +146,17 @@ class ItemGroupForm extends BaseControl
 
         if (!$this->itemGroupRepository->isIdentifierFree($values->identifier, $this->form, $this->itemGroup))
         {
-            $form->addError('Tento identifier je již zabrán.');
+            $form->addError('form.itemGroup.thisIdentifierIsAlreadyTaken');
         }
 
         foreach ($this->localeRepository->getActive() AS $activeLocale) {
             if (!$this->itemGroupRepository->isNameFree($values->{$activeLocale->getLanguageCode()}->name, $activeLocale, $this->form, $this->itemGroup)) {
-                $form->addError('Tento název je již zabrán.');
+                $form->addError('form.itemGroup.thisNameIsAlreadyTaken');
             }
         }
 
         if (!$this->user->isAllowed('form', 'edit')) {
-            $form->addError('Nemáte oprávění editovat article.');
+            $form->addError('form.itemGroup.youHaveNoPermissionToEditFormGroup');
         }
     }
 
