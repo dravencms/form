@@ -20,8 +20,7 @@ form:
     isActive: "Active"
     isAntispamProtected: "Antispam protected"
     isSaveFormDataToDatabase: "Save form data to database"
-    isSendFormToDetectedEmail: "Save form data to detected email"
-    
+    isSendFormToDetectedEmail: "Send form data to detected email"    
     pleaseEnterFormName: "Please enter form name."
     formNameIsTooLong: "Form name is too long."
     pleaseEnterSendButtonText: "Please enter send button text."
