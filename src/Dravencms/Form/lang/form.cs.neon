@@ -1,6 +1,8 @@
 email:
     formNameHasBeenFilled: "Formulář %name% byl vyplněn"
     filledData: "Vyplněná data:"
+    yes: "Ano"
+    no: "Ne"
 
 global:
     save: "Uložit"

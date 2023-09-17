@@ -17,6 +17,7 @@ use Dravencms\Model\Form\Repository\ItemOptionRepository;
 use Dravencms\Model\Form\Repository\ItemRepository;
 use Dravencms\Database\EntityManager;
 use Nette\Http\Request;
+use Nette\Localization\Translator;
 use Dravencms\Components\BaseForm\Form;
 use Dravencms\Structure\ICmsActionOption;
 use Salamek\TemplatedEmail\TemplatedEmail;
@@ -69,6 +70,9 @@ class Detail extends BaseControl
     /** @var Tempnam */
     private $tempnam;
 
+    /** @var Translator */
+    private $translator;
+
     /**
      * Detail constructor.
      * @param ICmsActionOption $cmsActionOption
@@ -94,6 +98,7 @@ class Detail extends BaseControl
         TemplatedEmail $templatedEmail,
         ItemOptionRepository $itemOptionRepository,
         CurrentLocaleResolver $currentLocaleResolver,
+        Translator $translator,
         Tempnam $tempnam
     )
     {
@@ -108,6 +113,7 @@ class Detail extends BaseControl
         $this->itemRepository = $itemRepository;
         $this->itemOptionRepository = $itemOptionRepository;
         $this->tempnam = $tempnam;
+        $this->translator = $translator;
 
         $this->formInfo = $this->formRepository->getOneById($this->cmsActionOption->getParameter('id'));
         $this->formInfoTranslation = $this->formRepository->getTranslation($this->formInfo, $this->currentLocale);
@@ -332,7 +338,12 @@ class Detail extends BaseControl
                         $detectedEmails[] = $value;
                     }
                     $formData[$formsItem->getName()] = $value;
-                    $emailData[$itemTranslation->getTitle()] = $value;
+
+                    if (in_array($formsItem->getType() , [Item::TYPE_CHECKBOX])) {
+                        $emailData[$itemTranslation->getTitle()] = $this->translator->translate($value ? 'form.email.yes' : 'form.email.no');
+                    } else {
+                        $emailData[$itemTranslation->getTitle()] = $value;
+                    }
                 }
 
                 if ($this->formInfo->isSaveToDatabase()) {

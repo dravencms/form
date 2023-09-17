@@ -1,6 +1,8 @@
 email:
     formNameHasBeenFilled: "Form %name% has been filled in."
     filledData: "Filled in data:"
+    yes: "Yes"
+    no: "No"
 
 global:
     save: "Save"
