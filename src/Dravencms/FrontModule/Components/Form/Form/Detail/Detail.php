@@ -277,7 +277,7 @@ class Detail extends BaseControl
 
         if ($this->formInfo->isAntispam())
         {
-            $form->addReCaptcha();
+            $form->addCaptcha();
         }
 
         $form->addSubmit('send', $this->formInfoTranslation->getSendButtonValue())
