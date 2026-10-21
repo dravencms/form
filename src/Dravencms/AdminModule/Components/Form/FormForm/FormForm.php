@@ -72,7 +72,7 @@ class FormForm extends BaseControl
         User $user,
         FormRepository $formRepository,
         LocaleRepository $localeRepository,
-        Form $form = null
+        ?Form $form = null
     ) {
         $this->form = $form;
 

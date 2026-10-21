@@ -41,8 +41,8 @@ class ItemGroupPresenter extends SecuredPresenter
 
     /**
      * @param integer $formId
-     * @isAllowed(form,edit)
      */
+    #[\Dravencms\User\Attributes\IsAllowed('form', 'edit')]
     public function actionDefault(int $formId): void
     {
         $this->form = $this->formRepository->getOneById($formId);
@@ -51,12 +51,12 @@ class ItemGroupPresenter extends SecuredPresenter
     }
 
     /**
-     * @isAllowed(form,edit)
      * @param integer $formId
      * @param null $id
      * @throws \Nette\Application\BadRequestException
      */
-    public function actionEdit(int $formId, int $id = null): void
+    #[\Dravencms\User\Attributes\IsAllowed('form', 'edit')]
+    public function actionEdit(int $formId, ?int $id = null): void
     {
         $this->form = $this->formRepository->getOneById($formId);
 

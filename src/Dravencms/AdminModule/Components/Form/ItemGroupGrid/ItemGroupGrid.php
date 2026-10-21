@@ -29,7 +29,7 @@ use Dravencms\Model\Form\Entities\Form;
 use Dravencms\Model\Form\Repository\ItemGroupRepository;
 use Dravencms\Model\Locale\Repository\LocaleRepository;
 use Dravencms\Database\EntityManager;
-use Ublaboo\DataGrid\Column\Action\Confirmation\StringConfirmation;
+use Contributte\Datagrid\Column\Action\Confirmation\StringConfirmation;
 use Nette\Security\User;
 
 /**
@@ -148,8 +148,8 @@ class ItemGroupGrid extends BaseControl
     /**
      * @param $id
      * @throws \Exception
-     * @isAllowed(form, delete)
      */
+    #[\Dravencms\User\Attributes\IsAllowed('form', 'delete')]
     public function handleDelete($id): void
     {
         $itemGroups = $this->itemGroupRepository->getById($id);

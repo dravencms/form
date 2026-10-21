@@ -4,16 +4,16 @@ namespace Dravencms\Model\Form\Entities;
 use Doctrine\ORM\Mapping as ORM;
 use Dravencms\Model\Locale\Entities\Locale;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Dravencms\Database\Attributes\TimestampableEntity;
 use Dravencms\Database\Attributes\Identifier;
 use Nette;
 
 /**
  * Class ItemTranslantion
  * @package App\Model\Form\Entities
- * @ORM\Entity
- * @ORM\Table(name="formItemTranslantion")
  */
+#[ORM\Entity]
+#[ORM\Table(name: "formItemTranslantion")]
 class ItemTranslantion
 {
     use Nette\SmartObject;
@@ -22,40 +22,40 @@ class ItemTranslantion
 
     /**
      * @var string
-     * @ORM\Column(type="string",length=255,nullable=false)
      */
+    #[ORM\Column(type: "string",length: 255,nullable: false)]
     private $defaultValue;
 
     /**
      * @var string
-     * @ORM\Column(type="string",length=255,nullable=false)
      */
+    #[ORM\Column(type: "string",length: 255,nullable: false)]
     private $placeholder;
 
     /**
      * @var string
-     * @ORM\Column(type="string",length=255,nullable=false)
      */
+    #[ORM\Column(type: "string",length: 255,nullable: false)]
     private $title;
 
     /**
      * @var string
-     * @ORM\Column(type="string",length=255,nullable=true)
      */
+    #[ORM\Column(type: "string",length: 255,nullable: true)]
     private $required;
 
     /**
      * @var Item
-     * @ORM\ManyToOne(targetEntity="Item", inversedBy="translations")
-     * @ORM\JoinColumn(name="item_id", referencedColumnName="id")
      */
+    #[ORM\ManyToOne(targetEntity: "Item", inversedBy: "translations")]
+    #[ORM\JoinColumn(name: "item_id", referencedColumnName: "id")]
     private $item;
 
     /**
      * @var Locale
-     * @ORM\ManyToOne(targetEntity="Dravencms\Model\Locale\Entities\Locale")
-     * @ORM\JoinColumn(name="locale_id", referencedColumnName="id")
      */
+    #[ORM\ManyToOne(targetEntity: "Dravencms\Model\Locale\Entities\Locale")]
+    #[ORM\JoinColumn(name: "locale_id", referencedColumnName: "id")]
     private $locale;
 
     /**
@@ -67,7 +67,7 @@ class ItemTranslantion
      * @param null $placeholder
      * @param null $required
      */
-    public function __construct(Item $item, Locale $locale, string $title, string $defaultValue = null, string $placeholder = null, string $required = null)
+    public function __construct(Item $item, Locale $locale, string $title, ?string $defaultValue = null, ?string $placeholder = null, ?string $required = null)
     {
         $this->item = $item;
         $this->locale = $locale;
@@ -104,7 +104,7 @@ class ItemTranslantion
     /**
      * @param boolean $required
      */
-    public function setRequired(string $required = null): void
+    public function setRequired(?string $required = null): void
     {
         $this->required = $required;
     }

@@ -4,16 +4,16 @@ namespace Dravencms\Model\Form\Entities;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Dravencms\Database\Attributes\TimestampableEntity;
 use Dravencms\Database\Attributes\Identifier;
 use Nette;
 
 /**
  * Class Form
  * @package App\Model\Form\Entities
- * @ORM\Entity
- * @ORM\Table(name="formForm")
  */
+#[ORM\Entity]
+#[ORM\Table(name: "formForm")]
 class Form
 {
     use Nette\SmartObject;
@@ -22,57 +22,57 @@ class Form
 
     /**
      * @var string
-     * @ORM\Column(type="string",length=255,nullable=false,unique=true)
      */
+    #[ORM\Column(type: "string",length: 255,nullable: false,unique: true)]
     private $name;
 
     /**
      * @var string
-     * @ORM\Column(type="string",length=255,nullable=true)
      */
+    #[ORM\Column(type: "string",length: 255,nullable: true)]
     private $email;
 
     /**
      * @var string
-     * @ORM\Column(type="text",nullable=true)
      */
+    #[ORM\Column(type: "text",nullable: true)]
     private $hookUrl;
 
     /**
      * @var boolean
-     * @ORM\Column(type="boolean", nullable=false)
      */
+    #[ORM\Column(type: "boolean", nullable: false)]
     private $isActive;
 
     /**
      * @var boolean
-     * @ORM\Column(type="boolean", nullable=false)
      */
+    #[ORM\Column(type: "boolean", nullable: false)]
     private $isAntispam;
 
     /**
      * @var boolean
-     * @ORM\Column(type="boolean", nullable=false)
      */
+    #[ORM\Column(type: "boolean", nullable: false)]
     private $isSaveToDatabase;
 
     /**
      * @var boolean
-     * @ORM\Column(type="boolean", nullable=false)
      */
+    #[ORM\Column(type: "boolean", nullable: false)]
     private $isSendFormToDetectedEmail;
 
     /**
      * @var ArrayCollection|ItemGroup[]
-     * @ORM\OneToMany(targetEntity="ItemGroup", mappedBy="form",cascade={"persist"})
-     * @ORM\OrderBy({"position" = "ASC"})
      */
+    #[ORM\OneToMany(targetEntity: "ItemGroup", mappedBy: "form",cascade: ["persist"])]
+    #[ORM\OrderBy(["position"  =>  "ASC"])]
     private $itemGroups;
 
     /**
      * @var ArrayCollection|FormTranslation[]
-     * @ORM\OneToMany(targetEntity="FormTranslation", mappedBy="form",cascade={"persist", "remove"})
      */
+    #[ORM\OneToMany(targetEntity: "FormTranslation", mappedBy: "form",cascade: ["persist", "remove"])]
     private $translations;
 
     /**
@@ -84,11 +84,11 @@ class Form
      * @param bool $isAntispam
      */
     public function __construct(
-            string $name, 
-            string $email = null, 
-            string $hookUrl = null, 
-            bool $isSaveToDatabase = true, 
-            bool $isActive = true, 
+            string $name,
+            ?string $email = null,
+            ?string $hookUrl = null,
+            bool $isSaveToDatabase = true,
+            bool $isActive = true,
             bool $isAntispam = true,
             bool $isSendFormToDetectedEmail = true
             )
@@ -125,7 +125,7 @@ class Form
     /**
      * @param string $email
      */
-    public function setEmail(string $email = null): void
+    public function setEmail(?string $email = null): void
     {
         $this->email = $email;
     }
@@ -141,7 +141,7 @@ class Form
     /**
      * @param string $hookUrl
      */
-    public function setHookUrl(string $hookUrl = null): void
+    public function setHookUrl(?string $hookUrl = null): void
     {
         $this->hookUrl = $hookUrl;
     }

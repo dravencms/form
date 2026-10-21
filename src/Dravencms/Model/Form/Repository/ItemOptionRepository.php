@@ -75,7 +75,7 @@ class ItemOptionRepository
      * @return mixed
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function isIdentifierFree(string $identifier, Item $item, ItemOption $itemOptionIgnore = null): bool
+    public function isIdentifierFree(string $identifier, Item $item, ?ItemOption $itemOptionIgnore = null): bool
     {
         $qb = $this->itemOptionRepository->createQueryBuilder('io')
             ->select('io')
@@ -104,7 +104,7 @@ class ItemOptionRepository
      * @return mixed
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function isNameFree(string $name, ILocale $locale, Item $item, ItemOption $itemOptionIgnore = null): bool
+    public function isNameFree(string $name, ILocale $locale, Item $item, ?ItemOption $itemOptionIgnore = null): bool
     {
         $qb = $this->itemOptionRepository->createQueryBuilder('io')
             ->select('io')

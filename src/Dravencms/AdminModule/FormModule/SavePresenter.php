@@ -27,8 +27,8 @@ class SavePresenter extends SecuredPresenter
 
     /**
      * @param integer $formId
-     * @isAllowed(form,edit)
      */
+    #[\Dravencms\User\Attributes\IsAllowed('form', 'edit')]
     public function actionDefault(int $formId): void
     {
         $this->form = $this->formRepository->getOneById($formId);

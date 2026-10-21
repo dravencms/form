@@ -68,7 +68,7 @@ class SaveRepository
      * @return boolean
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function isNameFree(string $name, Save $saveIgnore = null): bool
+    public function isNameFree(string $name, ?Save $saveIgnore = null): bool
     {
         $qb = $this->saveRepository->createQueryBuilder('s')
             ->select('s')

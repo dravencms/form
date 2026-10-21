@@ -31,7 +31,7 @@ use Dravencms\Model\Form\Entities\Save;
 use Dravencms\Model\Form\Repository\SaveRepository;
 use Dravencms\Model\Form\Repository\SaveValueRepository;
 use Dravencms\Database\EntityManager;
-use Ublaboo\DataGrid\Column\Action\Confirmation\StringConfirmation;
+use Contributte\Datagrid\Column\Action\Confirmation\StringConfirmation;
 use Nette\Security\User;
 
 /**
@@ -182,8 +182,8 @@ class SaveGrid extends BaseControl
     /**
      * @param $id
      * @throws \Exception
-     * @isAllowed(form, delete)
      */
+    #[\Dravencms\User\Attributes\IsAllowed('form', 'delete')]
     public function handleDelete($id): void
     {
         $saves = $this->saveRepository->getById($id);

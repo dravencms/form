@@ -74,7 +74,7 @@ class FormRepository
      * @return mixed
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function isNameFree(string $name, Form $formIgnore = null): bool
+    public function isNameFree(string $name, ?Form $formIgnore = null): bool
     {
         $qb = $this->formRepository->createQueryBuilder('f')
             ->select('f')

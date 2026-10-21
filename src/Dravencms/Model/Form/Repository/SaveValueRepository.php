@@ -63,7 +63,7 @@ class SaveValueRepository
      * @return boolean
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function isNameFree(string $name, SaveValue $saveValueIgnore = null): bool
+    public function isNameFree(string $name, ?SaveValue $saveValueIgnore = null): bool
     {
         $qb = $this->saveValueRepository->createQueryBuilder('sv')
             ->select('sv')

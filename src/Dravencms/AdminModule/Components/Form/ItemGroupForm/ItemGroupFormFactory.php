@@ -35,5 +35,5 @@ interface ItemGroupFormFactory
      * @param ItemGroup|null $itemGroup
      * @return ItemGroupForm
      */
-    public function create(Form $form, ItemGroup $itemGroup = null): ItemGroupForm;
+    public function create(Form $form, ?ItemGroup $itemGroup = null): ItemGroupForm;
 }

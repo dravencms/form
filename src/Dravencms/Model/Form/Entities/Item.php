@@ -5,16 +5,17 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping\UniqueConstraint;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Dravencms\Database\Attributes\TimestampableEntity;
 use Dravencms\Database\Attributes\Identifier;
 use Nette;
 
 /**
  * Class Item
  * @package App\Model\Form\Entities
- * @ORM\Entity(repositoryClass="Gedmo\Sortable\Entity\Repository\SortableRepository")
- * @ORM\Table(name="formItem", uniqueConstraints={@UniqueConstraint(name="name_unique", columns={"name", "item_group_id"})})
  */
+#[ORM\Entity(repositoryClass: "Gedmo\Sortable\Entity\Repository\SortableRepository")]
+#[ORM\UniqueConstraint(name: "name_unique", columns: ["name", "item_group_id"])]
+#[ORM\Table(name: "formItem")]
 class Item
 {
     use Nette\SmartObject;
@@ -53,59 +54,59 @@ class Item
 
     /**
      * @var string
-     * @ORM\Column(type="string",length=255,nullable=false)
      */
+    #[ORM\Column(type: "string",length: 255,nullable: false)]
     private $name;
 
     /**
      * @var string
-     * @ORM\Column(type="string",length=255)
      */
+    #[ORM\Column(type: "string",length: 255)]
     private $type;
     /**
      * @var integer
-     * @ORM\Column(type="integer",nullable=true)
      */
+    #[ORM\Column(type: "integer",nullable: true)]
     private $minValue;
 
     /**
      * @var integer
-     * @ORM\Column(type="integer",nullable=true)
      */
+    #[ORM\Column(type: "integer",nullable: true)]
     private $maxValue;
 
     /**
      * @var integer
-     * @Gedmo\SortablePosition
-     * @ORM\Column(type="integer")
      */
+    #[Gedmo\SortablePosition]
+    #[ORM\Column(type: "integer")]
     private $position;
 
     /**
      * @var ArrayCollection|ItemTranslantion[]
-     * @ORM\OneToMany(targetEntity="ItemTranslantion", mappedBy="item",cascade={"persist", "remove"})
      */
+    #[ORM\OneToMany(targetEntity: "ItemTranslantion", mappedBy: "item",cascade: ["persist", "remove"])]
     private $translations;
 
     /**
      * @var ItemGroup
-     * @Gedmo\SortableGroup
-     * @ORM\ManyToOne(targetEntity="ItemGroup", inversedBy="items")
-     * @ORM\JoinColumn(name="item_group_id", referencedColumnName="id")
      */
+    #[Gedmo\SortableGroup]
+    #[ORM\ManyToOne(targetEntity: "ItemGroup", inversedBy: "items")]
+    #[ORM\JoinColumn(name: "item_group_id", referencedColumnName: "id")]
     private $itemGroup;
 
     /**
      * @var ArrayCollection|ItemOption[]
-     * @ORM\OneToMany(targetEntity="ItemOption", mappedBy="item",cascade={"persist"})
-     * @ORM\OrderBy({"position" = "ASC"})
      */
+    #[ORM\OneToMany(targetEntity: "ItemOption", mappedBy: "item",cascade: ["persist"])]
+    #[ORM\OrderBy(["position"  =>  "ASC"])]
     private $itemOptions;
 
     /**
      * @var ArrayCollection|SaveValue[]
-     * @ORM\OneToMany(targetEntity="SaveValue", mappedBy="item",cascade={"persist"})
      */
+    #[ORM\OneToMany(targetEntity: "SaveValue", mappedBy: "item",cascade: ["persist"])]
     private $saveValues;
 
     /**
@@ -116,7 +117,7 @@ class Item
      * @param null $minValue
      * @param null $maxValue
      */
-    public function __construct(ItemGroup $itemGroup, string $name, string $type, int $minValue = null, int $maxValue = null)
+    public function __construct(ItemGroup $itemGroup, string $name, string $type, ?int $minValue = null, ?int $maxValue = null)
     {
         $this->itemGroup = $itemGroup;
         $this->name = $name;
@@ -152,7 +153,7 @@ class Item
     /**
      * @param int $minValue
      */
-    public function setMinValue(int $minValue = null): void
+    public function setMinValue(?int $minValue = null): void
     {
         $this->minValue = $minValue;
     }
@@ -160,7 +161,7 @@ class Item
     /**
      * @param int $maxValue
      */
-    public function setMaxValue(int $maxValue = null): void
+    public function setMaxValue(?int $maxValue = null): void
     {
         $this->maxValue = $maxValue;
     }

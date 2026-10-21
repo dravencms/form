@@ -34,5 +34,5 @@ interface ItemOptionFormFactory
      * @param ItemOption|null $itemOption
      * @return ItemOptionForm
      */
-    public function create(Item $item, ItemOption $itemOption = null): ItemOptionForm;
+    public function create(Item $item, ?ItemOption $itemOption = null): ItemOptionForm;
 }

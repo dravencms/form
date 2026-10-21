@@ -35,20 +35,18 @@ class FormPresenter extends SecuredPresenter
     /** @var Form|null */
     private $form = null;
 
-    /**
-     * @isAllowed(form,edit)
-     */
+    #[\Dravencms\User\Attributes\IsAllowed('form', 'edit')]
     public function renderDefault(): void
     {
         $this->template->h1 = 'Forms';
     }
 
     /**
-     * @isAllowed(form,edit)
      * @param null $id
      * @throws \Nette\Application\BadRequestException
      */
-    public function actionEdit(int $id = null): void
+    #[\Dravencms\User\Attributes\IsAllowed('form', 'edit')]
+    public function actionEdit(?int $id = null): void
     {
         if ($id) {
             $form = $this->formRepository->getOneById($id);

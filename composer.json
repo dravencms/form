@@ -18,7 +18,9 @@
     "dravencms/captcha": ">=0.0.2",
     "dravencms/admin": ">=v2.0",
     "dravencms/templated-email": "^v1.1",
-    "dravencms/tempnam": "^1.0"
+    "dravencms/tempnam": "^1.0",
+    "php": "^8.4",
+    "dravencms/database": "^0.2.4"
   },
   "suggest": {
     "dravencms/structure": "Allows form components to be used in cms"

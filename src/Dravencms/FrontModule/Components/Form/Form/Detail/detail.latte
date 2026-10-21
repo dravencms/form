@@ -2,12 +2,12 @@
     <ul class="alert alert-danger" n:if="$form->hasErrors()">
         <li n:foreach="$form->errors as $error">{$error}</li>
     </ul>
-    {foreach $formInfo->getItemGroups() AS $formsItemsGroups}
+    {foreach $formInfo->getItemGroups() as $formsItemsGroups}
         {if $formsItemsGroups->isShowName()}
         <fieldset>
             <legend>{$formsItemsGroups->translate($currentLocale)->getName()}</legend>
         {/if}
-        {foreach $formsItemsGroups->getItems() AS $formsItems}
+        {foreach $formsItemsGroups->getItems() as $formsItems}
             <div class="form-group control-group">
                 {if $formsItems->getType() == 'select'}
                     <select n:name="formItem_{$formsItems->getId()}" class="form-control"></select>

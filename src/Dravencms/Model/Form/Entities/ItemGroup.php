@@ -6,16 +6,16 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Dravencms\Model\Locale\Entities\ILocale;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Dravencms\Database\Attributes\TimestampableEntity;
 use Dravencms\Database\Attributes\Identifier;
 use Nette;
 
 /**
  * Class ItemGroup
  * @package App\Model\Form\Entities
- * @ORM\Entity(repositoryClass="Gedmo\Sortable\Entity\Repository\SortableRepository")
- * @ORM\Table(name="formItemGroup")
  */
+#[ORM\Entity(repositoryClass: "Gedmo\Sortable\Entity\Repository\SortableRepository")]
+#[ORM\Table(name: "formItemGroup")]
 class ItemGroup
 {
     use Nette\SmartObject;
@@ -24,42 +24,42 @@ class ItemGroup
 
     /**
      * @var string
-     * @ORM\Column(type="string",length=255,nullable=false,unique=true)
      */
+    #[ORM\Column(type: "string",length: 255,nullable: false,unique: true)]
     private $identifier;
 
     /**
      * @var boolean
-     * @ORM\Column(type="boolean")
      */
+    #[ORM\Column(type: "boolean")]
     private $isShowName;
 
     /**
      * @var integer
-     * @Gedmo\SortablePosition
-     * @ORM\Column(type="integer")
      */
+    #[Gedmo\SortablePosition]
+    #[ORM\Column(type: "integer")]
     private $position;
 
     /**
      * @var Form
-     * @Gedmo\SortableGroup
-     * @ORM\ManyToOne(targetEntity="Form", inversedBy="itemGroups")
-     * @ORM\JoinColumn(name="form_id", referencedColumnName="id")
      */
+    #[Gedmo\SortableGroup]
+    #[ORM\ManyToOne(targetEntity: "Form", inversedBy: "itemGroups")]
+    #[ORM\JoinColumn(name: "form_id", referencedColumnName: "id")]
     private $form;
 
     /**
      * @var ArrayCollection|Item[]
-     * @ORM\OneToMany(targetEntity="Item", mappedBy="itemGroup",cascade={"persist"})
-     * @ORM\OrderBy({"position" = "ASC"})
      */
+    #[ORM\OneToMany(targetEntity: "Item", mappedBy: "itemGroup",cascade: ["persist"])]
+    #[ORM\OrderBy(["position"  =>  "ASC"])]
     private $items;
 
     /**
      * @var ArrayCollection|ItemGroupTranslation[]
-     * @ORM\OneToMany(targetEntity="ItemGroupTranslation", mappedBy="itemGroup",cascade={"persist", "remove"})
      */
+    #[ORM\OneToMany(targetEntity: "ItemGroupTranslation", mappedBy: "itemGroup",cascade: ["persist", "remove"])]
     private $translations;
 
     /**

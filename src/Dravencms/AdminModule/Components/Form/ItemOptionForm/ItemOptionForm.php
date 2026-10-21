@@ -79,7 +79,7 @@ class ItemOptionForm extends BaseControl
         User $user,
         ItemOptionRepository $itemOptionRepository,
         LocaleRepository $localeRepository,
-        ItemOption $itemOption = null
+        ?ItemOption $itemOption = null
     ) {
 
         $this->itemOption = $itemOption;

@@ -72,7 +72,7 @@ class ItemRepository
      * @return mixed
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function isNameFree(string $name, ItemGroup $itemGroup, Item $itemIgnore = null): bool
+    public function isNameFree(string $name, ItemGroup $itemGroup, ?Item $itemIgnore = null): bool
     {
         $qb = $this->itemRepository->createQueryBuilder('i')
             ->select('i')

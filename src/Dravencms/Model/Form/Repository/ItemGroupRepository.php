@@ -74,7 +74,7 @@ class ItemGroupRepository
      * @return mixed
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function isIdentifierFree(string $identifier, Form $form, ItemGroup $itemGroupIgnore = null): bool
+    public function isIdentifierFree(string $identifier, Form $form, ?ItemGroup $itemGroupIgnore = null): bool
     {
         $qb = $this->itemGroupRepository->createQueryBuilder('ig')
             ->select('ig')
@@ -103,7 +103,7 @@ class ItemGroupRepository
      * @return mixed
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function isNameFree(string $name, ILocale $locale, Form $form, ItemGroup $itemGroupIgnore = null): bool
+    public function isNameFree(string $name, ILocale $locale, Form $form, ?ItemGroup $itemGroupIgnore = null): bool
     {
         $qb = $this->itemGroupRepository->createQueryBuilder('ig')
             ->select('ig')

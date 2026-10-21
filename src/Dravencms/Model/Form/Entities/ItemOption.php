@@ -4,16 +4,16 @@ namespace Dravencms\Model\Form\Entities;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Dravencms\Database\Attributes\TimestampableEntity;
 use Dravencms\Database\Attributes\Identifier;
 use Nette;
 
 /**
  * Class ItemOption
  * @package App\Model\Form\Entities
- * @ORM\Entity(repositoryClass="Gedmo\Sortable\Entity\Repository\SortableRepository")
- * @ORM\Table(name="formItemOption")
  */
+#[ORM\Entity(repositoryClass: "Gedmo\Sortable\Entity\Repository\SortableRepository")]
+#[ORM\Table(name: "formItemOption")]
 class ItemOption
 {
     use Nette\SmartObject;
@@ -22,28 +22,28 @@ class ItemOption
 
     /**
      * @var integer
-     * @Gedmo\SortablePosition
-     * @ORM\Column(type="integer")
      */
+    #[Gedmo\SortablePosition]
+    #[ORM\Column(type: "integer")]
     private $position;
 
     /**
      * @var string
-     * @ORM\Column(type="string",length=255,nullable=false,unique=true)
      */
+    #[ORM\Column(type: "string",length: 255,nullable: false,unique: true)]
     private $identifier;
 
     /**
      * @var Item
-     * @ORM\ManyToOne(targetEntity="Item", inversedBy="itemOptions")
-     * @ORM\JoinColumn(name="item_id", referencedColumnName="id")
      */
+    #[ORM\ManyToOne(targetEntity: "Item", inversedBy: "itemOptions")]
+    #[ORM\JoinColumn(name: "item_id", referencedColumnName: "id")]
     private $item;
 
     /**
      * @var ArrayCollection|ItemOptionTranslation[]
-     * @ORM\OneToMany(targetEntity="ItemOptionTranslation", mappedBy="itemOption",cascade={"persist", "remove"})
      */
+    #[ORM\OneToMany(targetEntity: "ItemOptionTranslation", mappedBy: "itemOption",cascade: ["persist", "remove"])]
     private $translations;
 
     /**

@@ -7,7 +7,7 @@
     <p>
         <strong>{_"IP:"}</strong> {$savedValue->ip} ({gethostbyaddr($savedValue->ip)})
     </p>
-    <p n:foreach="$values AS $key => $value">
+    <p n:foreach="$values as $key => $value">
         {var $parsed = explode('_', $key)}
         <strong>{$form[$parsed[1]]['row']->name}</strong>
 

@@ -10,7 +10,7 @@ namespace Dravencms\Model\Form\Entities;
 
 use Doctrine\ORM\Mapping as ORM;
 use Dravencms\Model\Locale\Entities\Locale;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Dravencms\Database\Attributes\TimestampableEntity;
 use Dravencms\Database\Attributes\Identifier;
 use Doctrine\ORM\Mapping\UniqueConstraint;
 use Nette;
@@ -18,9 +18,10 @@ use Nette;
 /**
  * Class Form
  * @package App\Model\Form\Entities
- * @ORM\Entity
- * @ORM\Table(name="formFormTranslantion", uniqueConstraints={@UniqueConstraint(name="form_idlocale_id", columns={"form_id", "locale_id"})})
  */
+#[ORM\Entity]
+#[ORM\UniqueConstraint(name: "form_idlocale_id", columns: ["form_id", "locale_id"])]
+#[ORM\Table(name: "formFormTranslantion")]
 class FormTranslation
 {
     use Nette\SmartObject;
@@ -29,34 +30,34 @@ class FormTranslation
 
     /**
      * @var string
-     * @ORM\Column(type="string",length=255,nullable=false)
      */
+    #[ORM\Column(type: "string",length: 255,nullable: false)]
     private $sendButtonValue;
 
     /**
      * @var string
-     * @ORM\Column(type="string",length=255,nullable=false)
      */
+    #[ORM\Column(type: "string",length: 255,nullable: false)]
     private $successMessage;
 
     /**
      * @var string
-     * @ORM\Column(type="text",nullable=false)
      */
+    #[ORM\Column(type: "text",nullable: false)]
     private $latteTemplate;
 
     /**
      * @var Form
-     * @ORM\ManyToOne(targetEntity="Form", inversedBy="translations")
-     * @ORM\JoinColumn(name="form_id", referencedColumnName="id")
      */
+    #[ORM\ManyToOne(targetEntity: "Form", inversedBy: "translations")]
+    #[ORM\JoinColumn(name: "form_id", referencedColumnName: "id")]
     private $form;
 
     /**
      * @var Locale
-     * @ORM\ManyToOne(targetEntity="Dravencms\Model\Locale\Entities\Locale")
-     * @ORM\JoinColumn(name="locale_id", referencedColumnName="id")
      */
+    #[ORM\ManyToOne(targetEntity: "Dravencms\Model\Locale\Entities\Locale")]
+    #[ORM\JoinColumn(name: "locale_id", referencedColumnName: "id")]
     private $locale;
 
     /**
@@ -72,7 +73,7 @@ class FormTranslation
             Locale $locale, 
             string $sendButtonValue, 
             string $successMessage,
-            string $latteTemplate = null
+            ?string $latteTemplate = null
             )
     {
         $this->form = $form;
@@ -101,7 +102,7 @@ class FormTranslation
     /**
      * @param null|string $latteTemplate
      */
-    public function setLatteTemplate(string $latteTemplate = null): void
+    public function setLatteTemplate(?string $latteTemplate = null): void
     {
         $this->latteTemplate = $latteTemplate;
     }

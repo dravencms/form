@@ -79,7 +79,7 @@ class ItemForm extends BaseControl
         ItemRepository $itemRepository,
         LocaleRepository $localeRepository,
         User $user,
-        Item $item = null
+        ?Item $item = null
     ) {
         $this->item = $item;
         $this->itemGroup = $itemGroup;

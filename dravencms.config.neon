@@ -1,6 +1,12 @@
 extensions:
     dravencms.form: Dravencms\Form\DI\FormExtension
 
-nettrine.orm.annotations:
-    mapping:
-        Dravencms\Model\Form: %appDir%/../vendor/dravencms/form/src/Dravencms/Model/Form/Entities
+nettrine.orm:
+    managers:
+        default:
+            mapping:
+                DravencmsModelForm :
+                    type: attributes
+                    directories:
+                        - %appDir%/../vendor/dravencms/form/src/Dravencms/Model/Form/Entities
+                    namespace: Dravencms\Model\Form

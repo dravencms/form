@@ -4,16 +4,16 @@ namespace Dravencms\Model\Form\Entities;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Dravencms\Database\Attributes\TimestampableEntity;
 use Dravencms\Database\Attributes\Identifier;
 use Nette;
 
 /**
  * Class Save
  * @package App\Model\Form\Entities
- * @ORM\Entity
- * @ORM\Table(name="formSave")
  */
+#[ORM\Entity]
+#[ORM\Table(name: "formSave")]
 class Save
 {
     use Nette\SmartObject;
@@ -22,20 +22,20 @@ class Save
 
     /**
      * @var string
-     * @ORM\Column(type="string",length=255,nullable=false)
      */
+    #[ORM\Column(type: "string",length: 255,nullable: false)]
     private $ip;
 
     /**
      * @var string
-     * @ORM\Column(type="string",length=255,nullable=false)
      */
+    #[ORM\Column(type: "string",length: 255,nullable: false)]
     private $userAgent;
 
     /**
      * @var ArrayCollection|SaveValue[]
-     * @ORM\OneToMany(targetEntity="SaveValue", mappedBy="save",cascade={"persist"})
      */
+    #[ORM\OneToMany(targetEntity: "SaveValue", mappedBy: "save",cascade: ["persist"])]
     private $saveValues;
 
     /**
