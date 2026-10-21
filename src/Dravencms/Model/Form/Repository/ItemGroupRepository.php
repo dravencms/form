@@ -61,9 +61,7 @@ class ItemGroupRepository
         $qb = $this->itemGroupRepository->createQueryBuilder('ig')
             ->select('ig')
             ->andWhere('ig.form = :form')
-            ->setParameters([
-                'form' => $form
-            ]);
+            ->setParameter('form', $form);
         return $qb;
     }
 
@@ -80,10 +78,8 @@ class ItemGroupRepository
             ->select('ig')
             ->where('ig.identifier = :identifier')
             ->andWhere('ig.form = :form')
-            ->setParameters([
-                'identifier' => $identifier,
-                'form' => $form
-            ]);
+            ->setParameter('identifier', $identifier)
+            ->setParameter('form', $form);
 
         if ($itemGroupIgnore)
         {
@@ -111,11 +107,9 @@ class ItemGroupRepository
             ->where('t.name = :name')
             ->andWhere('t.locale = :locale')
             ->andWhere('ig.form = :form')
-            ->setParameters([
-                'name' => $name,
-                'form' => $form,
-                'locale' => $locale
-            ]);
+            ->setParameter('name', $name)
+            ->setParameter('form', $form)
+            ->setParameter('locale', $locale);
 
         if ($itemGroupIgnore)
         {
@@ -138,10 +132,8 @@ class ItemGroupRepository
             ->select('t')
             ->where('t.locale = :locale')
             ->andWhere('t.itemGroup = :itemGroup')
-            ->setParameters([
-                'itemGroup' => $itemGroup,
-                'locale' => $locale
-            ]);
+            ->setParameter('itemGroup', $itemGroup)
+            ->setParameter('locale', $locale);
         return $qb->getQuery()->getOneOrNullResult();
     }
 }

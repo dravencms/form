@@ -81,10 +81,8 @@ class ItemOptionRepository
             ->select('io')
             ->where('io.identifier = :identifier')
             ->andWhere('io.item = :item')
-            ->setParameters([
-                'identifier' => $identifier,
-                'item' => $item,
-            ]);
+            ->setParameter('identifier', $identifier)
+            ->setParameter('item', $item);
 
         if ($itemOptionIgnore)
         {
@@ -112,11 +110,9 @@ class ItemOptionRepository
             ->where('t.name = :name')
             ->andWhere('io.item = :item')
             ->andWhere('t.locale = :locale')
-            ->setParameters([
-                'name' => $name,
-                'item' => $item,
-                'locale' => $locale
-            ]);
+            ->setParameter('name', $name)
+            ->setParameter('item', $item)
+            ->setParameter('locale', $locale);
 
         if ($itemOptionIgnore)
         {
@@ -139,10 +135,8 @@ class ItemOptionRepository
             ->select('t')
             ->where('t.locale = :locale')
             ->andWhere('t.itemOption = :itemOption')
-            ->setParameters([
-                'itemOption' => $itemOption,
-                'locale' => $locale
-            ]);
+            ->setParameter('itemOption', $itemOption)
+            ->setParameter('locale', $locale);
         return $qb->getQuery()->getOneOrNullResult();
     }
 }

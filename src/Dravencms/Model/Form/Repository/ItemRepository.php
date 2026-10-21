@@ -78,10 +78,8 @@ class ItemRepository
             ->select('i')
             ->where('i.name = :name')
             ->andWhere('i.itemGroup = :itemGroup')
-            ->setParameters([
-                'name' => $name,
-                'itemGroup' => $itemGroup
-            ]);
+            ->setParameter('name', $name)
+            ->setParameter('itemGroup', $itemGroup);
 
         if ($itemIgnore)
         {
@@ -105,10 +103,8 @@ class ItemRepository
             ->select('t')
             ->where('t.locale = :locale')
             ->andWhere('t.item = :item')
-            ->setParameters([
-                'item' => $item,
-                'locale' => $locale
-            ]);
+            ->setParameter('item', $item)
+            ->setParameter('locale', $locale);
         return $qb->getQuery()->getOneOrNullResult();
     }
 

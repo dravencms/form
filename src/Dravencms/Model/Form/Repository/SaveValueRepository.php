@@ -68,9 +68,7 @@ class SaveValueRepository
         $qb = $this->saveValueRepository->createQueryBuilder('sv')
             ->select('sv')
             ->where('sv.name = :name')
-            ->setParameters([
-                'name' => $name
-            ]);
+            ->setParameter('name', $name);
 
         if ($saveValueIgnore)
         {

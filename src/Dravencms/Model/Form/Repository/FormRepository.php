@@ -79,9 +79,7 @@ class FormRepository
         $qb = $this->formRepository->createQueryBuilder('f')
             ->select('f')
             ->where('f.name = :name')
-            ->setParameters([
-                'name' => $name
-            ]);
+            ->setParameter('name', $name);
 
         if ($formIgnore)
         {
@@ -113,10 +111,8 @@ class FormRepository
             ->select('t')
             ->where('t.locale = :locale')
             ->andWhere('t.form = :form')
-            ->setParameters([
-                'form' => $form,
-                'locale' => $locale
-            ]);
+            ->setParameter('form', $form)
+            ->setParameter('locale', $locale);
         return $qb->getQuery()->getOneOrNullResult();
     }
 }
