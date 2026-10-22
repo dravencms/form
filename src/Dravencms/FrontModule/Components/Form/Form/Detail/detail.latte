@@ -24,8 +24,8 @@
     {/foreach}
 
     <div n:if="$formInfo->isAntispam()" class="form-group control-group">
-        <label class="control-label" n:name="recaptcha">{_"Antispam"} <sup>*</sup></label>
-        <div n:name="recaptcha"></div>
+        <label class="control-label" n:name="captcha">{_"Antispam"} <sup>*</sup></label>
+        <div n:name="captcha"></div>
     </div>
     <input n:name="send" class="btn btn-primary">
 </form>
