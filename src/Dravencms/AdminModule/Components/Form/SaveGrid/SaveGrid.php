@@ -156,7 +156,7 @@ class SaveGrid extends BaseControl
             $grid->addAction('delete', '', 'delete!')
                 ->setIcon('trash')
                 ->setTitle('form.global.delete')
-                ->setClass('btn btn-xs btn-danger ajax')
+                ->setClass('btn btn-sm btn-danger ajax')
                 ->setConfirmation(new StringConfirmation('form.global.doYouReallyWantToDeleteRow', 'ip'));
 
             $grid->addGroupAction('form.global.delete')->onSelect[] = [$this, 'gridGroupActionDelete'];

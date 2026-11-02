@@ -96,18 +96,18 @@ class FormGrid extends BaseControl
             $grid->addAction('itemGroup', 'form.form.itemGroups', 'ItemGroup:', ['formId' => 'id'])
                 ->setIcon('bars')
                 ->setTitle('form.form.itemGroups')
-                ->setClass('btn btn-xs btn-default');
+                ->setClass('btn btn-sm btn-outline-secondary');
 
             $grid->addAction('savedData', 'form.form.savedData', 'Save:', ['formId' => 'id'])
                 ->setIcon('bars')
                 ->setTitle('form.form.savedData')
-                ->setClass('btn btn-xs btn-default');
+                ->setClass('btn btn-sm btn-outline-secondary');
 
 
             $grid->addAction('edit', '')
                 ->setIcon('pencil')
                 ->setTitle('form.global.edit')
-                ->setClass('btn btn-xs btn-primary');
+                ->setClass('btn btn-sm btn-primary');
         }
 
         if ($this->user->isAllowed('form', 'delete'))
@@ -115,7 +115,7 @@ class FormGrid extends BaseControl
             $grid->addAction('delete', '', 'delete!')
                 ->setIcon('trash')
                 ->setTitle('form.global.delete')
-                ->setClass('btn btn-xs btn-danger ajax')
+                ->setClass('btn btn-sm btn-danger ajax')
                 ->setConfirmation(new StringConfirmation('form.global.doYouReallyWantToDeleteRow', 'name'));
 
             $grid->addGroupAction('form.global.delete')->onSelect[] = [$this, 'gridGroupActionDelete'];

@@ -104,7 +104,7 @@ class ItemOptionGrid extends BaseControl
             $grid->addAction('edit', '', 'ItemOption:edit', ['itemId' => 'item.id', 'id'])
                 ->setIcon('pencil')
                 ->setTitle('form.global.edit')
-                ->setClass('btn btn-xs btn-primary');
+                ->setClass('btn btn-sm btn-primary');
         }
 
         if ($this->user->isAllowed('form', 'delete'))
@@ -112,7 +112,7 @@ class ItemOptionGrid extends BaseControl
             $grid->addAction('delete', '', 'delete!')
                 ->setIcon('trash')
                 ->setTitle('form.global.delete')
-                ->setClass('btn btn-xs btn-danger ajax')
+                ->setClass('btn btn-sm btn-danger ajax')
                 ->setConfirmation(new StringConfirmation('form.global.doYouReallyWantToDeleteRow', 'identifier'));
 
             $grid->addGroupAction('form.global.delete')->onSelect[] = [$this, 'handleDelete'];

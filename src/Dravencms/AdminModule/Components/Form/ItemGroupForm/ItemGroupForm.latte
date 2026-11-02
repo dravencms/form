@@ -1,11 +1,11 @@
-<form n:name="form" class="panel form-horizontal">
+<form n:name="form" class="card">
     <ul class="alert alert-danger" n:if="$form->hasErrors()">
         <li n:foreach="$form->errors as $error">{$error}</li>
     </ul>
-    <div class="panel-body">
+    <div class="card-body">
         <ul class="nav nav-tabs" role="tablist">
-            <li n:foreach="$activeLocales as $activeLocale" role="presentation" n:class="$activeLocale->isDefault() ? active"><a href="#{$activeLocale->getLanguageCode()}" aria-controls="home"
-                                                                                                                                 role="tab" data-toggle="tab"><span
+            <li n:foreach="$activeLocales as $activeLocale" role="presentation" class="nav-item"><a n:class="$activeLocale->isDefault() ? active, nav-link" href="#{$activeLocale->getLanguageCode()}" aria-controls="home"
+                                                                                                                                 role="tab" data-bs-toggle="tab"><span
                             class="flag-icon flag-icon-{$activeLocale->getCountry()->getCode()|lower}"></span> {$activeLocale->getName()}</a></li>
         </ul>
         <div class="tab-content">
@@ -15,8 +15,8 @@
                         <legend>{$activeLocale->getName()}</legend>
                         <div class="row">
                             <div class="col-sm-12">
-                                <div class="form-group no-margin-hr">
-                                    <label class="control-label" n:name="name">{_"form.itemGroup.name"}</label>
+                                <div class="mb-3">
+                                    <label class="form-label" n:name="name">{_"form.itemGroup.name"}</label>
                                     <input type="text" n:name="name" autofocus="autofocus" class="form-control">
                                 </div>
                             </div><!-- col-sm-12 -->
@@ -28,8 +28,8 @@
 
         <div class="row">
             <div class="col-sm-12">
-                <div class="form-group no-margin-hr">
-                    <label class="control-label" n:name="identifier">{_"form.itemGroup.identifier"}</label>
+                <div class="mb-3">
+                    <label class="form-label" n:name="identifier">{_"form.itemGroup.identifier"}</label>
                     <input type="text" n:name="identifier" class="form-control">
                 </div>
             </div>
@@ -37,15 +37,15 @@
 
         <div class="row">
             <div class="col-sm-12">
-                <div class="checkbox">
+                <div class="form-check">
                     <label>
-                        <input type="checkbox" n:name="isShowName" class="px"> <span class="lbl">{_"form.itemGroup.showGroupName"}</span>
+                        <input type="checkbox" n:name="isShowName" class="form-check-input"> <span class="form-check-label">{_"form.itemGroup.showGroupName"}</span>
                     </label>
                 </div>
             </div>
         </div>
     </div>
-    <div class="panel-footer">
+    <div class="card-footer">
         <input type="submit" n:name="send" class="btn btn-success button" value="{_"from.global.save"}">
     </div>
 </form>

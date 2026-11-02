@@ -128,7 +128,7 @@ class ItemGrid extends BaseControl
         $grid->addAction('itemOption', 'form.item.options', 'ItemOption:', ['itemId' => 'id'])
             ->setIcon('bars')
             ->setTitle('form.item.options')
-            ->setClass('btn btn-xs btn-default');
+            ->setClass('btn btn-sm btn-outline-secondary');
 
         $grid->allowRowsAction('itemOption', function($item) {
             $multiOptions = [Item::TYPE_SELECT, Item::TYPE_MULTISELECT, Item::TYPE_RADIOLIST, Item::TYPE_CHECKBOXLIST];
@@ -140,7 +140,7 @@ class ItemGrid extends BaseControl
             $grid->addAction('edit', '', 'Item:edit', ['itemGroupId' => 'itemGroup.id', 'id'])
                 ->setIcon('pencil')
                 ->setTitle('form.global.edit')
-                ->setClass('btn btn-xs btn-primary');
+                ->setClass('btn btn-sm btn-primary');
         }
 
         if ($this->user->isAllowed('form', 'delete'))
@@ -148,7 +148,7 @@ class ItemGrid extends BaseControl
             $grid->addAction('delete', '', 'delete!')
                 ->setIcon('trash')
                 ->setTitle('form.global.delete')
-                ->setClass('btn btn-xs btn-danger ajax')
+                ->setClass('btn btn-sm btn-danger ajax')
                 ->setConfirmation(new StringConfirmation('form.global.doYouReallyWantToDeleteRow', 'name'));
 
             $grid->addGroupAction('form.global.delete')->onSelect[] = [$this, 'handleDelete'];
