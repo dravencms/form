@@ -81,34 +81,6 @@ class FormForm extends BaseControl
         $this->user = $user;
         $this->formRepository = $formRepository;
         $this->localeRepository = $localeRepository;
-
-        if ($this->form) {
-            $defaults = [
-                'name' => $this->form->getName(),
-                'email' => $this->form->getEmail(),
-                'hookUrl' => $this->form->getHookUrl(),
-                'isActive' => $this->form->isActive(),
-                'isAntispam' => $this->form->isAntispam(),
-                'isSaveToDatabase' => $this->form->isSaveToDatabase(),
-                'isSendFormToDetectedEmail' => $this->form->isSendFormToDetectedEmail(),
-            ];
-
-            foreach ($this->form->getTranslations() AS $translation)
-            {
-                $defaults[$translation->getLocale()->getLanguageCode()]['sendButtonValue'] = $translation->getSendButtonValue();
-                $defaults[$translation->getLocale()->getLanguageCode()]['successMessage'] = $translation->getSuccessMessage();
-                $defaults[$translation->getLocale()->getLanguageCode()]['latteTemplate'] = $translation->getLatteTemplate();
-            }
-        }
-        else{
-            $defaults = [
-                'isActive' => true,
-                'isSaveToDatabase' => true,
-                'isSendFormToDetectedEmail' => true
-            ];
-        }
-
-        $this['form']->setDefaults($defaults);
     }
 
     /**
@@ -154,6 +126,34 @@ class FormForm extends BaseControl
 
         $form->onValidate[] = [$this, 'editFormValidate'];
         $form->onSuccess[] = [$this, 'editFormSucceeded'];
+
+        if ($this->form) {
+            $defaults = [
+                'name' => $this->form->getName(),
+                'email' => $this->form->getEmail(),
+                'hookUrl' => $this->form->getHookUrl(),
+                'isActive' => $this->form->isActive(),
+                'isAntispam' => $this->form->isAntispam(),
+                'isSaveToDatabase' => $this->form->isSaveToDatabase(),
+                'isSendFormToDetectedEmail' => $this->form->isSendFormToDetectedEmail(),
+            ];
+
+            foreach ($this->form->getTranslations() AS $translation)
+            {
+                $defaults[$translation->getLocale()->getLanguageCode()]['sendButtonValue'] = $translation->getSendButtonValue();
+                $defaults[$translation->getLocale()->getLanguageCode()]['successMessage'] = $translation->getSuccessMessage();
+                $defaults[$translation->getLocale()->getLanguageCode()]['latteTemplate'] = $translation->getLatteTemplate();
+            }
+        }
+        else{
+            $defaults = [
+                'isActive' => true,
+                'isSaveToDatabase' => true,
+                'isSendFormToDetectedEmail' => true
+            ];
+        }
+
+        $form->setDefaults($defaults);
 
         return $form;
     }

@@ -7,6 +7,7 @@ namespace Dravencms\Model\Form\Fixtures;
 
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Dravencms\Model\Admin\Entities\Menu;
+use Dravencms\Model\User\Entities\AclOperation;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -21,7 +22,7 @@ class AdminMenuFixtures extends AbstractFixture implements DependentFixtureInter
     {
         $menu = $manager->getRepository(Menu::class);
 
-        $adminMenu = new Menu('Forms', ':Admin:Form:Form', 'fa-credit-card', $this->getReference('user-acl-operation-form-edit'));
+        $adminMenu = new Menu('Forms', ':Admin:Form:Form', 'fa-credit-card', $this->getReference('user-acl-operation-form-edit', AclOperation::class));
 
         if ($parent = $menu->findOneBy(['name' => 'Site items']))
         {

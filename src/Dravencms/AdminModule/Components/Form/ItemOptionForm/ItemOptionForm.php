@@ -90,20 +90,6 @@ class ItemOptionForm extends BaseControl
         $this->user = $user;
         $this->itemOptionRepository = $itemOptionRepository;
         $this->localeRepository = $localeRepository;
-
-        if ($this->itemOption) {
-            $defaults = [
-                'position' => $this->itemOption->getPosition(),
-                'identifier' => $this->itemOption->getIdentifier()
-            ];
-
-            foreach ($this->itemOption->getTranslations() AS $translation)
-            {
-                $defaults[$translation->getLocale()->getLanguageCode()]['name'] = $translation->getName();
-            }
-
-            $this['form']->setDefaults($defaults);
-        }
     }
 
     /**
@@ -131,6 +117,20 @@ class ItemOptionForm extends BaseControl
 
         $form->onValidate[] = [$this, 'editFormValidate'];
         $form->onSuccess[] = [$this, 'editFormSucceeded'];
+
+        if ($this->itemOption) {
+            $defaults = [
+                'position' => $this->itemOption->getPosition(),
+                'identifier' => $this->itemOption->getIdentifier()
+            ];
+
+            foreach ($this->itemOption->getTranslations() AS $translation)
+            {
+                $defaults[$translation->getLocale()->getLanguageCode()]['name'] = $translation->getName();
+            }
+
+            $form->setDefaults($defaults);
+        }
 
         return $form;
     }

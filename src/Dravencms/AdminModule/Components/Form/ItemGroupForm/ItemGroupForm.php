@@ -89,25 +89,6 @@ class ItemGroupForm extends BaseControl
         $this->entityManager = $entityManager;
         $this->itemGroupRepository = $itemGroupRepository;
         $this->localeRepository = $localeRepository;
-
-        if ($this->itemGroup) {
-            $defaults = [
-                'isShowName' => $this->itemGroup->isShowName(),
-                'identifier' => $this->itemGroup->getIdentifier()
-            ];
-
-            foreach ($this->itemGroup->getTranslations() AS $translation)
-            {
-                $defaults[$translation->getLocale()->getLanguageCode()]['name'] = $translation->getName();
-            }
-        }
-        else{
-            $defaults = [
-                'isShowName' => false
-            ];
-        }
-
-        $this['form']->setDefaults($defaults);
     }
 
     /**
@@ -133,6 +114,25 @@ class ItemGroupForm extends BaseControl
 
         $form->onValidate[] = [$this, 'editFormValidate'];
         $form->onSuccess[] = [$this, 'editFormSucceeded'];
+
+        if ($this->itemGroup) {
+            $defaults = [
+                'isShowName' => $this->itemGroup->isShowName(),
+                'identifier' => $this->itemGroup->getIdentifier()
+            ];
+
+            foreach ($this->itemGroup->getTranslations() AS $translation)
+            {
+                $defaults[$translation->getLocale()->getLanguageCode()]['name'] = $translation->getName();
+            }
+        }
+        else{
+            $defaults = [
+                'isShowName' => false
+            ];
+        }
+
+        $form->setDefaults($defaults);
 
         return $form;
     }

@@ -89,31 +89,6 @@ class ItemForm extends BaseControl
         $this->entityManager = $entityManager;
         $this->itemRepository = $itemRepository;
         $this->localeRepository = $localeRepository;
-
-        if ($this->item) {
-            $defaults = [
-                'name' => $this->item->getName(),
-                'type' => $this->item->getType(),
-                'minValue' => $this->item->getMinValue(),
-                'maxValue' => $this->item->getMaxValue(),
-                'position' => $this->item->getPosition()
-            ];
-
-            foreach ($this->item->getTranslations() AS $translation)
-            {
-                $defaults[$translation->getLocale()->getLanguageCode()]['title'] = $translation->getTitle();
-                $defaults[$translation->getLocale()->getLanguageCode()]['defaultValue'] = $translation->getDefaultValue();
-                $defaults[$translation->getLocale()->getLanguageCode()]['placeholder'] = $translation->getPlaceholder();
-                $defaults[$translation->getLocale()->getLanguageCode()]['required'] = $translation->getRequired();
-            }
-        }
-        else{
-            $defaults = [
-                'isActive' => true
-            ];
-        }
-
-        $this['form']->setDefaults($defaults);
     }
 
     /**
@@ -163,6 +138,31 @@ class ItemForm extends BaseControl
 
         $form->onValidate[] = [$this, 'editFormValidate'];
         $form->onSuccess[] = [$this, 'editFormSucceeded'];
+
+        if ($this->item) {
+            $defaults = [
+                'name' => $this->item->getName(),
+                'type' => $this->item->getType(),
+                'minValue' => $this->item->getMinValue(),
+                'maxValue' => $this->item->getMaxValue(),
+                'position' => $this->item->getPosition()
+            ];
+
+            foreach ($this->item->getTranslations() AS $translation)
+            {
+                $defaults[$translation->getLocale()->getLanguageCode()]['title'] = $translation->getTitle();
+                $defaults[$translation->getLocale()->getLanguageCode()]['defaultValue'] = $translation->getDefaultValue();
+                $defaults[$translation->getLocale()->getLanguageCode()]['placeholder'] = $translation->getPlaceholder();
+                $defaults[$translation->getLocale()->getLanguageCode()]['required'] = $translation->getRequired();
+            }
+        }
+        else{
+            $defaults = [
+                'isActive' => true
+            ];
+        }
+
+        $form->setDefaults($defaults);
 
         return $form;
     }
