@@ -2,7 +2,7 @@
 
 {block #content}
     <p n:if="isAllowed('form', 'edit')">
-        <a n:href="ItemOption:edit, itemId => $item->getId()" class="btn btn-primary"><i class="fa fa-plus"></i> {_"New item option"}</a>
+        <a n:href="ItemOption:edit, itemId => $item->getId()" class="btn btn-primary"><i class="fa fa-plus"></i> {_'form.admin.title.newOption'}</a>
     </p>
     {control gridItemOption}
 {/block}

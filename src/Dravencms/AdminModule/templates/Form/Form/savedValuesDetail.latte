@@ -2,10 +2,10 @@
 
 {block content}
     <p>
-        <strong>{_"Date:"}</strong> {$savedValue->created|date:'d.m.Y H:i:s'}
+        <strong>{_'form.saved.dateLabel'}</strong> {$savedValue->created|date:'d.m.Y H:i:s'}
     </p>
     <p>
-        <strong>{_"IP:"}</strong> {$savedValue->ip} ({gethostbyaddr($savedValue->ip)})
+        <strong>{_'form.saved.ipLabel'}</strong> {$savedValue->ip} ({gethostbyaddr($savedValue->ip)})
     </p>
     <p n:foreach="$values as $key => $value">
         {var $parsed = explode('_', $key)}
@@ -15,7 +15,7 @@
             {if array_key_exists($value, $form[$parsed[1]]['values'])}
                 {$form[$parsed[1]]['values'][$value]}
             {else}
-                {_"Not found"}
+                {_'form.saved.notFound'}
             {/if}
         {else}
             {$value}

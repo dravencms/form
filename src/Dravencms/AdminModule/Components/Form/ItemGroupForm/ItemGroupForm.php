@@ -110,7 +110,7 @@ class ItemGroupForm extends BaseControl
 
         $form->addCheckbox('isShowName');
 
-        $form->addSubmit('send');
+        $form->addSubmit('send', 'form.global.save');
 
         $form->onValidate[] = [$this, 'editFormValidate'];
         $form->onSuccess[] = [$this, 'editFormSucceeded'];

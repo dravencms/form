@@ -38,7 +38,7 @@ class FormPresenter extends SecuredPresenter
     #[\Dravencms\User\Attributes\IsAllowed('form', 'edit')]
     public function renderDefault(): void
     {
-        $this->template->h1 = 'Forms';
+        $this->template->h1 = $this->translator->translate('form.admin.title.forms');
     }
 
     /**
@@ -57,9 +57,9 @@ class FormPresenter extends SecuredPresenter
 
             $this->form = $form;
 
-            $this->template->h1 = 'Form edit';
+            $this->template->h1 = $this->translator->translate('form.admin.title.editForm');
         } else {
-            $this->template->h1 = 'New form';
+            $this->template->h1 = $this->translator->translate('form.admin.title.newForm');
         }
     }
 
@@ -71,7 +71,7 @@ class FormPresenter extends SecuredPresenter
         $control = $this->formFormFactory->create($this->form);
         $control->onSuccess[] = function()
         {
-            $this->flashMessage('Form has been successfully saved', 'alert-success');
+            $this->flashMessage($this->translator->translate('form.admin.flash.formSaved'), 'alert-success');
             $this->redirect('Form:');
         };
         return $control;
@@ -85,7 +85,7 @@ class FormPresenter extends SecuredPresenter
         $control = $this->formGridFactory->create();
         $control->onDelete[] = function()
         {
-            $this->flashMessage('Form has been successfully deleted', 'alert-success');
+            $this->flashMessage($this->translator->translate('form.admin.flash.formDeleted'), 'alert-success');
             $this->redirect('Form:');
         };
         return $control;

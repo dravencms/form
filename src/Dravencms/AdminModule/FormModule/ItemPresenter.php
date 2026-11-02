@@ -51,7 +51,7 @@ class ItemPresenter extends SecuredPresenter
     {
         $this->itemGroup = $this->itemGroupRepository->getOneById($itemGroupId);
         $this->template->itemGroup = $this->itemGroup;
-        $this->template->h1 = 'Items';
+        $this->template->h1 = $this->translator->translate('form.admin.title.items');
     }
 
     /**
@@ -73,9 +73,9 @@ class ItemPresenter extends SecuredPresenter
 
             $this->item = $item;
 
-            $this->template->h1 = 'Item edit';
+            $this->template->h1 = $this->translator->translate('form.admin.title.editItem');
         } else {
-            $this->template->h1 = 'New item';
+            $this->template->h1 = $this->translator->translate('form.admin.title.newItem');
         }
     }
 
@@ -87,7 +87,7 @@ class ItemPresenter extends SecuredPresenter
         $control = $this->itemGridFactory->create($this->itemGroup);
         $control->onDelete[] = function()
         {
-            $this->flashMessage('Item has been successfully deleted', 'alert-success');
+            $this->flashMessage($this->translator->translate('form.admin.flash.itemDeleted'), 'alert-success');
             $this->redirect('Item:', ['itemGroupId' => $this->itemGroup->getId()]);
         };
         return $control;
@@ -101,7 +101,7 @@ class ItemPresenter extends SecuredPresenter
         $control = $this->itemFormFactory->create($this->itemGroup, $this->item);
         $control->onSuccess[] = function()
         {
-            $this->flashMessage('Item has been successfully saved', 'alert-success');
+            $this->flashMessage($this->translator->translate('form.admin.flash.itemSaved'), 'alert-success');
             $this->redirect('Item:', ['itemGroupId' => $this->itemGroup->getId()]);
         };
         return $control;

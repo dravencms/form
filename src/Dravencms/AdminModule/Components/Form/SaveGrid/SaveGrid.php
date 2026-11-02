@@ -124,7 +124,7 @@ class SaveGrid extends BaseControl
             foreach ($itemGroup->getItems() AS $item)
             {
                 $grid->addColumnText('formItem_'.$item->getId(), $item->getName())
-                    ->setRenderer(function($row) use ($item){
+                    ->setRenderer(function($row) use ($item, $grid){
                         /** @var Save $row */
                         $dataRow = $this->saveValueRepository->getByItemAndSave($item, $row);
                         if (!$dataRow) {
@@ -141,7 +141,7 @@ class SaveGrid extends BaseControl
                                 }
                             }
 
-                            return 'form.saved.valueIsNotInTheList';
+                            return $grid->getTranslator()->translate('form.saved.valueIsNotInTheList');
                         }
                         else
                         {

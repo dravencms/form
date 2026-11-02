@@ -32,7 +32,7 @@ class SavePresenter extends SecuredPresenter
     public function actionDefault(int $formId): void
     {
         $this->form = $this->formRepository->getOneById($formId);
-        $this->template->h1 = 'Forms';
+        $this->template->h1 = $this->translator->translate('form.admin.title.forms');
     }
 
     /**
@@ -43,7 +43,7 @@ class SavePresenter extends SecuredPresenter
         $control = $this->saveGridFactory->create($this->form);
         $control->onDelete[] = function()
         {
-            $this->flashMessage('Saved form been successfully deleted', 'alert-success');
+            $this->flashMessage($this->translator->translate('form.admin.flash.savedDeleted'), 'alert-success');
             $this->redirect('Save:', ['formId' => $this->form->getId()]);
         };
         return $control;

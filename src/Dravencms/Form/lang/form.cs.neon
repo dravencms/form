@@ -25,7 +25,7 @@ form:
     isSendFormToDetectedEmail: "Poslat data na detekované emaily"
     pleaseEnterFormName: "Zadejte prosím název formuláře."
     formNameIsTooLong: "Název formuláře je příliš dlouhý."
-    pleaseEnterSendButtonText: "Zadejte prosím test tlačítka odeslat."
+    pleaseEnterSendButtonText: "Zadejte prosím text tlačítka odeslat."
     sendButtonTextIsTooLong: "Text tlačítka odeslat je příliš dlouhý."
     pleaseEnterSendSuccessMessage: "Zadejte prosím text úspěchu."
     successMessageIsTooLong: "Text úspěchu je příliš dlouhý."
@@ -76,7 +76,7 @@ itemGroup:
 itemOption:
     name: "Název"
     identifier: "Identifikátor"
-    pleaseEnterItemOptionIdentifier: "Zadejte prosím idetifikátor možnosti."
+    pleaseEnterItemOptionIdentifier: "Zadejte prosím identifikátor možnosti."
     position: "Pozice"
     pleaseEnterItemOptionName: "Zadejte prosím název možnosti."
     itemOptionNameIsTooLong: "Název možnosti je příliš dlouhý."
@@ -89,4 +89,51 @@ saved:
     createdAt: "Vytvořeno"
     ip: "IP adresa"
     userAgent: "User Agent"
+    dateLabel: 'Datum:'
+    ipLabel: 'IP:'
+    notFound: 'Nenalezeno'
     valueIsNotInTheList: "Hodnota není v seznamu"
+
+admin:
+	title:
+		forms: Formuláře
+		newForm: Nový formulář
+		editForm: Upravit formulář
+		groups: Skupiny položek
+		newGroup: Nová skupina položek
+		editGroup: Upravit skupinu položek
+		items: Položky
+		newItem: Nová položka
+		editItem: Upravit položku
+		options: Možnosti položky
+		newOption: Nová možnost položky
+		editOption: Upravit možnost položky
+
+	flash:
+		formSaved: Formulář byl uložen.
+		formDeleted: Formulář byl smazán.
+		groupSaved: Skupina položek byla uložena.
+		groupDeleted: Skupina položek byla smazána.
+		itemSaved: Položka byla uložena.
+		itemDeleted: Položka byla smazána.
+		optionSaved: Možnost položky byla uložena.
+		optionDeleted: Možnost položky byla smazána.
+		savedDeleted: Uložené odeslání formuláře bylo smazáno.
+
+	validation:
+		titleRequired: Zadejte titulek položky.
+		integer: Zadejte celé číslo.
+
+itemType:
+	text: Textové pole
+	textarea: Víceřádkový text
+	number: Číselné pole
+	email: E-mail
+	date: Datum
+	url: Odkaz
+	tel: Telefon
+	select: Výběrový seznam
+	multiselect: Vícenásobný výběr
+	radiolist: Přepínače
+	checkbox: Zaškrtávací políčko
+	checkboxlist: Seznam zaškrtávacích políček

@@ -2,7 +2,7 @@
 
 {block #content}
     <p n:if="isAllowed('form', 'edit')">
-        <a n:href="ItemGroup:edit, formId => $form->getId()" class="btn btn-primary"><i class="fa fa-plus"></i> {_"New item group"}</a>
+        <a n:href="ItemGroup:edit, formId => $form->getId()" class="btn btn-primary"><i class="fa fa-plus"></i> {_'form.admin.title.newGroup'}</a>
     </p>
     {control gridItemGroup}
 {/block}

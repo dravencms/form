@@ -51,7 +51,7 @@ class ItemOptionPresenter extends SecuredPresenter
     {
         $this->item = $this->formItemRepository->getOneById($itemId);
         $this->template->item = $this->item;
-        $this->template->h1 = 'Item options';
+        $this->template->h1 = $this->translator->translate('form.admin.title.options');
     }
     
     /**
@@ -72,9 +72,9 @@ class ItemOptionPresenter extends SecuredPresenter
 
             $this->itemOption = $itemOption;
 
-            $this->template->h1 = 'Item option edit';
+            $this->template->h1 = $this->translator->translate('form.admin.title.editOption');
         } else {
-            $this->template->h1 = 'New item option';
+            $this->template->h1 = $this->translator->translate('form.admin.title.newOption');
         }
     }
 
@@ -86,7 +86,7 @@ class ItemOptionPresenter extends SecuredPresenter
         $control = $this->itemOptionGridFactory->create($this->item);
         $control->onDelete[] = function()
         {
-            $this->flashMessage('Item option has been successfully deleted', 'alert-success');
+            $this->flashMessage($this->translator->translate('form.admin.flash.optionDeleted'), 'alert-success');
             $this->redirect('ItemOption:', ['itemId' => $this->item->getId()]);
         };
         return $control;
@@ -100,7 +100,7 @@ class ItemOptionPresenter extends SecuredPresenter
         $control = $this->itemOptionFormFactory->create($this->item, $this->itemOption);
         $control->onSuccess[] = function()
         {
-            $this->flashMessage('Item option has been successfully saved', 'alert-success');
+            $this->flashMessage($this->translator->translate('form.admin.flash.optionSaved'), 'alert-success');
             $this->redirect('ItemOption:', ['itemId' => $this->item->getId()]);
         };
         return $control;

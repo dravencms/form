@@ -117,9 +117,9 @@ class ItemGrid extends BaseControl
                 return 'formItem_'.$row->getId();
             });
 
-        $grid->addColumnText('type', 'form.formItem.type')
-            ->setRenderer(function ($row) {
-                return Item::$typeList[$row->getType()];
+        $grid->addColumnText('type', 'form.item.type')
+            ->setRenderer(function ($row) use ($grid) {
+                return $grid->getTranslator()->translate('form.itemType.' . $row->getType());
             })
             ->setFilterText();
 

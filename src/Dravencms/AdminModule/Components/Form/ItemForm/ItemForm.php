@@ -110,7 +110,7 @@ class ItemForm extends BaseControl
                 ->addRule(Form::MAX_LENGTH, 'form.item.placeholderIsTooLong', 255);
 
             $container->addText('title')
-                ->setRequired(true)
+                ->setRequired('form.admin.validation.titleRequired')
                 ->addRule(Form::MAX_LENGTH, 'form.item.titleIsTooLong', 255);
 
             $container->addText('required')
@@ -122,19 +122,23 @@ class ItemForm extends BaseControl
             ->setRequired('form.item.pleaseEnterFormItemName')
             ->addRule(Form::MAX_LENGTH, 'form.item.formItemNameIsTooLong', 255);
 
-        $form->addSelect('type', null, Item::$typeList);
+        $types = [];
+        foreach (array_keys(Item::$typeList) as $type) {
+            $types[$type] = 'form.itemType.' . $type;
+        }
+        $form->addSelect('type', null, $types);
 
-        $form->addInteger('minValue')
-            ->setType('number');
+        $form->addText('minValue')->setNullable()->addRule(Form::INTEGER, 'form.admin.validation.integer')
+            ->setHtmlType('number');
 
-        $form->addInteger('maxValue')
-            ->setType('number');
+        $form->addText('maxValue')->setNullable()->addRule(Form::INTEGER, 'form.admin.validation.integer')
+            ->setHtmlType('number');
 
-        $form->addInteger('position')
+        $form->addText('position')->setNullable()->addRule(Form::INTEGER, 'form.admin.validation.integer')
             ->setDisabled(is_null($this->item))
-            ->setType('number');
+            ->setHtmlType('number');
 
-        $form->addSubmit('send');
+        $form->addSubmit('send', 'form.global.save');
 
         $form->onValidate[] = [$this, 'editFormValidate'];
         $form->onSuccess[] = [$this, 'editFormSucceeded'];

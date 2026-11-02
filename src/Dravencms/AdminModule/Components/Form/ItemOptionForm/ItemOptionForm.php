@@ -111,9 +111,9 @@ class ItemOptionForm extends BaseControl
 
         $form->addText('position')
             ->setDisabled(is_null($this->itemOption))
-            ->setType('number');
+            ->setHtmlType('number');
 
-        $form->addSubmit('send');
+        $form->addSubmit('send', 'form.global.save');
 
         $form->onValidate[] = [$this, 'editFormValidate'];
         $form->onSuccess[] = [$this, 'editFormSucceeded'];

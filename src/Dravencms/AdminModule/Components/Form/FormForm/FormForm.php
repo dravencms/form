@@ -122,7 +122,7 @@ class FormForm extends BaseControl
         $form->addCheckbox('isSaveToDatabase');
         $form->addCheckbox('isSendFormToDetectedEmail');
 
-        $form->addSubmit('send');
+        $form->addSubmit('send', 'form.global.save');
 
         $form->onValidate[] = [$this, 'editFormValidate'];
         $form->onSuccess[] = [$this, 'editFormSucceeded'];

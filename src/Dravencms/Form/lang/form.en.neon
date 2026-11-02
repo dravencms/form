@@ -23,7 +23,7 @@ form:
     isAntispamProtected: "Antispam protected"
     isSaveFormDataToDatabase: "Save form data to database"
     isSendFormToDetectedEmail: "Send form data to detected email"    
-    pleaseEnterFormName: "Please enter form name."
+    pleaseEnterFormName: "Please enter a form name."
     formNameIsTooLong: "Form name is too long."
     pleaseEnterSendButtonText: "Please enter send button text."
     sendButtonTextIsTooLong: "Send button text is too long."
@@ -89,4 +89,51 @@ saved:
     createdAt: "Created"
     ip: "IP address"
     userAgent: "User Agent"
+    dateLabel: 'Date:'
+    ipLabel: 'IP:'
+    notFound: 'Not found'
     valueIsNotInTheList: "Value is not in the list"
+
+admin:
+	title:
+		forms: Forms
+		newForm: New form
+		editForm: Edit form
+		groups: Item groups
+		newGroup: New item group
+		editGroup: Edit item group
+		items: Items
+		newItem: New item
+		editItem: Edit item
+		options: Item options
+		newOption: New item option
+		editOption: Edit item option
+
+	flash:
+		formSaved: The form has been saved.
+		formDeleted: The form has been deleted.
+		groupSaved: The item group has been saved.
+		groupDeleted: The item group has been deleted.
+		itemSaved: The item has been saved.
+		itemDeleted: The item has been deleted.
+		optionSaved: The item option has been saved.
+		optionDeleted: The item option has been deleted.
+		savedDeleted: The saved form submission has been deleted.
+
+	validation:
+		titleRequired: Please enter an item title.
+		integer: Please enter an integer.
+
+itemType:
+	text: Text input
+	textarea: Text area
+	number: Number input
+	email: Email input
+	date: Date input
+	url: URL input
+	tel: Telephone input
+	select: Select list
+	multiselect: Multi-select list
+	radiolist: Radio list
+	checkbox: Checkbox
+	checkboxlist: Checkbox list
