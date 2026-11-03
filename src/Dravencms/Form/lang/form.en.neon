@@ -140,3 +140,11 @@ itemType:
 
 menu:
     overview: 'Forms'
+
+acl:
+    resource: 'Forms'
+    permissions:
+        edit:
+            label: 'Manage forms'
+        delete:
+            label: 'Delete forms'

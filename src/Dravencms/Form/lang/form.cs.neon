@@ -140,3 +140,11 @@ itemType:
 
 menu:
     overview: 'Formuláře'
+
+acl:
+    resource: 'Formuláře'
+    permissions:
+        edit:
+            label: 'Spravovat formuláře'
+        delete:
+            label: 'Mazat formuláře'
