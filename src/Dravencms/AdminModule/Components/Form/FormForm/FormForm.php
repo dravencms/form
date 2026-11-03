@@ -179,6 +179,7 @@ class FormForm extends BaseControl
      */
     public function editFormSucceeded(AForm $form): void
     {
+        $this->requirePermission('form', 'edit');
         $values = $form->getValues();
 
         if ($this->form) {

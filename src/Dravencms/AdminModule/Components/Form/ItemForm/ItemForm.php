@@ -193,6 +193,7 @@ class ItemForm extends BaseControl
      */
     public function editFormSucceeded(Form $item): void
     {
+        $this->requirePermission('form', 'edit');
         $values = $item->getValues();
 
         if ($this->item) {

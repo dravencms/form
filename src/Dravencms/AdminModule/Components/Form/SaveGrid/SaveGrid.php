@@ -105,6 +105,7 @@ class SaveGrid extends BaseControl
     {
         /** @var Grid $grid */
         $grid = $this->baseGridFactory->create($this, $name);
+        $grid->setWritePermission('form', 'edit');
 
         $grid->setDataSource($this->saveRepository->getSaveQueryBuilder($this->form));
 
@@ -184,8 +185,10 @@ class SaveGrid extends BaseControl
      * @throws \Exception
      */
     #[\Dravencms\User\Attributes\IsAllowed('form', 'delete')]
+    #[\Dravencms\Security\Mutation]
     public function handleDelete($id): void
     {
+        $this->requirePermission('form', 'delete');
         $saves = $this->saveRepository->getById($id);
         foreach ($saves AS $save)
         {

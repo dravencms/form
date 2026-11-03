@@ -20,6 +20,7 @@ use Dravencms\Model\Form\Repository\ItemGroupRepository;
 use Dravencms\Model\Form\Repository\ItemOptionRepository;
 use Dravencms\Model\Form\Repository\ItemRepository;
 
+#[\Dravencms\User\Attributes\IsAllowed('form', 'edit')]
 class ItemPresenter extends SecuredPresenter
 {
     /** @var ItemOptionRepository @inject */

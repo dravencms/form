@@ -82,6 +82,7 @@ class FormGrid extends BaseControl
     {
         /** @var Grid $grid */
         $grid = $this->baseGridFactory->create($this, $name);
+        $grid->setWritePermission('form', 'edit');
 
         $grid->setDataSource($this->formRepository->getFormQueryBuilder());
 
@@ -143,8 +144,10 @@ class FormGrid extends BaseControl
      * @throws \Exception
      */
     #[\Dravencms\User\Attributes\IsAllowed('form', 'delete')]
+    #[\Dravencms\Security\Mutation]
     public function handleDelete($id): void
     {
+        $this->requirePermission('form', 'delete');
         $forms = $this->formRepository->getById($id);
         foreach ($forms AS $form)
         {

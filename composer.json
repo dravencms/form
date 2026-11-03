@@ -20,7 +20,8 @@
     "dravencms/templated-email": "^v1.1",
     "dravencms/tempnam": "^1.0",
     "php": "^8.4",
-    "dravencms/database": "^0.2.4"
+    "dravencms/database": "^0.2.4",
+    "dravencms/application": "^0.3"
   },
   "suggest": {
     "dravencms/structure": "Allows form components to be used in cms"
@@ -39,6 +40,7 @@
     }
   },
   "conflict": {
-    "dravencms/user": "<3.0"
+    "dravencms/user": "<3.1",
+    "dravencms/admin": "<3.2"
   }
 }

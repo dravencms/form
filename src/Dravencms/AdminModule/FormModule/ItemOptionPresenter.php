@@ -23,6 +23,7 @@ use Dravencms\Model\Form\Repository\ItemRepository;
  * Class ItemOptionPresenter
  * @package AdminModule\FormModule
  */
+#[\Dravencms\User\Attributes\IsAllowed('form', 'edit')]
 class ItemOptionPresenter extends SecuredPresenter
 {
     /** @var ItemRepository @inject */

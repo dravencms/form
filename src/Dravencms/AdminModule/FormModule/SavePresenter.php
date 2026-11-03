@@ -14,6 +14,7 @@ use Dravencms\AdminModule\SecuredPresenter;
 use Dravencms\Model\Form\Entities\Form;
 use Dravencms\Model\Form\Repository\FormRepository;
 
+#[\Dravencms\User\Attributes\IsAllowed('form', 'edit')]
 class SavePresenter extends SecuredPresenter
 {
     /** @var FormRepository @inject */

@@ -19,6 +19,7 @@ use Dravencms\Model\Form\Entities\ItemGroup;
 use Dravencms\Model\Form\Repository\FormRepository;
 use Dravencms\Model\Form\Repository\ItemGroupRepository;
 
+#[\Dravencms\User\Attributes\IsAllowed('form', 'edit')]
 class ItemGroupPresenter extends SecuredPresenter
 {
     /** @var FormRepository @inject */

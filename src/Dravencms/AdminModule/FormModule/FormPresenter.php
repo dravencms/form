@@ -18,6 +18,7 @@ use Dravencms\Model\Form\Entities\Form;
 use Dravencms\Model\Form\Repository\FormRepository;
 use Dravencms\Model\Form\Repository\ItemRepository;
 
+#[\Dravencms\User\Attributes\IsAllowed('form', 'edit')]
 class FormPresenter extends SecuredPresenter
 {
     /** @var FormRepository @inject */

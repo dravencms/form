@@ -104,6 +104,7 @@ class ItemGroupGrid extends BaseControl
     {
         /** @var Grid $grid */
         $grid = $this->baseGridFactory->create($this, $name);
+        $grid->setWritePermission('form', 'edit');
 
         $grid->setDataSource($this->itemGroupRepository->getItemGroupQueryBuilder($this->form));
         $grid->setDefaultSort(['position' => 'ASC']);
@@ -150,8 +151,10 @@ class ItemGroupGrid extends BaseControl
      * @throws \Exception
      */
     #[\Dravencms\User\Attributes\IsAllowed('form', 'delete')]
+    #[\Dravencms\Security\Mutation]
     public function handleDelete($id): void
     {
+        $this->requirePermission('form', 'delete');
         $itemGroups = $this->itemGroupRepository->getById($id);
         foreach ($itemGroups AS $itemGroup)
         {
@@ -171,16 +174,22 @@ class ItemGroupGrid extends BaseControl
         $this->onDelete();
     }
 
+    #[\Dravencms\User\Attributes\IsAllowed('form', 'edit')]
+    #[\Dravencms\Security\Mutation]
     public function handleUp(int $id): void
     {
+        $this->requirePermission('form', 'edit');
         $item = $this->itemGroupRepository->getOneById($id);
         $item->setPosition($item->getPosition() - 1);
         $this->entityManager->persist($item);
         $this->entityManager->flush();
     }
 
+    #[\Dravencms\User\Attributes\IsAllowed('form', 'edit')]
+    #[\Dravencms\Security\Mutation]
     public function handleDown(int $id): void
     {
+        $this->requirePermission('form', 'edit');
         $item = $this->itemGroupRepository->getOneById($id);
         $item->setPosition($item->getPosition() + 1);
         $this->entityManager->persist($item);
