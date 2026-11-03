@@ -137,3 +137,6 @@ itemType:
 	radiolist: Přepínače
 	checkbox: Zaškrtávací políčko
 	checkboxlist: Seznam zaškrtávacích políček
+
+menu:
+    overview: 'Formuláře'

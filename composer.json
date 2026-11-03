@@ -16,7 +16,7 @@
   ],
   "require": {
     "dravencms/captcha": ">=0.0.2",
-    "dravencms/admin": ">=v2.0",
+    "dravencms/admin": "^3.0",
     "dravencms/templated-email": "^v1.1",
     "dravencms/tempnam": "^1.0",
     "php": "^8.4",

@@ -22,6 +22,9 @@ class FormExtension extends CompilerExtension implements TranslationProviderInte
     public function loadConfiguration(): void
     {
         $builder = $this->getContainerBuilder();
+        if ($this->compiler->getExtensions(\Dravencms\Admin\DI\AdminExtension::class) !== []) {
+            $builder->addDefinition($this->prefix('adminMenuProvider'))->setFactory(\Dravencms\Form\AdminMenuProvider::class);
+        }
 
         $builder->addDefinition($this->prefix('form'))
             ->setFactory(Form::class);

@@ -137,3 +137,6 @@ itemType:
 	radiolist: Radio list
 	checkbox: Checkbox
 	checkboxlist: Checkbox list
+
+menu:
+    overview: 'Forms'
