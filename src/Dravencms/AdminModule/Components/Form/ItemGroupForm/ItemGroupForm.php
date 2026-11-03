@@ -166,7 +166,6 @@ class ItemGroupForm extends BaseControl
      */
     public function editFormSucceeded(AForm $itemGroup): void
     {
-        $this->requirePermission('form', 'edit');
         $values = $itemGroup->getValues();
 
         if ($this->itemGroup) {
