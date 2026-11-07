@@ -190,15 +190,9 @@ class SaveGrid extends BaseControl
     {
         $this->requirePermission('form', 'delete');
         $saves = $this->saveRepository->getById($id);
-        foreach ($saves AS $save)
-        {
-            foreach ($save->getSaveValues() AS $saveValue)
-            {
-                $this->entityManager->remove($saveValue);
-            }
+        foreach ($saves as $save) {
             $this->entityManager->remove($save);
         }
-
         $this->entityManager->flush();
 
         $this->onDelete();

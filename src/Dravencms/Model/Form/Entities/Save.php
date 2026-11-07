@@ -35,7 +35,7 @@ class Save
     /**
      * @var ArrayCollection|SaveValue[]
      */
-    #[ORM\OneToMany(targetEntity: "SaveValue", mappedBy: "save",cascade: ["persist"])]
+    #[ORM\OneToMany(targetEntity: "SaveValue", mappedBy: "save",cascade: ["persist", "remove"])]
     private $saveValues;
 
     /**

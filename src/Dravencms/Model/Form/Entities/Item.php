@@ -99,14 +99,14 @@ class Item
     /**
      * @var ArrayCollection|ItemOption[]
      */
-    #[ORM\OneToMany(targetEntity: "ItemOption", mappedBy: "item",cascade: ["persist"])]
+    #[ORM\OneToMany(targetEntity: "ItemOption", mappedBy: "item",cascade: ["persist", "remove"])]
     #[ORM\OrderBy(["position"  =>  "ASC"])]
     private $itemOptions;
 
     /**
      * @var ArrayCollection|SaveValue[]
      */
-    #[ORM\OneToMany(targetEntity: "SaveValue", mappedBy: "item",cascade: ["persist"])]
+    #[ORM\OneToMany(targetEntity: "SaveValue", mappedBy: "item",cascade: ["persist", "remove"])]
     private $saveValues;
 
     /**

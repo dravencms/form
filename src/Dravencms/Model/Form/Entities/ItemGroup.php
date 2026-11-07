@@ -52,7 +52,7 @@ class ItemGroup
     /**
      * @var ArrayCollection|Item[]
      */
-    #[ORM\OneToMany(targetEntity: "Item", mappedBy: "itemGroup",cascade: ["persist"])]
+    #[ORM\OneToMany(targetEntity: "Item", mappedBy: "itemGroup",cascade: ["persist", "remove"])]
     #[ORM\OrderBy(["position"  =>  "ASC"])]
     private $items;
 
@@ -75,6 +75,7 @@ class ItemGroup
         $this->form = $form;
 
         $this->translations = new ArrayCollection();
+        $this->items = new ArrayCollection();
     }
 
     /**

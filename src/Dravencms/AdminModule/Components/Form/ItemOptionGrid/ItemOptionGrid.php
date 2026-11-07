@@ -139,11 +139,9 @@ class ItemOptionGrid extends BaseControl
     {
         $this->requirePermission('form', 'delete');
         $itemOptions = $this->itemOptionRepository->getById($id);
-        foreach ($itemOptions AS $itemOption)
-        {
+        foreach ($itemOptions as $itemOption) {
             $this->entityManager->remove($itemOption);
         }
-
         $this->entityManager->flush();
 
         $this->onDelete();

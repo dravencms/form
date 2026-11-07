@@ -156,19 +156,9 @@ class ItemGroupGrid extends BaseControl
     {
         $this->requirePermission('form', 'delete');
         $itemGroups = $this->itemGroupRepository->getById($id);
-        foreach ($itemGroups AS $itemGroup)
-        {
-            foreach ($itemGroup->getItems() AS $item)
-            {
-                foreach ($item->getItemOptions() AS $itemOption)
-                {
-                    $this->entityManager->remove($itemOption);
-                }
-                $this->entityManager->remove($item);
-            }
+        foreach ($itemGroups as $itemGroup) {
             $this->entityManager->remove($itemGroup);
         }
-
         $this->entityManager->flush();
 
         $this->onDelete();

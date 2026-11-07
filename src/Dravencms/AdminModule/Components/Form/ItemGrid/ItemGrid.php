@@ -174,22 +174,9 @@ class ItemGrid extends BaseControl
     {
         $this->requirePermission('form', 'delete');
         $items = $this->itemRepository->getById($id);
-        foreach ($items AS $item)
-        {
-            foreach ($item->getItemOptions() AS $itemOption)
-            {
-                $this->entityManager->remove($itemOption);
-            }
-
-            // Remove saved values
-            foreach ($item->getSaveValues() AS $savedValue) 
-            {
-                $this->entityManager->remove($savedValue);
-            }
-  
+        foreach ($items as $item) {
             $this->entityManager->remove($item);
         }
-
         $this->entityManager->flush();
 
         $this->onDelete();

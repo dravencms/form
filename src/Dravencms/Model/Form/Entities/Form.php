@@ -65,7 +65,7 @@ class Form
     /**
      * @var ArrayCollection|ItemGroup[]
      */
-    #[ORM\OneToMany(targetEntity: "ItemGroup", mappedBy: "form",cascade: ["persist"])]
+    #[ORM\OneToMany(targetEntity: "ItemGroup", mappedBy: "form",cascade: ["persist", "remove"])]
     #[ORM\OrderBy(["position"  =>  "ASC"])]
     private $itemGroups;
 
